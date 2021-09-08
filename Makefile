@@ -19,6 +19,7 @@ NAME_EXE        = minishell
 PATH_EXE        = minishell
 TARGET_TYPE     = exe
 INC_DIR         =
+СС              = clang
 FLAGS          += -O2 -fomit-frame-pointer
 LIBS           += -lreadline
 LIBS_DIRS      +=
@@ -44,7 +45,7 @@ SETUP    =      ${addprefix BUILD_FLAGS+=, ${FLAGS}} \
                 ${addprefix BUILD_TARGET_TYPE=, ${TARGET_TYPE}}
 
 ms/%:   lft/%
-		${MAKE} -f ${TM_FILE} ${@:ms/%=%} ${SETUP}
+		${MAKE} -f ${TM_FILE} ${@:ms/%=%} ${SETUP} CC=$(CC)
 
 #######################################################
 
