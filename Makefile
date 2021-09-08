@@ -13,14 +13,14 @@ LIBFT_DIR = libft/
 #			MINISHELL build
 #
 NAME            = minishell
-BUILD_NAME      = release
-BUILD_DIR       = .release/
+BUILD_NAME      = debug
+BUILD_DIR       = .debug/
 NAME_EXE        = minishell
 PATH_EXE        = minishell
 TARGET_TYPE     = exe
 INC_DIR         =
 СС              = clang
-FLAGS          += -O2 -fomit-frame-pointer
+FLAGS          +=  -Wpedantic -g -fsanitize=address
 LIBS           += -lreadline
 LIBS_DIRS      +=
 SRCS           += ./main.c
