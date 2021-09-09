@@ -64,4 +64,4 @@ fclean:		ms/fclean
 norm:		ms/norm
 
 .PHONY:	re
-re:			rems
+re:			ms/re
