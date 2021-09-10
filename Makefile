@@ -18,7 +18,7 @@ BUILD_DIR       = .debug/
 NAME_EXE        = minishell
 PATH_EXE        = minishell
 TARGET_TYPE     = exe
-INC_DIR         =
+INC_DIR         = libft/include
 СС              = clang
 FLAGS          +=  -Wpedantic -g -fsanitize=address
 LIBS           += -lreadline
