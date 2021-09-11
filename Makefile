@@ -8,44 +8,24 @@ FTST_MAKE = ./libft/ftst/ftst.mk
 include libft/libft.mk
 LIBFT_DIR = libft/
 
+СС	= clang
 #######################################################
 #
 #			MINISHELL build
 #
-NAME            = minishell
-BUILD_NAME      = debug
-BUILD_DIR       = .debug/
-NAME_EXE        = minishell
-PATH_EXE        = minishell
-TARGET_TYPE     = exe
-INC_DIR         = libft/include
-СС              = clang
-FLAGS          +=  -Wpedantic -g -fsanitize=address
-LIBS           += -lreadline
-LIBS_DIRS      +=
-SRCS           += ./main.c
-IS_FTST         = 0
-FTST_SRCS      +=
-DEPEND_FILES   += ./Makefile
 
+SRCS		=	./srcs/parser/dfa_arg.c \
+				./srcs/parser/dfa_part1.c \
+				./srcs/parser/parser.c \
+				./srcs/main.c
 
-SETUP    =      ${addprefix BUILD_FLAGS+=, ${FLAGS}} \
-                ${addprefix NAME=, ${NAME}} \
-                ${addprefix BUILD_NAME=, ${BUILD_NAME}} \
-                ${addprefix BUILD_TARGET_NAME=, ${NAME_EXE}} \
-                ${addprefix BUILD_TARGET=, ${PATH_EXE}} \
-                ${addprefix BUILD_DIR=, ${BUILD_DIR}} \
-                ${addprefix BUILD_SRCS+=, ${SRCS}} \
-                ${addprefix BUILD_INC_DIRS+=, ${INC_DIR}} \
-                ${addprefix BUILD_LIBS_DIRS+=, ${LIBS_DIRS}} \
-                ${addprefix BUILD_LIBS+=, ${LIBS}} \
-                ${addprefix BUILD_IS_FTST=, ${IS_FTST}} \
-                ${addprefix BUILD_DEPEND_FILES+=, ${DEPEND_FILES}} \
-                ${addprefix FTST_SRCS+=, ${FTST_SRCS}} \
-                ${addprefix BUILD_TARGET_TYPE=, ${TARGET_TYPE}}
+RELEASE_MAKE = ./release.mk
+ms/%:
+		${MAKE} -f ${RELEASE_MAKE} ${@:ms/%=%} ${addprefix MSRCS+=, ${SRCS}}
 
-ms/%:   lft/%
-		${MAKE} -f ${TM_FILE} ${@:ms/%=%} ${SETUP} CC=$(CC)
+DEBUG_MAKE = ./debug.mk
+db/%:
+		${MAKE} -f ${DEBUG_MAKE} ${@:db/%=%} ${addprefix MSRCS+=, ${SRCS}}
 
 #######################################################
 
