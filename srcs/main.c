@@ -12,8 +12,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <readline/readline.h>
+#include "parser/parser.h"
 
 int	main(void)
 {
+	parse("<< file echo some\\ arg \"ano'ther \"arg; 1||a && b");
+	parse("a|b");
+	parse("\"ls;\"");
 }
