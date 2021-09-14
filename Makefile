@@ -30,18 +30,18 @@ db/%:
 #######################################################
 
 .PHONY:	all
-all:		ms/build
+all:		db/build
 
 ${NAME}:	all
 
 .PHONY:	clean
-clean:		ms/clean
+clean:		db/clean
 
 .PHONY:	fclean
-fclean:		ms/fclean
+fclean:		db/fclean
 
 .PHONY:	norm
-norm:		ms/norm
+norm:		db/norm
 
 .PHONY:	re
-re:			ms/re
+re:			db/re
