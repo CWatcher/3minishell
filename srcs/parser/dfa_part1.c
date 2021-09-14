@@ -8,24 +8,24 @@ t_error	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 	return (error_no_error);
 }
 
-t_error	dfa_skip_spaces(char *str, t_dfaparse *parse)
+t_error	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 {
 	if (*str == ' ')
 		parse->dfafunc = (t_dfafunc)dfa_skip_spaces;
 	else if (ft_strchr("<>|&;", *str))
-		return (dfa_create_token(parse, (t_token){e_token_logic, {str, 1}}, (t_dfafunc)dfa_repeat));
+		return (dfa_create_token(parse, (t_token){e_token_logic, {(char *)str, 1}}, (t_dfafunc)dfa_repeat));
 	else if (*str == '\'')
-		return (dfa_create_token(parse, (t_token){e_token_arg, {str, 1}}, (t_dfafunc)dfa_arg1squotes));
+		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_arg1quotes));
 	else if (*str == '"')
-		return (dfa_create_token(parse, (t_token){e_token_arg, {str, 1}}, (t_dfafunc)dfa_arg2squotes));
+		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_arg2quotes));
 	else if (*str == '\\')
-		return (dfa_create_token(parse, (t_token){e_token_arg, {str, 1}}, (t_dfafunc)dfa_argprotsym));
+		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_argprotsym));
 	else
-		return (dfa_create_token(parse, (t_token){e_token_arg, {str, 1}}, (t_dfafunc)dfa_arg));
+		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_arg));
 	return (error_no_error);
 }
 
-t_error	dfa_repeat(char *str, t_dfaparse *parse)
+t_error	dfa_repeat(char const *str, t_dfaparse *parse)
 {
 	t_token *t;
 

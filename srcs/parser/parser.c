@@ -13,33 +13,23 @@ t_error	dfa_process(char const *str, t_dfaparse *parse)
 			return (err);
 		str++;
 	}
-	if (parse->dfafunc == (t_dfafunc)&dfa_arg1squotes || parse->dfafunc == (t_dfafunc)&dfa_arg2squotes)
+	if (parse->dfafunc == (t_dfafunc)&dfa_arg1quotes \
+		|| parse->dfafunc == (t_dfafunc)&dfa_arg2quotes)
 		return (e_dfaerr_parse_unclosed_quote);
 	return (error_no_error);
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-void process(t_token *tk)
-{
-	char *i = ft_substr(tk->substr.str, 0, tk->substr.size);
-	printf("token %i: %s\n", tk->type, i);
-	free(i);
-}
-typedef void(*test)(void*);
-
-t_error parse(char const *str)
+t_error parse(t_minishell *ms, char const *str)
 {
 	t_dfaparse	dfa;
 	t_error		err;
 
+	(void)ms;
 	err = dfa_process(str, &dfa);
 	if (err)
 	{
 		ft_vec_destructor(&dfa.tokens, NULL);
 		return (err);
 	}
-	printf("%zu\n", dfa.tokens.size);
-	ft_vec_foreach(&dfa.tokens, (test)process);
 	return (error_no_error);
 }
