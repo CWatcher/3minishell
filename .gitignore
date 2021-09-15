@@ -12,7 +12,6 @@
 .idea
 cmake-build-debug
 */.gitignore
-tst*
 out*.txt
 .release/
 .debug/
