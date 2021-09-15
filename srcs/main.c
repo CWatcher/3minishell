@@ -12,21 +12,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "parser/parser.h"
 
+#include "minishell.h"
 #include <readline/readline.h>
-
-t_error	minishell_construct(t_minishell *ms)
-{
-	t_ht_construct_args a;
-
-	a.cmpfunc = (t_cmpfunc)ft_strcmp;
-	a.hashfunc = (t_hashfunc)ft_hash_str;
-	a.key_size = sizeof(char *);
-	a.value_size = sizeof(char *);
-	ft_ht_construct(&ms->env, a);
-	return (error_no_error);
-}
 
 int	main(void)
 {

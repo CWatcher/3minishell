@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "tokenize.h"
 
 t_error	dfa_arg(char const *str, t_dfaparse *parse)
 {

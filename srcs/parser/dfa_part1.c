@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "tokenize.h"
 
 t_error	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 {
@@ -10,7 +10,7 @@ t_error	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 
 t_error	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 {
-	if (*str == ' ')
+	if (ft_isspace(*str))
 		parse->dfafunc = (t_dfafunc)dfa_skip_spaces;
 	else if (ft_strchr("<>|&;", *str))
 		return (dfa_create_token(parse, (t_token){e_token_logic, {(char *)str, 1}}, (t_dfafunc)dfa_repeat));
@@ -24,6 +24,11 @@ t_error	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_arg));
 	return (error_no_error);
 }
+
+//t_bool	be_matched_operator(t_stringview sv)
+//{
+//
+//}
 
 t_error	dfa_repeat(char const *str, t_dfaparse *parse)
 {
