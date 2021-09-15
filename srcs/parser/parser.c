@@ -41,5 +41,6 @@ t_error parse(char const *str)
 	}
 	printf("%zu\n", dfa.tokens.size);
 	ft_vec_foreach(&dfa.tokens, (test)process);
+	ft_vec_destructor(&dfa.tokens, NULL);
 	return (error_no_error);
 }
