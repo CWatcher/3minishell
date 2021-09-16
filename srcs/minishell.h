@@ -4,55 +4,69 @@
 # include <stdlib.h>
 # include <ft_vector.h>
 
+typedef enum e_redir_type
+{
+	e_redir_o_trunc,
+	e_redir_o_append,
+	e_redir_i_file,
+	e_redir_i_stream
+}			t_redir_type;
+
+typedef struct s_redir
+{
+	char			*arg;
+	int				fd;
+	t_redir_type	type;
+}				t_redir;
+
+inline void redir_free(t_redir *redir)
+{
+	free(redir->arg);
+}
+
 typedef struct s_single_run
 {
 	// ft_vec_construct(&args, sizeof(char*))
 	t_vector	args;
-	// ft_vec_construct(&redir_i_stream, sizeof(???))
-	t_vector	redir_i_stream;
-	// ft_vec_construct(&redir_o_stream, sizeof(???))
-	t_vector	redir_o_stream;
+	// ft_vec_construct(&redir_i_stream, sizeof(t_redir))
+	t_vector	redir;
 }				t_single_run;
 
 inline void	srun_destr(t_single_run *srun)
 {
 	ft_vec_destructor(&srun->args, free);
-	ft_vec_destructor(&srun->redir_i_stream, NULL); // TODO close fd
-	ft_vec_destructor(&srun->redir_o_stream, NULL); // TODO close fd
+	ft_vec_destructor(&srun->redir, redir_free);
 }
 
-enum e_cmdlogic
+typedef struct s_and_or_node
 {
-	e_cmdlogic_bit = (1 << 30),
-	e_cmdlogic_and,
-	e_cmdlogic_or,
-	e_cmdlogic_end,
-	e_cmdlogic_bracket_open,
-	e_cmdlogic_bracket_close
-};
+	t_vector	pipeline;
+	int64_t		next_if_succed;
+	int64_t		next_if_failed;
+}				t_and_or_node;
 
-typedef uint64_t t_cmdlogic;
-
-typedef struct s_command
+inline void	and_or_node_destr(t_and_or_node *node)
 {
-	// ft_vec_construct(&p_run, sizeof(s_single_run))
-	t_vector	p_run;
-	// ft_vec_construct(&logic, sizeof(t_cmdlogic))
-	t_vector	logic;
-}				t_command;
+	ft_vec_destructor(&node->pipeline, srun_destr);
+}
 
-inline void	command_destr(t_command *cmd)
+typedef struct	s_and_or_list
 {
-	ft_vec_destructor(&cmd->p_run, (t_destrfunc)srun_destr);
-	ft_vec_destructor(&cmd->logic, NULL);
+	// ft_vec_construct(&p_run, sizeof(t_and_or_node))
+	t_vector	list;
+}				t_and_or_list;
+
+inline void	and_or_destr(t_and_or_list *cmd)
+{
+	ft_vec_destructor(&cmd->list, (t_destrfunc)and_or_node_destr);
 }
 
 typedef struct s_minishell
 {
 	// ft_vec_construct(&logic, sizeof(char*))
 	t_vector		env;
-	// ft_vec_construct(&logic, sizeof(t_command))
-	t_command		cmd;
+	// ft_vec_construct(&logic, sizeof(t_and_or_list))
+	t_and_or_list	and_or_list;
 }				t_minishell;
 
 #endif

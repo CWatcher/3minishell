@@ -12,7 +12,14 @@ enum e_token_type
 {
 	e_token_none,
 	e_token_arg,
-	e_token_logic
+	e_token_logic,
+	e_token_logic_and,
+	e_token_logic_or,
+	e_token_logic_pipe,
+	e_token_logic_redir_o_trunk,
+	e_token_logic_redir_o_append,
+	e_token_logic_redir_i_file,
+	e_token_logic_redir_i_stream
 };
 
 enum e_dfa_error

@@ -1,9 +1,11 @@
 #include "tokenize.h"
 
-t_error	open_arg1quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_error	open_argnquotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
 {
-	while (*pos < sv.size && ft_strchr("\"'", sv.str[*pos]) == t_false)
+	while (*pos < sv.size && ft_strchr("\"\'", sv.str[*pos]) == t_false)
 	{
+		if (sv.str[*pos] == '\\')
+			(*pos)++;
 		if (ft_vec_push_back(str_build, &sv.str[*pos]) == t_false)
 			return (error_allocation_fail);
 		(*pos)++;
@@ -27,7 +29,7 @@ t_error	open_arg1quotes(t_stringview sv, t_vector *str_build, t_vector *env, siz
 t_error	open_arg2quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
 {
 	(*pos)++;
-	while (sv.str[*pos] != '"')
+	while (sv.str[*pos] != '\"')
 	{
 		if (ft_vec_push_back(str_build, &sv.str[*pos]) == t_false)
 			return (error_allocation_fail);
@@ -48,7 +50,7 @@ char *open_arg(t_stringview sv, t_vector *env)
 	pos = 0;
 	while (pos < sv.size)
 	{
-		if (sv.str[pos] == '"')
+		if (sv.str[pos] == '\"')
 			open_arg2quotes(sv, &str_build, env, &pos);
 		else if (sv.str[pos] == '\'')
 			open_arg1quotes(sv, &str_build, env, &pos);
