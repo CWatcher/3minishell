@@ -10,34 +10,38 @@ t_error	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 
 t_error	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 {
+	t_stringview const	sv = {{(char *)str, 1}};
+
 	if (ft_isspace(*str))
 		parse->dfafunc = (t_dfafunc)dfa_skip_spaces;
-	else if (ft_strchr("<>|&;", *str))
-		return (dfa_create_token(parse, (t_token){e_token_logic, {(char *)str, 1}}, (t_dfafunc)dfa_repeat));
+	else if (ft_strchr("<>|&", *str))
+		return (dfa_create_token(parse, (t_token){e_token_logic, sv}, match_operator(*str)));
 	else if (*str == '\'')
-		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_arg1quotes));
-	else if (*str == '"')
-		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_arg2quotes));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg1quotes));
+	else if (*str == '\"')
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg2quotes));
 	else if (*str == '\\')
-		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_argprotsym));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_argprotsym));
 	else
-		return (dfa_create_token(parse, (t_token){e_token_arg, {(char *)str, 1}}, (t_dfafunc)dfa_arg));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg));
 	return (error_no_error);
 }
 
-//t_bool	be_matched_operator(t_stringview sv)
-//{
-//
-//}
-
-t_error	dfa_repeat(char const *str, t_dfaparse *parse)
+t_dfafunc	match_operator(char ch)
 {
-	t_token *t;
-
-	t = ((t_token *)ft_vec_back(&parse->tokens));
-	if (*str == *(t->substr.str))
-		t->substr.size++;
-	else
-		return (dfa_skip_spaces(str, parse));
-	return (error_no_error);
+	if (ch == '<')
+		return ((t_dfafunc)dfa_op_redir_left);
+	if (ch == '>')
+		return ((t_dfafunc)dfa_op_redir_right);
+	if (ch == '|')
+		return ((t_dfafunc)dfa_op_or);
+	if (ch == '&')
+		return ((t_dfafunc)dfa_op_and);
+	if (ch == '(')
+		return ((t_dfafunc)dfa_op_brack_left);
+	if (ch == ')')
+		return ((t_dfafunc)dfa_op_brack_right);
+	if (ch == ';')
+		return ((t_dfafunc)dfa_op_end);
+	return ((t_dfafunc)dfa_skip_spaces);
 }

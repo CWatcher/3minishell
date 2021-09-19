@@ -38,11 +38,16 @@ inline void	srun_destr(t_single_run *srun)
 	ft_vec_destructor(&srun->redir, redir_free);
 }
 
+typedef enum {
+	e_logic_arg,
+	e_logic_and,
+	e_logic_or
+}			t_logic;
+
 typedef struct s_and_or_node
 {
+	t_logic		type;
 	t_vector	pipeline;
-	int64_t		next_if_succed;
-	int64_t		next_if_failed;
 }				t_and_or_node;
 
 inline void	and_or_node_destr(t_and_or_node *node)
@@ -53,12 +58,12 @@ inline void	and_or_node_destr(t_and_or_node *node)
 typedef struct	s_and_or_list
 {
 	// ft_vec_construct(&p_run, sizeof(t_and_or_node))
-	t_vector	list;
+	t_vector	rpn;
 }				t_and_or_list;
 
 inline void	and_or_destr(t_and_or_list *cmd)
 {
-	ft_vec_destructor(&cmd->list, (t_destrfunc)and_or_node_destr);
+	ft_vec_destructor(&cmd->rpn, (t_destrfunc)and_or_node_destr);
 }
 
 typedef struct s_minishell
