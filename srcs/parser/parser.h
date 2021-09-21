@@ -13,6 +13,4 @@ t_error	parse_arg_redir(t_minishell *ms, t_token *token);
 t_error	parse_redir(t_minishell *ms, t_token *token);
 t_error	parse_commands(t_minishell *ms, t_dfaparse *tokens);
 
-char	*open_arg(t_stringview sv, t_vector *env);
-
 #endif
