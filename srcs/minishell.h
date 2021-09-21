@@ -30,11 +30,8 @@ typedef struct s_single_run
 	t_vector	redir;
 }				t_single_run;
 
-inline void	srun_destr(t_single_run *srun)
-{
-	ft_vec_destructor(&srun->args, NULL);
-	ft_vec_destructor(&srun->redir, NULL);
-}
+void	srun_constr(t_single_run *srun);
+void	srun_destr(t_single_run *srun);
 
 typedef enum
 {
@@ -51,10 +48,8 @@ typedef struct s_and_or_node
 	t_vector	pipeline;
 }				t_and_or_node;
 
-inline void	and_or_node_destr(t_and_or_node *node)
-{
-	ft_vec_destructor(&node->pipeline, (t_destrfunc)srun_destr);
-}
+void	and_or_node_constr(t_and_or_node *node);
+void	and_or_node_destr(t_and_or_node *node);
 
 typedef struct	s_command
 {
@@ -62,10 +57,8 @@ typedef struct	s_command
 	t_vector	and_or_list;
 }				t_command;
 
-inline void	command_destr(t_command *cmd)
-{
-	ft_vec_destructor(&cmd->and_or_list, (t_destrfunc)and_or_node_destr);
-}
+void	command_constr(t_command *cmd);
+void	command_destr(t_command *cmd);
 
 typedef t_error(	*t_itokenfunc)(void *, void *);
 
@@ -79,6 +72,6 @@ typedef struct s_minishell
 }				t_minishell;
 
 t_error	parse(t_minishell *ms, char const *str);
-void	null_minishell(t_minishell *ms);
+t_error	null_minishell_cmd(t_minishell *ms);
 
 #endif

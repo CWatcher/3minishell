@@ -38,8 +38,7 @@ t_error	parse_pipe(t_minishell *ms, t_token *token)
 	(void)token;
 	and_or = ft_vec_back(&ms->commands);
 	node = ft_vec_back(&and_or->and_or_list);
-	ft_vec_construct(&srun.args, sizeof(char*));
-	ft_vec_construct(&srun.redir, sizeof(t_redir));
+	srun_constr(&srun);
 	if (!ft_vec_push_back(&node->pipeline, &srun))
 		return (error_allocation_fail);
 	ms->parse_token = (t_itokenfunc)parse_all;
@@ -77,9 +76,8 @@ t_error	parse_redir(t_minishell *ms, t_token *token)
 	redir.fd = -1;
 	redir.arg = (t_stringview){NULL, 0};
 	redir.type = (t_redir_type)token->type;
-	if (!ft_vec_push_back(&node->pipeline, &srun))
+	if (!ft_vec_push_back(&srun->redir, &redir))
 		return (error_allocation_fail);
-	ft_vec_push_back(&srun->redir, &redir);
 	ms->parse_token = (t_itokenfunc)parse_arg_redir;
 	return (error_no_error);
 }

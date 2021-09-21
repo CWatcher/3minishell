@@ -8,8 +8,6 @@ t_error	dlrt_dfaparse(t_dfaparse *dfa, t_error err)
 	return (err);
 }
 
-typedef	t_error(*t_tokenparsefunc)(t_minishell*, t_token *);
-
 t_error	parse(t_minishell *ms, char const *str)
 {
 	t_dfaparse	tokens;
@@ -18,6 +16,8 @@ t_error	parse(t_minishell *ms, char const *str)
 	err = dfa_tokenize(str, &tokens);
 	if (err || tokens.tokens.size == 0)
 		return (dlrt_dfaparse(&tokens, err));
-	parse_commands(ms, &tokens);
+	err = parse_commands(ms, &tokens);
+	if (err)
+		return (dlrt_dfaparse(&tokens, err));
 	return (error_no_error);
 }
