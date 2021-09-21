@@ -36,10 +36,11 @@ void	srun_destr(t_single_run *srun);
 typedef enum
 {
 	e_logic_arg,
-	e_logic_and,
-	e_logic_or,
-	e_logic_bracket_open,
-	e_logic_bracket_close
+	e_logic_andor_bit = 1 << 6,
+	e_logic_and = e_logic_andor_bit + 1,
+	e_logic_or = e_logic_andor_bit + 2,
+	e_logic_bopen_bit = 1 << 7,
+	e_logic_bclose_bit = 1 << 8
 }			t_logic;
 
 typedef struct s_and_or_node

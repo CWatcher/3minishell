@@ -9,6 +9,8 @@ t_error	parse_all(t_minishell *ms, t_token *token)
 		return (parse_arg(ms, token));
 	if (token->type == e_token_logic_pipe)
 		return (parse_pipe(ms, token));
+	if (token->type == e_token_logic_end_command)
+		return (parse_end(ms, token));
 	return (error_parse_error);
 }
 
@@ -59,6 +61,26 @@ t_error	parse_arg_redir(t_minishell *ms, t_token *token)
 	if (token->type != e_token_arg)
 		return (error_parse_error);
 	redir->arg = token->substr;
+	ms->parse_token = (t_itokenfunc)parse_all;
+	return (error_no_error);
+}
+
+t_error parse_end(t_minishell *ms, t_token *token)
+{
+	t_single_run	srun;
+	t_and_or_node	and_or_node;
+	t_command		cmd;
+
+	(void)token;
+	srun_constr(&srun);
+	and_or_node_constr(&and_or_node);
+	command_constr(&cmd);
+	if (!ft_vec_push_back(&and_or_node.pipeline, &srun))
+		return (error_allocation_fail);
+	if (!ft_vec_push_back(&cmd.and_or_list, &and_or_node))
+		return (error_allocation_fail);
+	if (!ft_vec_push_back(&ms->commands, &cmd))
+		return (error_allocation_fail);
 	ms->parse_token = (t_itokenfunc)parse_all;
 	return (error_no_error);
 }

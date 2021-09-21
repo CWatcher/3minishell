@@ -1,5 +1,13 @@
 #include "tokenize.h"
 
+t_error	open_arg_env(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+{
+	(void)sv;
+	(void)str_build;
+	(void)env;
+	(void)pos;
+}
+
 t_error	open_argNquotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
 {
 	(void)env;

@@ -14,7 +14,7 @@ t_error	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 
 	if (ft_isspace(*str))
 		parse->dfafunc = (t_dfafunc)dfa_skip_spaces;
-	else if (ft_strchr("<>|&", *str))
+	else if (ft_strchr("<>|&();", *str))
 		return (dfa_create_token(parse, (t_token){e_token_logic, sv}, match_operator(*str)));
 	else if (*str == '\'')
 		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg1quotes));
