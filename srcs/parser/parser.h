@@ -3,47 +3,16 @@
 
 # include <ft_string.h>
 # include <ft_vector.h>
-# include <ft_error.h>
+# include <minishell.h>
+# include <parser/tokenize.h>
 
-enum e_token_type
-{
-	e_token_none,
-	e_token_arg,
-	e_token_logic
-};
+t_error	parse_all(t_minishell *ms, t_token *token);
+t_error	parse_arg(t_minishell *ms, t_token *token);
+t_error	parse_pipe(t_minishell *ms, t_token *token);
+t_error	parse_arg_redir(t_minishell *ms, t_token *token);
+t_error	parse_redir(t_minishell *ms, t_token *token);
+t_error	parse_commands(t_minishell *ms, t_dfaparse *tokens);
 
-enum e_dfa_error
-{
-	e_dfaerr_none = error_user_define_error,
-	e_dfaerr_parse_unexpected_token,
-	e_dfaerr_parse_unclosed_quote
-};
-
-typedef struct s_token
-{
-	enum e_token_type	type;
-	t_stringview		substr;
-}				t_token;
-
-typedef t_error(*t_dfafunc)(char const*, void *);
-
-typedef struct s_parse
-{
-	t_vector	tokens;
-	t_dfafunc	dfafunc;
-}				t_dfaparse;
-
-t_error	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func);
-
-t_error	dfa_skip_spaces(char *str, t_dfaparse *parse);
-
-t_error	dfa_repeat(char *str, t_dfaparse *parse);
-
-t_error	dfa_arg(char *str, t_dfaparse *parse);
-t_error	dfa_arg1squotes(char *str, t_dfaparse *parse);
-t_error	dfa_arg2squotes(char *str, t_dfaparse *parse);
-t_error	dfa_argprotsym(char *str, t_dfaparse *parse);
-
-t_error parse(char const *str);
+char	*open_arg(t_stringview sv, t_vector *env);
 
 #endif
