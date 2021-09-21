@@ -14,9 +14,7 @@ LIBFT_DIR = libft/
 #			MINISHELL build
 #
 
-SRCS		=	./srcs/parser/dfa_arg.c \
-				./srcs/parser/dfa_part1.c \
-				./srcs/parser/parser.c \
+SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				./srcs/main.c
 
 RELEASE_MAKE = ./release.mk

@@ -13,11 +13,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "minishell.h"
+#include <minishell.h>
 #include <readline/readline.h>
 
 #include <readline/readline.h>
 
-int	main(void)
+int	main(int argc, char *argv[], char *env[])
 {
+	(void)argc, (void)argv, (void)env;
+	t_minishell	ms;
+
+	ft_vec_construct(&ms.env, sizeof(char *));
+	ft_vec_construct(&ms.commands, sizeof(t_command));
+	while (t_true)
+	{
+		char *str;
+		str = readline("> ");
+		parse(&ms, str);
+	}
 }

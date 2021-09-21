@@ -10,7 +10,7 @@ t_error	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 
 t_error	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 {
-	t_stringview const	sv = {{(char *)str, 1}};
+	t_stringview const	sv = {(char *)str, 1};
 
 	if (ft_isspace(*str))
 		parse->dfafunc = (t_dfafunc)dfa_skip_spaces;

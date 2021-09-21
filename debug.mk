@@ -11,7 +11,7 @@ BUILD_DIR       = .debug/
 NAME_EXE        = minishell
 PATH_EXE        = minishell
 TARGET_TYPE     = exe
-INC_DIR         = ${LIBFT_INC}
+INC_DIR         = ${LIBFT_INC} srcs/
 FLAGS          += -Wpedantic -O0 -g3 -fsanitize=address
 LIBS           += -lreadline ${LIBFT_LIB}
 LIBS_DIRS      += ${LIBFT_DB_LIB_DIR}

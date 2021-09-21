@@ -1,9 +1,11 @@
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef TOKENIZE_H
+# define TOKENIZE_H
 
 # include <ft_string.h>
 # include <ft_vector.h>
 # include <ft_error.h>
+
+# include <minishell.h>
 
 // ********************
 // * DFA
@@ -17,13 +19,13 @@ enum e_token_type
 	e_token_logic_or,
 	e_token_logic_pipe,
 	e_token_logic_background_run,
-	e_token_logic_redir_o_trunk,
-	e_token_logic_redir_o_append,
-	e_token_logic_redir_i_file,
-	e_token_logic_redir_i_stream,
 	e_token_logic_end_command,
 	e_token_logic_brack_left,
-	e_token_logic_brack_right
+	e_token_logic_brack_right,
+	e_token_logic_redir_o_trunk = e_redir_o_trunc,
+	e_token_logic_redir_o_append = e_redir_o_append,
+	e_token_logic_redir_i_file = e_redir_i_file,
+	e_token_logic_redir_i_stream = e_redir_i_stream,
 };
 
 enum e_dfa_error
