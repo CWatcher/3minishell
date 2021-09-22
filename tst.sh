@@ -1,3 +1,5 @@
+make > /dev/null && echo 'make: ok!'
+
 echo "" | ./minishell
 echo "a|b"  | ./minishell
 echo "\"ls;\"" | ./minishell
