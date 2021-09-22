@@ -28,10 +28,10 @@ typedef struct s_single_run
 	t_vector	args;
 	// ft_vec_construct(&redir_i_stream, sizeof(t_redir))
 	t_vector	redir;
-}				t_single_run;
+}				t_command;
 
-void	srun_constr(t_single_run *srun);
-void	srun_destr(t_single_run *srun);
+void	srun_constr(t_command *srun);
+void	srun_destr(t_command *srun);
 
 typedef enum
 {
@@ -52,14 +52,14 @@ typedef struct s_and_or_node
 void	and_or_node_constr(t_and_or_node *node);
 void	and_or_node_destr(t_and_or_node *node);
 
-typedef struct	s_command
+typedef struct	s_run
 {
 	// ft_vec_construct(&p_run, sizeof(t_and_or_node))
 	t_vector	and_or_list;
-}				t_command;
+}				t_andor_list;
 
-void	command_constr(t_command *cmd);
-void	command_destr(t_command *cmd);
+void	command_constr(t_andor_list *cmd);
+void	command_destr(t_andor_list *cmd);
 
 typedef t_error(	*t_itokenfunc)(void *, void *);
 
@@ -68,7 +68,7 @@ typedef struct s_minishell
 	// ft_vec_construct(&logic, sizeof(char*))
 	t_vector		env;
 	// ft_vec_construct(&logic, sizeof(t_and_or_list))
-	t_vector		commands;
+	t_vector		run_stack;
 	t_itokenfunc	parse_token;
 }				t_minishell;
 

@@ -19,5 +19,5 @@ t_error	parse(t_minishell *ms, char const *str)
 	err = parse_commands(ms, &tokens);
 	if (err)
 		return (dlrt_dfaparse(&tokens, err));
-	return (error_no_error);
+	return (dlrt_dfaparse(&tokens, error_no_error));
 }

@@ -16,11 +16,11 @@ t_error	parse_all(t_minishell *ms, t_token *token)
 
 t_error	parse_arg(t_minishell *ms, t_token *token)
 {
-	t_command		*and_or;
+	t_andor_list	*and_or;
 	t_and_or_node	*node;
-	t_single_run	*s_run;
+	t_command		*s_run;
 
-	and_or = ft_vec_back(&ms->commands);
+	and_or = ft_vec_back(&ms->run_stack);
 	node = ft_vec_back(&and_or->and_or_list);
 	s_run = ft_vec_back(&node->pipeline);
 	if (token->type != e_token_arg)
@@ -33,12 +33,12 @@ t_error	parse_arg(t_minishell *ms, t_token *token)
 
 t_error	parse_pipe(t_minishell *ms, t_token *token)
 {
-	t_command		*and_or;
+	t_andor_list	*and_or;
 	t_and_or_node	*node;
-	t_single_run	srun;
+	t_command		srun;
 
 	(void)token;
-	and_or = ft_vec_back(&ms->commands);
+	and_or = ft_vec_back(&ms->run_stack);
 	node = ft_vec_back(&and_or->and_or_list);
 	srun_constr(&srun);
 	if (!ft_vec_push_back(&node->pipeline, &srun))
@@ -49,12 +49,12 @@ t_error	parse_pipe(t_minishell *ms, t_token *token)
 
 t_error	parse_arg_redir(t_minishell *ms, t_token *token)
 {
-	t_command		*and_or;
+	t_andor_list	*and_or;
 	t_and_or_node	*node;
-	t_single_run	*s_run;
+	t_command		*s_run;
 	t_redir			*redir;
 
-	and_or = ft_vec_back(&ms->commands);
+	and_or = ft_vec_back(&ms->run_stack);
 	node = ft_vec_back(&and_or->and_or_list);
 	s_run = ft_vec_back(&node->pipeline);
 	redir = ft_vec_back(&s_run->redir);
@@ -67,9 +67,9 @@ t_error	parse_arg_redir(t_minishell *ms, t_token *token)
 
 t_error parse_end(t_minishell *ms, t_token *token)
 {
-	t_single_run	srun;
+	t_command		srun;
 	t_and_or_node	and_or_node;
-	t_command		cmd;
+	t_andor_list	cmd;
 
 	(void)token;
 	srun_constr(&srun);
@@ -79,7 +79,7 @@ t_error parse_end(t_minishell *ms, t_token *token)
 		return (error_allocation_fail);
 	if (!ft_vec_push_back(&cmd.and_or_list, &and_or_node))
 		return (error_allocation_fail);
-	if (!ft_vec_push_back(&ms->commands, &cmd))
+	if (!ft_vec_push_back(&ms->run_stack, &cmd))
 		return (error_allocation_fail);
 	ms->parse_token = (t_itokenfunc)parse_all;
 	return (error_no_error);
@@ -87,12 +87,12 @@ t_error parse_end(t_minishell *ms, t_token *token)
 
 t_error	parse_redir(t_minishell *ms, t_token *token)
 {
-	t_command		*and_or;
+	t_andor_list	*and_or;
 	t_and_or_node	*node;
-	t_single_run	*srun;
+	t_command		*srun;
 	t_redir			redir;
 
-	and_or = ft_vec_back(&ms->commands);
+	and_or = ft_vec_back(&ms->run_stack);
 	node = ft_vec_back(&and_or->and_or_list);
 	srun = ft_vec_back(&node->pipeline);
 	redir.fd = -1;

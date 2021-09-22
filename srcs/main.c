@@ -30,14 +30,14 @@ void print_redir(t_redir *rd)
 	print_string_view(&rd->arg);
 }
 
-void	debug_print(t_command *cmd)
+void	debug_print(t_andor_list *cmd)
 {
 	for (size_t idx_ao = 0; idx_ao < cmd->and_or_list.size; idx_ao++)
 	{
 		t_and_or_node *node = ft_vec_at(&cmd->and_or_list, idx_ao);
 		for (size_t idx_pp = 0; idx_pp < node->pipeline.size; idx_pp++)
 		{
-			t_single_run *srun = ft_vec_at(&node->pipeline, idx_pp);
+			t_command *srun = ft_vec_at(&node->pipeline, idx_pp);
 			ft_vec_foreach(&srun->args, (void(*)(void*))print_string_view);
 			ft_vec_foreach(&srun->redir, (void(*)(void*))print_redir);
 		}
@@ -50,14 +50,18 @@ int	main(int argc, char *argv[], char *env[])
 	t_minishell	ms;
 
 	ft_vec_construct(&ms.env, sizeof(char *));
-	ft_vec_construct(&ms.commands, sizeof(t_command));
+	ft_vec_construct(&ms.run_stack, sizeof(t_andor_list));
 	while (t_true)
 	{
 		null_minishell_cmd(&ms);
 		char *str;
 		str = readline("> ");
+		if (!str)
+			break;
 		parse(&ms, str);
-		debug_print(ft_vec_at(&ms.commands, 0));
+		debug_print(ft_vec_at(&ms.run_stack, 0));
 		free(str);
 	}
+	ft_vec_destructor(&ms.env, free);
+	ft_vec_destructor(&ms.run_stack, (t_destrfunc)command_destr);
 }
