@@ -6,6 +6,7 @@ t_error	open_arg_env(t_stringview sv, t_vector *str_build, t_vector *env, size_t
 	(void)str_build;
 	(void)env;
 	(void)pos;
+	return (error_no_error);
 }
 
 t_error	open_argNquotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
