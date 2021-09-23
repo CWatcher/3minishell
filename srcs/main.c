@@ -30,16 +30,16 @@ void print_redir(t_redir *rd)
 	print_string_view(&rd->arg);
 }
 
-void	debug_print(t_andor_list *cmd)
+void	debug_print(t_andor_list *andor_list)
 {
-	for (size_t idx_ao = 0; idx_ao < cmd->and_or_list.size; idx_ao++)
+	for (size_t idx_ao = 0; idx_ao < andor_list->and_or_list.size; idx_ao++)
 	{
-		t_and_or_node *node = ft_vec_at(&cmd->and_or_list, idx_ao);
+		t_and_or_node *node = ft_vec_at(&andor_list->and_or_list, idx_ao);
 		for (size_t idx_pp = 0; idx_pp < node->pipeline.size; idx_pp++)
 		{
-			t_command *srun = ft_vec_at(&node->pipeline, idx_pp);
-			ft_vec_foreach(&srun->args, (void(*)(void*))print_string_view);
-			ft_vec_foreach(&srun->redir, (void(*)(void*))print_redir);
+			t_command *cmd = ft_vec_at(&node->pipeline, idx_pp);
+			ft_vec_foreach(&cmd->args, (void(*)(void*))print_string_view);
+			ft_vec_foreach(&cmd->redir, (void(*)(void*))print_redir);
 		}
 	}
 }

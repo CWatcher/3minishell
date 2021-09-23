@@ -22,7 +22,7 @@ typedef struct s_redir
 	t_redir_type	type;
 }				t_redir;
 
-typedef struct s_single_run
+typedef struct s_command
 {
 	// ft_vec_construct(&args, sizeof(t_stringview))
 	t_vector	args;
@@ -52,7 +52,7 @@ typedef struct s_and_or_node
 void	and_or_node_constr(t_and_or_node *node);
 void	and_or_node_destr(t_and_or_node *node);
 
-typedef struct	s_run
+typedef struct	s_andor_list
 {
 	// ft_vec_construct(&p_run, sizeof(t_and_or_node))
 	t_vector	and_or_list;
