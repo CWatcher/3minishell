@@ -15,6 +15,5 @@ cmake-build-debug
 out*.txt
 .release/
 .debug/
-pipex
 bonus
 minishell
