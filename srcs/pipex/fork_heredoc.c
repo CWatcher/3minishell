@@ -6,13 +6,13 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 17:04:17 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/01 14:30:27 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/23 22:59:26 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "libft.h"
-#include "get_next_line.h"
+#include "ft_string.h"
+#include "ft_io.h"
 #include "exit_me.h"
 
 static void	get_put_heredoc(const char *limiter, int fd_out)
@@ -21,7 +21,7 @@ static void	get_put_heredoc(const char *limiter, int fd_out)
 	int			r;
 
 	ft_putstr("> ");
-	r = get_next_line(STDIN_FILENO, &s);
+	r = ft_get_next_line(STDIN_FILENO, &s);
 	while (r > 0 && ft_strncmp(limiter, s, ft_strlen(limiter) + 1) != 0)
 	{
 		r = ft_putendl_fd(s, fd_out);
@@ -30,13 +30,13 @@ static void	get_put_heredoc(const char *limiter, int fd_out)
 			exit_me(ft_strdup("heredoc: failed to ft_putendl_fd()"));
 		if (ft_putstr("> ") < 0)
 			exit_me(ft_strdup("heredoc: failed to ft_putstr()"));
-		r = get_next_line(STDIN_FILENO, &s);
+		r = ft_get_next_line(STDIN_FILENO, &s);
 	}
 	s = ft_free(s);
 	if (close(fd_out) != 0)
 		exit_me(ft_strdup("Failed to close() in get_put_heredoc()"));
 	if (r < 0)
-		exit_me(ft_strdup("heredoc: failed to get_next_line()"));
+		exit_me(ft_strdup("heredoc: failed to ft_get_next_line()"));
 }
 
 void	fork_heredoc(const char *limiter, int fd_out)

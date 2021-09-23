@@ -6,13 +6,13 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/01 14:47:29 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/23 22:59:19 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <errno.h>
-#include "libft.h"
+#include "ft_string.h"
 #include "exit_me.h"
 
 static char	*find_value(char *vars[], char *var_name_with_delimiter)
@@ -28,7 +28,7 @@ static char	*find_value(char *vars[], char *var_name_with_delimiter)
 
 static char	*get_exec_pathname(const char *filename, const char *path_var)
 {
-	char **const	search_dirs = ft_split(path_var, ':');
+	char **const	search_dirs = ft_split(path_var, ":");
 	char			*pathname;
 	char			*found_pathname;
 	char			**dir;
@@ -49,7 +49,7 @@ static char	*get_exec_pathname(const char *filename, const char *path_var)
 			pathname = ft_free(pathname);
 		dir++;
 	}
-	ft_freestrs(search_dirs);
+	ft_freemultistr(search_dirs);
 	return (found_pathname);
 }
 
@@ -58,13 +58,13 @@ static void	exec_cmd(const char *cmd, char *envp[])
 	char	**argv;
 	char	*pathname;
 
-	argv = ft_split(cmd, ' ');
+	argv = ft_split(cmd, " ");
 	if (ft_strchr(argv[0], '/'))
 		pathname = ft_strdup(argv[0]);
 	else
 		pathname = get_exec_pathname(argv[0], find_value(envp, "PATH="));
 	execve(pathname, argv, envp);
-	ft_freestrs(argv);
+	ft_freemultistr(argv);
 	exit_me(pathname);
 }
 

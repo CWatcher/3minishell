@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "libft.h"
+#include "ft_string.h"
 #include "fork_boost.h"
 #include "exit_me.h"
 

@@ -15,6 +15,10 @@ LIBFT_DIR = libft/
 #
 
 SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
+				srcs/pipex/exit_me.c		\
+				srcs/pipex/fork_cmd.c		\
+				srcs/pipex/fork_heredoc.c	\
+				srcs/pipex/fork_pipeline.c	\
 				./srcs/main.c
 
 RELEASE_MAKE = ./release.mk

@@ -3,3 +3,4 @@ git -= submodules
 Makefile -= *
 Makefile -= printf
 Makefile += color on Ubuntu
+-.vscode

@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 17:05:01 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/08/26 15:23:36 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/23 15:24:28 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
-#include "libft.h"
+#include "ft_io.h"
 
 void	exit_me(char *dynamic_error)
 {
