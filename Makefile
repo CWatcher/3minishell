@@ -19,6 +19,7 @@ SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				srcs/pipex/fork_cmd.c		\
 				srcs/pipex/fork_heredoc.c	\
 				srcs/pipex/fork_pipeline.c	\
+				srcs/pipex/run_andor_list.c	\
 				./srcs/signal_handle.c		\
 				./srcs/main.c
 

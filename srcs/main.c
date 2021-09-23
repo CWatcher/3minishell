@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/15 14:43:22 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/26 22:15:59 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <minishell.h>
+#include "minishell.h"
+#include "pipex/pipex.h"
 
 t_vector	*g_env;
 
@@ -68,12 +69,12 @@ void	minishell_init(t_minishell *ms, char *env[])
 	g_env = &ms->env;
 }
 
-int	main(int argc, char *argv[], char *env[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	t_minishell	ms;
 
-	(void)argc, (void)argv, (void)env;
-	minishell_init(&ms, env);
+	(void)argc, (void)argv, (void)envp;
+	minishell_init(&ms, envp);
 	while (t_true)
 	{
 		null_minishell_cmd(&ms);
@@ -85,6 +86,7 @@ int	main(int argc, char *argv[], char *env[])
 			add_history(line);
 		parse(&ms, line);
 		debug_print(ft_vec_at(&ms.run_stack, 0));
+		run_andor_list(ft_vec_at(&ms.run_stack, 0), envp);
 		free(line);
 	}
 	printf("exit\n");
