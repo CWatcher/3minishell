@@ -15,6 +15,7 @@ LIBFT_DIR = libft/
 #
 
 SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
+				./srcs/signal_handle.c \
 				./srcs/main.c
 
 RELEASE_MAKE = ./release.mk

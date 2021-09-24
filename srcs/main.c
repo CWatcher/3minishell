@@ -16,6 +16,8 @@
 #include <minishell.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
+#include <bits/sigaction.h>
 
 t_vector	*g_env;
 
@@ -60,6 +62,7 @@ int	main(int argc, char *argv[], char *env[])
 
 	(void)argc, (void)argv, (void)env;
 	using_history();
+	set_signal_handler();
 	ft_vec_construct(&ms.env, sizeof(char *));
 	ft_vec_construct(&ms.run_stack, sizeof(t_andor_list));
 	for (size_t i = 0; env[i]; i++)
