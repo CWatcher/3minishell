@@ -15,8 +15,7 @@
 
 #include <minishell.h>
 #include <readline/readline.h>
-
-#include <readline/readline.h>
+#include <readline/history.h>
 
 t_vector	*g_env;
 
@@ -57,9 +56,10 @@ void	freep(char **p)
 
 int	main(int argc, char *argv[], char *env[])
 {
-	(void)argc, (void)argv, (void)env;
 	t_minishell	ms;
 
+	(void)argc, (void)argv, (void)env;
+	using_history();
 	ft_vec_construct(&ms.env, sizeof(char *));
 	ft_vec_construct(&ms.run_stack, sizeof(t_andor_list));
 	for (size_t i = 0; env[i]; i++)
@@ -71,14 +71,16 @@ int	main(int argc, char *argv[], char *env[])
 	while (t_true)
 	{
 		null_minishell_cmd(&ms);
-		char *str;
-		str = readline("> ");
-		if (!str)
+		char *line;
+		line = readline("> ");
+		if (!line)
 			break;
-		parse(&ms, str);
+		add_history(line);
+		parse(&ms, line);
 		debug_print(ft_vec_at(&ms.run_stack, 0));
-		free(str);
+		free(line);
 	}
+	printf("exit\n");
 	ft_vec_destructor(&ms.env, (t_destrfunc)freep);
 	ft_vec_destructor(&ms.run_stack, (t_destrfunc)command_destr);
 }
