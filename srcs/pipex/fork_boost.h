@@ -13,6 +13,8 @@
 #ifndef FORK_BOOST_H
 # define FORK_BOOST_H
 
+# include <sys/types.h>
+
 pid_t	fork_cmd(const char *cmd, char *envp[], int fd_in, int fd_out);
 pid_t	fork_pipeline(char *cmds[], char *envp[], int fd_in, int fd_out);
 void	fork_heredoc(const char *limiter, int fd_out);
