@@ -75,5 +75,6 @@ typedef struct s_minishell
 char	*open_arg(t_stringview sv, t_vector *env);
 t_error	parse(t_minishell *ms, char const *str);
 t_error	null_minishell_cmd(t_minishell *ms);
+void	set_signal_handler(void);
 
 #endif
