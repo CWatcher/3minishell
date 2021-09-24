@@ -19,11 +19,11 @@ char *env_value(t_vector *env, t_stringview key)
 	return "";
 }
 
-t_error	get_name(t_stringview sv, t_stringview *name, size_t *pos)
+t_ftE	get_name(t_stringview sv, t_stringview *name, size_t *pos)
 {
-	t_error	err;
+	t_ftE	err;
 
-	err = error_no_error;
+	err = ftE_ok;
 	if (sv.str[*pos] == '{')
 	{
 		name->str = &sv.str[++(*pos)];
@@ -31,7 +31,7 @@ t_error	get_name(t_stringview sv, t_stringview *name, size_t *pos)
 		while (*pos < sv.size && sv.str[*pos] != '}')
 		{
 			if ((ft_isalnum(name->str[name->size]) || name->str[name->size] == '_') == t_false)
-				err = error_parse_error;
+				err = ftE_parse_error;
 			name->size++;
 			(*pos)++;
 		}
@@ -50,33 +50,33 @@ t_error	get_name(t_stringview sv, t_stringview *name, size_t *pos)
 	return (err);
 }
 
-t_error	open_arg_env(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_arg_env(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
 {
 	t_stringview	name;
 	char			*env_v;
 
 	(*pos)++;
 	if (get_name(sv, &name, pos))
-		return (error_parse_error);
+		return (ftE_parse_error);
 	if (name.size == 0)
 	{
 		if (ft_vec_push_back(str_build, "$") == t_false)
-			return (error_allocation_fail);
+			return (ftE_bad_alloc);
 	}
 	else
 	{
 		env_v = env_value(env, name);
 		if (ft_vec_push_back_n(str_build, env_v, ft_strlen(env_v)) == t_false)
-			return (error_allocation_fail);
+			return (ftE_bad_alloc);
 	}
-	return (error_no_error);
+	return (ftE_ok);
 }
 
-t_error	open_argNquotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_argNquotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
 {
-	t_error	err;
+	t_ftE	err;
 
-	err = error_no_error;
+	err = ftE_ok;
 	while (*pos < sv.size && '\"' != sv.str[*pos] && '\'' != sv.str[*pos])
 	{
 		if (sv.str[*pos] == '\\')
@@ -84,51 +84,51 @@ t_error	open_argNquotes(t_stringview sv, t_vector *str_build, t_vector *env, siz
 		else if (sv.str[*pos] == '$')
 			err = open_arg_env(sv, str_build, env, pos);
 		else if (ft_vec_push_back(str_build, &sv.str[(*pos)++]) == t_false)
-			return (error_allocation_fail);
+			return (ftE_bad_alloc);
 		if (err)
 			return (err);
 	}
-	return (error_no_error);
+	return (ftE_ok);
 }
 
-t_error	open_arg1quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_arg1quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
 {
 	(void)env;
 	(*pos)++;
 	while (sv.str[*pos] != '\'')
 	{
 		if (ft_vec_push_back(str_build, &sv.str[*pos]) == t_false)
-			return (error_allocation_fail);
+			return (ftE_bad_alloc);
 		(*pos)++;
 	}
 	(*pos)++;
-	return (error_no_error);
+	return (ftE_ok);
 }
 
-t_error	open_arg2quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_arg2quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
 {
-	t_error	err;
+	t_ftE	err;
 
 	(void)env;
-	err = error_no_error;
+	err = ftE_ok;
 	(*pos)++;
 	while (sv.str[*pos] != '\"')
 	{
 		if (sv.str[*pos] == '$')
 			err = open_arg_env(sv, str_build, env, pos);
 		else if (ft_vec_push_back(str_build, &sv.str[(*pos)++]) == t_false)
-			return (error_allocation_fail);
+			return (ftE_bad_alloc);
 		if (err)
 			return (err);
 	}
 	(*pos)++;
-	return (error_no_error);
+	return (ftE_ok);
 }
 
 char *open_arg(t_stringview sv, t_vector *env)
 {
 	t_vector	str_build;
-	t_error		err;
+	t_ftE		err;
 	size_t		pos;
 	char const	zero = '\0';
 

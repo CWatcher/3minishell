@@ -61,7 +61,7 @@ typedef struct	s_andor_list
 void	command_constr(t_andor_list *cmd);
 void	command_destr(t_andor_list *cmd);
 
-typedef t_error(	*t_itokenfunc)(void *, void *);
+typedef t_ftE(	*t_itokenfunc)(void *, void *);
 
 typedef struct s_minishell
 {
@@ -73,8 +73,8 @@ typedef struct s_minishell
 }				t_minishell;
 
 char	*open_arg(t_stringview sv, t_vector *env);
-t_error	parse(t_minishell *ms, char const *str);
-t_error	null_minishell_cmd(t_minishell *ms);
+t_ftE	parse(t_minishell *ms, char const *str);
+t_ftE	null_minishell_cmd(t_minishell *ms);
 void	set_signal_handler(void);
 
 #endif

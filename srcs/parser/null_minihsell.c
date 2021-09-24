@@ -33,7 +33,7 @@ void	srun_destr(t_command *srun)
 	ft_vec_destructor(&srun->redir, NULL);
 }
 
-t_error	null_minishell_cmd(t_minishell *ms)
+t_ftE	null_minishell_cmd(t_minishell *ms)
 {
 	t_command		srun;
 	t_and_or_node	and_or_node;
@@ -47,5 +47,5 @@ t_error	null_minishell_cmd(t_minishell *ms)
 	ft_vec_push_back(&cmd.and_or_list, &and_or_node);
 	ft_vec_push_back(&ms->run_stack, &cmd);
 	ms->parse_token = (t_itokenfunc)parse_all;
-	return (error_no_error);
+	return (ftE_ok);
 }
