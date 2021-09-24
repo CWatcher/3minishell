@@ -18,16 +18,22 @@
 
 #include <readline/readline.h>
 
-void print_string_view(t_stringview *sv)
+t_vector	*g_env;
+
+void print_arg(t_stringview *sv)
 {
-	int size = sv->size;
-	printf("%.*s\n", size, sv->str);
+	char *arg = open_arg(*sv, g_env);
+	if (arg)
+		printf("%s\n", arg);
+	else
+		printf("(null)\n");
+	free(arg);
 }
 
 void print_redir(t_redir *rd)
 {
 	printf("%i: ", rd->type);
-	print_string_view(&rd->arg);
+	print_arg(&rd->arg);
 }
 
 void	debug_print(t_andor_list *cmd)
@@ -38,7 +44,7 @@ void	debug_print(t_andor_list *cmd)
 		for (size_t idx_pp = 0; idx_pp < node->pipeline.size; idx_pp++)
 		{
 			t_command *srun = ft_vec_at(&node->pipeline, idx_pp);
-			ft_vec_foreach(&srun->args, (void(*)(void*))print_string_view);
+			ft_vec_foreach(&srun->args, (void(*)(void*))print_arg);
 			ft_vec_foreach(&srun->redir, (void(*)(void*))print_redir);
 		}
 	}
@@ -51,6 +57,12 @@ int	main(int argc, char *argv[], char *env[])
 
 	ft_vec_construct(&ms.env, sizeof(char *));
 	ft_vec_construct(&ms.run_stack, sizeof(t_andor_list));
+	for (size_t i = 0; env[i]; i++)
+	{
+		char *str = ft_strdup(env[i]);
+		ft_vec_push_back(&ms.env, &str);
+	}
+	g_env = &ms.env;
 	while (t_true)
 	{
 		null_minishell_cmd(&ms);
