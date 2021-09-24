@@ -14,6 +14,7 @@
 #include <errno.h>
 #include "ft_string.h"
 #include "exit_me.h"
+#include <sys/types.h>
 
 static char	*find_value(char *vars[], char *var_name_with_delimiter)
 {
