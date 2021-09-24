@@ -30,7 +30,7 @@ t_error	get_name(t_stringview sv, t_stringview *name, size_t *pos)
 		name->size = 0;
 		while (*pos < sv.size && sv.str[*pos] != '}')
 		{
-			if (!(ft_isalnum(name->str[name->size]) || name->str[name->size] == '_'))
+			if ((ft_isalnum(name->str[name->size]) || name->str[name->size] == '_') == t_false)
 				err = error_parse_error;
 			name->size++;
 			(*pos)++;
