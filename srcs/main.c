@@ -50,6 +50,11 @@ void	debug_print(t_andor_list *cmd)
 	}
 }
 
+void	freep(char **p)
+{
+	free(*p);
+}
+
 int	main(int argc, char *argv[], char *env[])
 {
 	(void)argc, (void)argv, (void)env;
@@ -74,6 +79,6 @@ int	main(int argc, char *argv[], char *env[])
 		debug_print(ft_vec_at(&ms.run_stack, 0));
 		free(str);
 	}
-	ft_vec_destructor(&ms.env, free);
+	ft_vec_destructor(&ms.env, (t_destrfunc)freep);
 	ft_vec_destructor(&ms.run_stack, (t_destrfunc)command_destr);
 }
