@@ -12,12 +12,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
-#include <minishell.h>
+#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <signal.h>
-#include <bits/sigaction.h>
+#include <minishell.h>
 
 t_vector	*g_env;
 
