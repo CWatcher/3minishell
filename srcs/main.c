@@ -56,21 +56,26 @@ void	freep(char **p)
 	free(*p);
 }
 
+void	minishell_init(t_minishell *ms, char *env[])
+{
+	using_history();
+	set_signal_handler();
+	ft_vec_construct(&ms->env, sizeof(char *));
+	ft_vec_construct(&ms->run_stack, sizeof(t_andor_list));
+	for (size_t i = 0; env[i]; i++)
+	{
+		char *str = ft_strdup(env[i]);
+		ft_vec_push_back(&ms->env, &str);
+	}
+	g_env = &ms->env;
+}
+
 int	main(int argc, char *argv[], char *env[])
 {
 	t_minishell	ms;
 
 	(void)argc, (void)argv, (void)env;
-	using_history();
-	set_signal_handler();
-	ft_vec_construct(&ms.env, sizeof(char *));
-	ft_vec_construct(&ms.run_stack, sizeof(t_andor_list));
-	for (size_t i = 0; env[i]; i++)
-	{
-		char *str = ft_strdup(env[i]);
-		ft_vec_push_back(&ms.env, &str);
-	}
-	g_env = &ms.env;
+	minishell_init(&ms, env);
 	while (t_true)
 	{
 		null_minishell_cmd(&ms);
@@ -78,7 +83,8 @@ int	main(int argc, char *argv[], char *env[])
 		line = readline("> ");
 		if (!line)
 			break;
-		add_history(line);
+		if (*line)
+			add_history(line);
 		parse(&ms, line);
 		debug_print(ft_vec_at(&ms.run_stack, 0));
 		free(line);
