@@ -2,7 +2,7 @@
 
 t_ftE	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 {
-	if (!ft_vec_push_back(&parse->tokens, &token))
+	if (ft_vec_push_back(&parse->tokens, &token) != ftE_ok)
 		return (ftE_bad_alloc);
 	parse->dfafunc = func;
 	return (ftE_ok);

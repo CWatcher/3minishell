@@ -9,12 +9,12 @@ t_ftE	dfa_tokenize(char const *str, t_dfaparse *parse)
 	while (*str)
 	{
 		err = parse->dfafunc(str, parse);
-		if (err)
+		if (err != ftE_ok)
 			return (err);
 		str++;
 	}
 	if (parse->dfafunc == (t_dfafunc)&dfa_arg1quotes \
 		|| parse->dfafunc == (t_dfafunc)&dfa_arg2quotes)
-		return (dfaE_parse_unclosed_quote);
+		return ((t_ftE)dfaE_parse_unclosed_quote);
 	return (ftE_ok);
 }
