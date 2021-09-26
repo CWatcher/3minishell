@@ -15,8 +15,8 @@ void	run_pipeline(t_vector *pipeline, char *envp[])
 	while (j < pipeline->size)
 	{
 		cmd = ft_vec_at(pipeline, j);
-		t_stringview *arg0 = ft_vec_at(&cmd->args, 0);
-		pid = fork_cmd(arg0->str, envp, STDIN_FILENO, STDOUT_FILENO);
+		t_stringview *args = cmd->args.array;
+		pid = fork_cmd(args[0].str, envp, STDIN_FILENO, STDOUT_FILENO);
 		waitpid(pid, &status, 0);
 		j++;
 	}
