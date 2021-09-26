@@ -6,7 +6,6 @@ void	new_line(int i)
 {
 	(void)i;
 	rl_replace_line("", 0);
-	rl_redisplay();
 	rl_done = 1;
 }
 
