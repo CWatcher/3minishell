@@ -29,11 +29,12 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
-			"args": [""],
+			"args": ["< ","input.txt"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [{"name":"PATH", "value":"${env:PATH}"}],
 			"externalConsole": false,
+			"console": "integratedTerminal",
 			"MIMode": "lldb",
 			"preLaunchTask": "C/C++: make with cc the project"
 		}
