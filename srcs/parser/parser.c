@@ -14,8 +14,10 @@ t_ftE	parse(t_minishell *ms, char const *str)
 	t_ftE		err;
 
 	err = dfa_tokenize(str, &tokens);
-	if (err != ftE_ok || tokens.tokens.size == 0)
+	if (err != ftE_ok)
 		return (dlrt_dfaparse(&tokens, err));
+	if (tokens.tokens.size == 0) // TODO remove
+		return (dlrt_dfaparse(&tokens, ftE_parse_error));
 	err = parse_commands(ms, &tokens);
 	if (err != ftE_ok)
 		return (dlrt_dfaparse(&tokens, err));
