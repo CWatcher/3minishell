@@ -70,8 +70,6 @@ void	init_env(t_minishell *ms, char *env[])
 		ft_vec_push_back(&ms->env, &str);
 		i++;
 	}
-	str = NULL;
-	ft_vec_push_back(&ms->env, &str);
 	g_env = &ms->env;
 }
 
