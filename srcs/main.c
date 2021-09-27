@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/26 22:15:59 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/27 09:22:09 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int	main(int argc, char *argv[], char *envp[])
 	t_minishell	ms;
 	char		*line;
 
+	(void)argc;
+	(void)argv;
 	minishell_init(&ms, envp);
 	line = NULL;
 	while (t_true)
