@@ -1,7 +1,7 @@
 #include "tokenize.h"
 #include <ft_string.h>
 
-char *env_value(t_vector *env, t_stringview key)
+char *env_value(const t_vector *env, t_stringview key)
 {
 	char	*str;
 	size_t	i;
@@ -50,7 +50,7 @@ t_ftE	get_name(t_stringview sv, t_stringview *name, size_t *pos)
 	return (err);
 }
 
-t_ftE	open_arg_env(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_arg_env(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
 {
 	t_stringview	name;
 	char			*env_v;
@@ -72,7 +72,7 @@ t_ftE	open_arg_env(t_stringview sv, t_vector *str_build, t_vector *env, size_t *
 	return (ftE_ok);
 }
 
-t_ftE	open_argNquotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_argNquotes(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
 {
 	t_ftE	err;
 
@@ -91,7 +91,7 @@ t_ftE	open_argNquotes(t_stringview sv, t_vector *str_build, t_vector *env, size_
 	return (ftE_ok);
 }
 
-t_ftE	open_arg1quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_arg1quotes(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
 {
 	(void)env;
 	(*pos)++;
@@ -105,7 +105,7 @@ t_ftE	open_arg1quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_
 	return (ftE_ok);
 }
 
-t_ftE	open_arg2quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_t *pos)
+t_ftE	open_arg2quotes(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
 {
 	t_ftE	err;
 
@@ -125,7 +125,7 @@ t_ftE	open_arg2quotes(t_stringview sv, t_vector *str_build, t_vector *env, size_
 	return (ftE_ok);
 }
 
-char *open_arg(t_stringview sv, t_vector *env)
+char *open_arg(t_stringview sv, const t_vector *env)
 {
 	t_vector	str_build;
 	t_ftE		err;

@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 17:04:17 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/23 22:09:22 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/30 22:48:28 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "ft_string.h"
 #include "fork_boost.h"
 #include "exit_me.h"
-
+/*
 pid_t	fork_pipeline(char *cmds[], char *envp[], int fd_in, int fd_out)
 {
 	int		pipe_fds[2];
@@ -29,3 +29,4 @@ pid_t	fork_pipeline(char *cmds[], char *envp[], int fd_in, int fd_out)
 	}
 	return (fork_cmd(*cmds, envp, fd_in, fd_out));
 }
+*/

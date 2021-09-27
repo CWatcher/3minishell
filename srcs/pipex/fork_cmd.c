@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/23 22:59:19 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/30 22:39:13 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,21 @@ static char	*get_exec_pathname(const char *filename, const char *path_var)
 	return (found_pathname);
 }
 
-static void	exec_cmd(const char *cmd, char *envp[])
+static void	exec_cmd(char *argv[], char *envp[])
 {
-	char	**argv;
 	char	*pathname;
 
-	argv = ft_split(cmd, " ");
 	if (ft_strchr(argv[0], '/'))
 		pathname = ft_strdup(argv[0]);
 	else
 		pathname = get_exec_pathname(argv[0], find_value(envp, "PATH="));
 	execve(pathname, argv, envp);
-	ft_freemultistr(argv);
+	//TODO check exit codes when argv[0] is a dir
+	argv = ft_freemultistr(argv);
 	exit_me(pathname);
 }
 
-pid_t	fork_cmd(const char *cmd, char *envp[], int fd_in, int fd_out)
+pid_t	fork_cmd(char *argv[], char *envp[], int fd_in, int fd_out)
 {
 	pid_t	pid;
 
@@ -77,9 +76,9 @@ pid_t	fork_cmd(const char *cmd, char *envp[], int fd_in, int fd_out)
 	if (pid == 0)
 	{
 		if (fd_in >= 0 && dup2(fd_in, STDIN_FILENO) != STDIN_FILENO)
-			exit_me(ft_strjoin("failed to dup2 on:", cmd));
+			exit_me(ft_strjoin("failed to dup2() on: ", argv[0]));
 		if (fd_out >= 0 && dup2(fd_out, STDOUT_FILENO) != STDOUT_FILENO)
-			exit_me(ft_strjoin("failed to dup2 on:", cmd));
+			exit_me(ft_strjoin("failed to dup2() on: ", argv[0]));
 	}
 	if (fd_in != STDIN_FILENO)
 		if (close(fd_in) != 0)
@@ -88,8 +87,8 @@ pid_t	fork_cmd(const char *cmd, char *envp[], int fd_in, int fd_out)
 		if (close(fd_out) != 0)
 			exit_me(ft_strdup("Failed to close(fd_out) in fork_cmd()"));
 	if (pid == 0)
-		exec_cmd(cmd, envp);
+		exec_cmd(argv, envp);
 	if (pid < 0)
-		exit_me(ft_strjoin("Failed to fork() on:", cmd));
+		exit_me(ft_strjoin("Failed to fork() on:", argv[0]));
 	return (pid);
 }

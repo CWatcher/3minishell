@@ -1,4 +1,3 @@
-echo ls | minishell (as before "signal handle" commit)
 git -= submodules
 #include <libft.h> -> "libft.h"
 Makefile -= *
@@ -9,3 +8,5 @@ make re = make clean && make
     ("make re" errors on commit "- #include <bits/sigaction.h>" after next)
 [norm] libft/error.h: e_ftE -= uppercase += explicit
 PS1='mish$'
+fork_cmd.c -= #include <sys/types.h>
++exit_minishell()

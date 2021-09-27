@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 17:05:01 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/23 15:24:28 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/30 22:27:29 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	exit_me(char *dynamic_error)
 {
 	int	status;
 
+	//TODO free minishell
 	if (!dynamic_error)
 		exit(EXIT_SUCCESS);
 	ft_putstr_fd("Error\n", STDERR_FILENO);
