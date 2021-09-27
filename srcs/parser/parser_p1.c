@@ -9,8 +9,6 @@ t_ftE	parse_all(t_minishell *ms, t_token *token)
 		return (parse_arg(ms, token));
 	if (token->type == e_token_logic_pipe)
 		return (parse_pipe(ms, token));
-	if (token->type == e_token_logic_end_command)
-		return (parse_end(ms, token));
 	return (ftE_parse_error);
 }
 

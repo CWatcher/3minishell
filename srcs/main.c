@@ -105,7 +105,6 @@ int	main(int argc, char *argv[], char *envp[])
 			continue ;
 		debug_print(ft_vec_at(&ms.run_stack, 0));
 		run_andor_list(ft_vec_at(&ms.run_stack, 0), envp);
-		free(line);
 	}
 	printf("exit\n");
 	ft_vec_destructor(&ms.env, (t_destrfunc)freep);
