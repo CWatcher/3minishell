@@ -1,3 +1,4 @@
+echo ls | minishell (as before "signal handle" commit)
 git -= submodules
 #include <libft.h> -> "libft.h"
 Makefile -= *
@@ -7,3 +8,4 @@ Makefile += color on Ubuntu
 make re = make clean && make
     ("make re" errors on commit "- #include <bits/sigaction.h>" after next)
 [norm] libft/error.h: e_ftE -= uppercase += explicit
+PS1='$'
