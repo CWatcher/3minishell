@@ -4,7 +4,7 @@
 #include "../minishell.h"
 #include "fork_boost.h"
 
-void	run_pipeline(t_vector *pipeline, char *envp[])
+void	run_pipeline(t_vector *pipeline, t_vector *envp)
 {
 	size_t		j;
 	t_command	*cmd;
@@ -16,23 +16,13 @@ void	run_pipeline(t_vector *pipeline, char *envp[])
 	{
 		cmd = ft_vec_at(pipeline, j);
 		t_stringview *args = cmd->args.array;
-		pid = fork_cmd(args[0].str, envp, STDIN_FILENO, STDOUT_FILENO);
+		pid = fork_cmd(args[0].str, envp->array, STDIN_FILENO, STDOUT_FILENO);
 		waitpid(pid, &status, 0);
 		j++;
 	}
 }
 
-void run_andor_list(t_andor_list *andor_list, char *envp[])
+void run_command_list(t_minishell *ms)
 {
-	size_t			i;
-	t_and_or_node	*andor_node;
-
-	(void)envp;
-	i = 0;
-	while(i < andor_list->and_or_list.size)
-	{
-		andor_node = ft_vec_at(&andor_list->and_or_list, i);
-		run_pipeline(&andor_node->pipeline, envp);
-		i++;
-	}
+	run_pipeline(&ms->node.pipeline, &ms->env);
 }

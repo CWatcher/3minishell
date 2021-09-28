@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/27 09:22:09 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/09/28 22:03:33 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,13 @@ void print_redir(t_redir *rd)
 	print_arg(&rd->arg);
 }
 
-void	debug_print(t_andor_list *andor_list)
+void	debug_print(t_and_or_node *node)
 {
-	for (size_t idx_ao = 0; idx_ao < andor_list->and_or_list.size; idx_ao++)
+	for (size_t idx_pp = 0; idx_pp < node->pipeline.size; idx_pp++)
 	{
-		t_and_or_node *node = ft_vec_at(&andor_list->and_or_list, idx_ao);
-		for (size_t idx_pp = 0; idx_pp < node->pipeline.size; idx_pp++)
-		{
-			t_command *srun = ft_vec_at(&node->pipeline, idx_pp);
-			ft_vec_foreach(&srun->args, (void(*)(void*))print_arg);
-			ft_vec_foreach(&srun->redir, (void(*)(void*))print_redir);
-		}
+		t_command *srun = ft_vec_at(&node->pipeline, idx_pp);
+		ft_vec_foreach(&srun->args, (void(*)(void*))print_arg);
+		ft_vec_foreach(&srun->redir, (void(*)(void*))print_redir);
 	}
 }
 
@@ -78,7 +74,7 @@ void	minishell_init(t_minishell *ms, char *env[])
 	using_history();
 	set_signal_handler();
 	ft_vec_construct(&ms->env, sizeof(char *));
-	ft_vec_construct(&ms->run_stack, sizeof(t_andor_list));
+	and_or_node_constr(&ms->node);
 	init_env(ms, env);
 }
 
@@ -103,10 +99,10 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(line);
 		if (parse(&ms, line) != ftE_ok)
 			continue ;
-		debug_print(ft_vec_at(&ms.run_stack, 0));
-		run_andor_list(ft_vec_at(&ms.run_stack, 0), envp);
+		debug_print(&ms.node);
+		run_command_list(&ms);
 	}
 	printf("exit\n");
 	ft_vec_destructor(&ms.env, (t_destrfunc)freep);
-	ft_vec_destructor(&ms.run_stack, (t_destrfunc)command_destr);
+	and_or_node_destr(&ms.node);
 }

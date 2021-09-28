@@ -7,7 +7,7 @@ char *env_value(t_vector *env, t_stringview key)
 	size_t	i;
 
 	i = 0;
-	while (i < env->size)
+	while (i < env->size - 1)
 	{
 		str = *(char **)ft_vec_at(env, i);
 		if (ft_strncmp(str, key.str, key.size) == 0 && str[key.size] == '=')
