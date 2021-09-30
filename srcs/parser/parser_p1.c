@@ -43,7 +43,7 @@ t_ftE	parse_arg_redir(t_minishell *ms, t_token *token)
 	t_redir			*redir;
 
 	s_run = ft_vec_back(&ms->node.pipeline);
-	redir = ft_vec_back(&s_run->redir);
+	redir = ft_vec_back(&s_run->redirs);
 	if (token->type != e_token_arg)
 		return (ftE_parse_error);
 	redir->arg = token->substr;
@@ -60,7 +60,7 @@ t_ftE	parse_redir(t_minishell *ms, t_token *token)
 	redir.fd = -1;
 	redir.arg = (t_stringview){NULL, 0};
 	redir.type = (t_redir_type)token->type;
-	if (ft_vec_push_back(&srun->redir, &redir) != ftE_ok)
+	if (ft_vec_push_back(&srun->redirs, &redir) != ftE_ok)
 		return (ftE_bad_alloc);
 	ms->parse_token = (t_itokenfunc)parse_arg_redir;
 	return (ftE_ok);

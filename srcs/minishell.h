@@ -27,7 +27,7 @@ typedef struct s_command
 	// ft_vec_construct(&args, sizeof(t_stringview))
 	t_vector	args;
 	// ft_vec_construct(&redir_i_stream, sizeof(t_redir))
-	t_vector	redir;
+	t_vector	redirs;
 }				t_command;
 
 void	srun_constr(t_command *srun);
