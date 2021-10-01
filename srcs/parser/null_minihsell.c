@@ -13,13 +13,13 @@ void	and_or_node_destr(t_and_or_node *node)
 void	srun_constr(t_command *srun)
 {
 	ft_vec_construct(&srun->args, sizeof(t_stringview));
-	ft_vec_construct(&srun->redir, sizeof(t_redir));
+	ft_vec_construct(&srun->redirs, sizeof(t_redir));
 }
 
 void	srun_destr(t_command *srun)
 {
 	ft_vec_destructor(&srun->args, NULL);
-	ft_vec_destructor(&srun->redir, NULL);
+	ft_vec_destructor(&srun->redirs, NULL);
 }
 
 t_ftE	null_minishell_cmd(t_minishell *ms)

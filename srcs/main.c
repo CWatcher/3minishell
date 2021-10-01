@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/28 22:03:33 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/09/30 11:23:10 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	debug_print(t_and_or_node *node)
 	{
 		t_command *srun = ft_vec_at(&node->pipeline, idx_pp);
 		ft_vec_foreach(&srun->args, (void(*)(void*))print_arg);
-		ft_vec_foreach(&srun->redir, (void(*)(void*))print_redir);
+		ft_vec_foreach(&srun->redirs, (void(*)(void*))print_redir);
 	}
 }
 

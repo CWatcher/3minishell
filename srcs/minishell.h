@@ -25,7 +25,7 @@ typedef struct s_redir
 typedef struct s_command
 {
 	t_vector	args;
-	t_vector	redir;
+	t_vector	redirs;
 }				t_command;
 
 void	srun_constr(t_command *srun);
