@@ -24,9 +24,7 @@ typedef struct s_redir
 
 typedef struct s_command
 {
-	// ft_vec_construct(&args, sizeof(t_stringview))
 	t_vector	args;
-	// ft_vec_construct(&redir_i_stream, sizeof(t_redir))
 	t_vector	redir;
 }				t_command;
 
@@ -45,9 +43,7 @@ typedef t_ftE(	*t_itokenfunc)(void *, void *);
 
 typedef struct s_minishell
 {
-	// ft_vec_construct(&logic, sizeof(char*))
 	t_vector		env;
-	// ft_vec_construct(&logic, sizeof(t_and_or_list))
 	t_and_or_node	node;
 	t_itokenfunc	parse_token;
 }				t_minishell;
