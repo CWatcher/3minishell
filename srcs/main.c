@@ -94,7 +94,7 @@ int	main(int argc, char *argv[], char *envp[])
 		free(line);
 		if (null_minishell_cmd(&ms) != ftE_ok)
 			break;
-		line = readline("> ");
+		line = readline(PROMPT);
 		if (!line)
 			break;
 		if (*line)

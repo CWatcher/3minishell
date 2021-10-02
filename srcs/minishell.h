@@ -6,6 +6,8 @@
 # include <ftdef.h>
 # include <ft_string.h>
 
+# define PROMPT "mish-0.3$ "
+
 typedef enum e_redir_type
 {
 	e_redir_bit = 1 << 7,

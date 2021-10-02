@@ -7,6 +7,16 @@ Makefile += color on Ubuntu
 make re = make clean && make
     ("make re" errors on commit "- #include <bits/sigaction.h>" after next)
 [norm] libft/error.h: e_ftE -= uppercase += explicit
-PS1='mish$'
 fork_cmd.c -= #include <sys/types.h>
 +exit_minishell()
+
+bash-3.2$ sleep 100
+^C
+bash-3.2$ minishell
+mish-0.3$ sleep 100
+sleep
+100
+^C
+mish-0.3$ mish-0.3$
+Приглашение ввода дважды выводится после прерывания процесса
+Это вроде из-за того что нужно как то по особому обрабатывать сигналы в уже запущенных прогах
