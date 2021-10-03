@@ -102,7 +102,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (parse(&ms, line) != ftE_ok)
 			continue ;
 		debug_print(&ms.node);
-		run_command_list(&ms);
+		ms.status = run_pipeline(&ms.node.pipeline, &ms.env);
 	}
 	printf("exit\n");
 	ft_vec_destructor(&ms.env, (t_destrfunc)freep);

@@ -15,6 +15,6 @@
 
 # include "../minishell.h"
 
-void	run_command_list(t_minishell *ms);
+int	run_pipeline(const t_vector *pipeline, t_vector *env);
 
 #endif

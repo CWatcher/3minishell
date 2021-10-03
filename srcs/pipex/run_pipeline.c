@@ -79,7 +79,7 @@ char**	open_args(t_vector v_stringviews, t_vector env)
 	return (argv);
 }
 
-void	run_pipeline(const t_vector *pipeline, t_vector *env)
+int	run_pipeline(const t_vector *pipeline, t_vector *env)
 {
 	const t_command		*cmds = pipeline->array;
 	char				**argv;
@@ -103,9 +103,5 @@ void	run_pipeline(const t_vector *pipeline, t_vector *env)
 		}
 		j++;
 	}
-}
-
-void	run_command_list(t_minishell *ms)
-{
-	run_pipeline(&ms->node.pipeline, &ms->env);
+	return (WEXITSTATUS(status));
 }
