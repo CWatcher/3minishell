@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 20:12:04 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 21:40:43 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include "fork_boost.h"
 #include "ft_string.h" // free_mutlistr()
 #include "ftdef.h"
-
 
 static t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 {
@@ -61,6 +60,12 @@ static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 	return (r);
 }
 
+static int	ft_perror(const char *s, int ret)
+{
+	perror(s);
+	return (ret);
+}
+
 static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
 {
 	const t_command		*cmds = pipeline.array;
@@ -79,15 +84,9 @@ static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
 			return (-1);
 		if (fd_out != STDOUT_FILENO)
 			if (close(fd_out) != 0)
-			{
-				perror("ft_open_file(): close()");
-				return (-2);
-			}
+				return (ft_perror("mish: fork_pipeline(): close() error", -2));
 		if (pipe(pipe_fds) != 0)
-		{
-			perror("mish: pipe error");
-			return (-3);
-		}
+			return (ft_perror("mish: pipe error", -3));
 		fork_cmd(cmds[j].args, env, fd_in, pipe_fds[1]);
 		fd_in = pipe_fds[0];
 		j++;
