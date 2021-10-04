@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/30 22:50:27 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/03 20:15:48 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (parse(&ms, line) != ftE_ok)
 			continue ;
 		debug_print(&ms.node);
-		ms.status = run_pipeline(&ms.node.pipeline, &ms.env);
+		ms.status = run_pipeline(ms.node.pipeline, ms.env);
 	}
 	printf("exit\n");
 	ft_vec_destructor(&ms.env, (t_destrfunc)freep);

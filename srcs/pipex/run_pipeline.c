@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_andor_list.c                                   :+:      :+:    :+:   */
+/*   run_pipeline.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/01 10:24:47 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 08:26:53 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <stdio.h> //perror()
 #include "../minishell.h"
 #include "fork_boost.h"
-#include "ftdef.h"
 #include "ft_string.h" // free_mutlistr()
+#include "ftdef.h"
 
-t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
+
+static t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 {
 	if (*p_fd > STDERR_FILENO)
 		if (close(*p_fd) != 0)
@@ -31,19 +31,19 @@ t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 	return (t_true);
 }
 
-t_bool	open_redirs(const t_vector *v_redirs, const t_vector *env,
+static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 					int *p_fd_in, int *p_fd_out)
 {
 	size_t			i;
-	const t_redir	*redirs = v_redirs->array;
+	const t_redir	*redirs = v_redirs.array;
 	char			*path;
 	t_bool			r;
 
 	i = 0;
 	r = t_true;
-	while (r && i < v_redirs->size)
+	while (r && i < v_redirs.size)
 	{
-		path = open_arg(redirs[i].arg, env);
+		path = open_arg(redirs[i].arg, &env);
 		if (redirs[i].type == e_redir_i_stream)
 		{
 			// fork_heredoc()
@@ -60,7 +60,8 @@ t_bool	open_redirs(const t_vector *v_redirs, const t_vector *env,
 	}
 	return (r);
 }
-char**	open_args(t_vector v_stringviews, t_vector env)
+
+static char**	open_args(t_vector v_stringviews, t_vector env)
 {
 	const t_stringview	*stringviews = v_stringviews.array;
 	size_t				i;
@@ -79,29 +80,48 @@ char**	open_args(t_vector v_stringviews, t_vector env)
 	return (argv);
 }
 
-int	run_pipeline(const t_vector *pipeline, t_vector *env)
+static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
 {
-	const t_command		*cmds = pipeline->array;
+	const t_command		*cmds = pipeline.array;
 	char				**argv;
 	size_t				j;
 	int					fd_in;
 	int					fd_out;
+	int					pipe_fds[2];
+	pid_t				pid;
+
+	fd_in = STDIN_FILENO;
+	fd_out = STDOUT_FILENO;
+	j = 0;
+	while (j < pipeline.size - 1)
+	{
+		if (!open_redirs(cmds[j].redirs, env, &fd_in, &fd_out))
+			return (-1);
+		if (fd_out != STDOUT_FILENO)
+			if (close(fd_out) != 0)
+				perror("ft_open_file(): close()");
+		if (pipe(pipe_fds) < 0)
+			perror("mish: pipe error");
+		argv = open_args(cmds[j].args, env);
+		fork_cmd(argv, env.array, fd_in, pipe_fds[1]);
+		argv = ft_freemultistr(argv);
+		fd_in = pipe_fds[0];
+		j++;
+	}
+	argv = open_args(cmds[j].args, env);
+	pid = fork_cmd(argv, env.array, fd_in, fd_out);
+	argv = ft_freemultistr(argv);
+	return (pid);
+}
+
+int	run_pipeline(t_vector pipeline, t_vector env)
+{
 	pid_t				pid;
 	int					status;
 
-	j = 0;
-	while (j < pipeline->size)
-	{
-		fd_in = STDIN_FILENO;
-		fd_out = STDOUT_FILENO;
-		if (open_redirs(&cmds[j].redirs, env, &fd_in, &fd_out))
-		{
-			argv = open_args(cmds[j].args, *env);
-			pid = fork_cmd(argv, env->array, fd_in, fd_out);
-			argv = ft_freemultistr(argv);
-			waitpid(pid, &status, 0);
-		}
-		j++;
-	}
+	pid = fork_pipeline(pipeline, env);
+	if (pid < 0)
+		return (1);
+	waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
 }

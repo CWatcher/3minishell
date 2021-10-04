@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:45:47 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/30 22:44:20 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 08:24:30 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "../minishell.h"
 
 pid_t	fork_cmd(char *argv[], char *envp[], int fd_in, int fd_out);
-pid_t	fork_pipeline(char *cmds[], char *envp[], int fd_in, int fd_out);
 void	fork_heredoc(const char *limiter, int fd_out);
 
 #endif
