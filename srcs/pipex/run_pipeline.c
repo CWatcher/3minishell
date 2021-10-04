@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 08:26:53 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 16:12:24 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,15 @@ static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
 			return (-1);
 		if (fd_out != STDOUT_FILENO)
 			if (close(fd_out) != 0)
+			{
 				perror("ft_open_file(): close()");
-		if (pipe(pipe_fds) < 0)
+				return (-2);
+			}
+		if (pipe(pipe_fds) != 0)
+		{
 			perror("mish: pipe error");
+			return (-3);
+		}
 		argv = open_args(cmds[j].args, env);
 		fork_cmd(argv, env.array, fd_in, pipe_fds[1]);
 		argv = ft_freemultistr(argv);

@@ -6,7 +6,7 @@
 # include <ftdef.h>
 # include <ft_string.h>
 
-# define PROMPT "mish-0.3$ "
+# define PROMPT "mish-0.4$ "
 
 typedef enum e_redir_type
 {
