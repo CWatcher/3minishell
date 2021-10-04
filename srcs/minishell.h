@@ -53,6 +53,7 @@ typedef struct s_minishell
 }				t_minishell;
 
 char	*open_arg(t_stringview sv, const t_vector *env);
+char**	open_args(t_vector v_stringviews, t_vector env);
 t_ftE	parse(t_minishell *ms, char const *str);
 t_ftE	null_minishell_cmd(t_minishell *ms);
 void	set_signal_handler(void);

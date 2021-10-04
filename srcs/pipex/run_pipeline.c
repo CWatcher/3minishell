@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 16:12:24 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 20:12:04 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,29 +61,9 @@ static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 	return (r);
 }
 
-static char**	open_args(t_vector v_stringviews, t_vector env)
-{
-	const t_stringview	*stringviews = v_stringviews.array;
-	size_t				i;
-	char				**argv;
-
-	i = 0;
-	argv = malloc(sizeof(char *) * (v_stringviews.size + 1));
-	if (!argv)
-		return (NULL);
-	while (i < v_stringviews.size)
-	{
-		argv[i] = open_arg(stringviews[i], &env);
-		i++;
-	}
-	argv[i] = NULL;
-	return (argv);
-}
-
 static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
 {
 	const t_command		*cmds = pipeline.array;
-	char				**argv;
 	size_t				j;
 	int					fd_in;
 	int					fd_out;
@@ -108,15 +88,11 @@ static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
 			perror("mish: pipe error");
 			return (-3);
 		}
-		argv = open_args(cmds[j].args, env);
-		fork_cmd(argv, env.array, fd_in, pipe_fds[1]);
-		argv = ft_freemultistr(argv);
+		fork_cmd(cmds[j].args, env, fd_in, pipe_fds[1]);
 		fd_in = pipe_fds[0];
 		j++;
 	}
-	argv = open_args(cmds[j].args, env);
-	pid = fork_cmd(argv, env.array, fd_in, fd_out);
-	argv = ft_freemultistr(argv);
+	pid = fork_cmd(cmds[j].args, env, fd_in, fd_out);
 	return (pid);
 }
 
