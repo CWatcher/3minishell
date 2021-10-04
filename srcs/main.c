@@ -6,17 +6,19 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/03 20:15:48 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 20:02:18 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
+#include <unistd.h> // isatty()
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
 #include "pipex/pipex.h"
+#include "ft_io.h" // ft_get_next_line()
 
 t_vector	*g_env;
 
@@ -73,11 +75,14 @@ void	init_env(t_minishell *ms, char *env[])
 
 void	minishell_init(t_minishell *ms, char *env[])
 {
+	*ms = (t_minishell){{0},{0},0,0,0};
 	using_history();
 	set_signal_handler();
 	ft_vec_construct(&ms->env, sizeof(char *));
 	and_or_node_constr(&ms->node);
 	init_env(ms, env);
+	if (isatty(STDIN_FILENO))
+		ms->prompt = PROMPT;
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -94,17 +99,25 @@ int	main(int argc, char *argv[], char *envp[])
 		free(line);
 		if (null_minishell_cmd(&ms) != ftE_ok)
 			break;
-		line = readline(PROMPT);
+		if (isatty(STDIN_FILENO))
+			line = readline(ms.prompt);
+		else
+		{
+			int r = ft_get_next_line(STDIN_FILENO, &line);
+			if (r < 1)
+				return (r);
+		}
 		if (!line)
 			break;
 		if (*line)
 			add_history(line);
 		if (parse(&ms, line) != ftE_ok)
 			continue ;
-		debug_print(&ms.node);
+//		debug_print(&ms.node);
 		ms.status = run_pipeline(ms.node.pipeline, ms.env);
 	}
-	printf("exit\n");
+	if (isatty(STDIN_FILENO))
+		printf("exit\n");
 	ft_vec_destructor(&ms.env, (t_destrfunc)freep);
 	and_or_node_destr(&ms.node);
 }

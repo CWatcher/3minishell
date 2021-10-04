@@ -49,6 +49,7 @@ typedef struct s_minishell
 	t_and_or_node	node;
 	t_itokenfunc	parse_token;
 	int				status;
+	char*			prompt;
 }				t_minishell;
 
 char	*open_arg(t_stringview sv, const t_vector *env);
