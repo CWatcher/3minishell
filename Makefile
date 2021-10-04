@@ -16,6 +16,7 @@ LIBFT_DIR = libft/
 
 SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				srcs/pipex/exit_me.c		\
+				srcs/pipex/ft_perror.c		\
 				srcs/pipex/fork_cmd.c		\
 				srcs/pipex/fork_heredoc.c	\
 				srcs/pipex/run_pipeline.c	\

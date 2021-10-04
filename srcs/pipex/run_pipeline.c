@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 21:40:43 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 21:52:14 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/wait.h>
 #include <stdio.h> //perror()
 #include "../minishell.h"
-#include "fork_boost.h"
+#include "pipex.h"
 #include "ft_string.h" // free_mutlistr()
 #include "ftdef.h"
 
@@ -58,12 +58,6 @@ static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 		i++;
 	}
 	return (r);
-}
-
-static int	ft_perror(const char *s, int ret)
-{
-	perror(s);
-	return (ret);
 }
 
 static pid_t	fork_pipeline(t_vector pipeline, t_vector env)

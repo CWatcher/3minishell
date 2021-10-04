@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 19:50:16 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/04 22:32:30 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include "../minishell.h"
+#include "pipex.h"
 #include "ft_string.h"
 #include "exit_me.h"
 #include <sys/types.h>
@@ -83,15 +84,15 @@ pid_t	fork_cmd(t_vector args, t_vector env, int fd_in, int fd_out)
 			exit_me(ft_strdup("mish: dup2()"));
 		if (fd_out >= 0 && dup2(fd_out, STDOUT_FILENO) != STDOUT_FILENO)
 			exit_me(ft_strdup("mish: dup2()"));
-	}
-	if (fd_in != STDIN_FILENO)
-		if (close(fd_in) != 0)
-			exit_me(ft_strdup("Failed to close(fd_in) in fork_cmd()"));
-	if (fd_out != STDOUT_FILENO)
-		if (close(fd_out) != 0)
-			exit_me(ft_strdup("Failed to close(fd_out) in fork_cmd()"));
-	if (pid == 0)
 		exec_cmd(args, env);
+	}
+	errno = 0;
+	if (fd_in != STDIN_FILENO && close(fd_in) != 0)
+		perror("mish: fork_cmd(): close(fd_in)");
+	if (fd_out != STDOUT_FILENO && close(fd_out) != 0)
+		perror("mish: fork_cmd(): close(fd_out)");
+	if (errno != 0 && pid == 0)
+		exit_me(ft_strdup("mish: child"));
 	if (pid < 0)
 		perror("mish: fork()");
 	return (pid);
