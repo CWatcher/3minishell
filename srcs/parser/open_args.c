@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_args.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 19:46:51 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/05 21:02:11 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@ char**	open_args(t_vector v_stringviews, t_vector env)
 {
 	const t_stringview	*stringviews = v_stringviews.array;
 	size_t				i;
-	char				**argv;
+	char				**n_args;
+	t_vector			argv;
 
+	ft_vec_construct(&argv, sizeof(char*));
 	i = 0;
-	argv = malloc(sizeof(char *) * (v_stringviews.size + 1));
-	if (!argv)
-		return (NULL);
 	while (i < v_stringviews.size)
 	{
-		argv[i] = open_arg(stringviews[i], &env);
+		n_args = open_arg(stringviews[i], &env);
+		ft_vec_push_back_n(&argv, n_args, ft_strarr_size(n_args));
+		free(n_args);
 		i++;
 	}
-	argv[i] = NULL;
-	return (argv);
+	n_args = NULL;
+	ft_vec_push_back(&argv, &n_args);
+	return (ft_vec_fetch_array(&argv, NULL));
 }

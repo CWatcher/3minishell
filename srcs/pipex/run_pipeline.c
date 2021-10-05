@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_pipeline.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 21:52:14 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/05 19:37:28 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,19 @@ static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 	size_t			i;
 	const t_redir	*redirs = v_redirs.array;
 	char			*path;
+	char			**t;
 	t_bool			r;
 
 	i = 0;
 	r = t_true;
 	while (r && i < v_redirs.size)
 	{
-		path = open_arg(redirs[i].arg, &env);
+		//! \todo error if open args return more then 1 arg
+		t = open_arg(redirs[i].arg, &env);
+		path = *t;
+		*t = NULL;
+		ft_strarr_clear(t);
+
 		if (redirs[i].type == e_redir_i_stream)
 		{
 			// fork_heredoc()

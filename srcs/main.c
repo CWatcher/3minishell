@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/05 09:42:11 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/05 20:47:42 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,39 +19,6 @@
 #include "minishell.h"
 #include "pipex/pipex.h"
 #include "ft_io.h" // ft_get_next_line()
-
-t_vector	*g_env;
-
-void print_arg(t_stringview *sv)
-{
-	char *arg = open_arg(*sv, g_env);
-	if (arg)
-		printf("%s\n", arg);
-	else
-		printf("(null)\n");
-	free(arg);
-}
-
-void print_redir(t_redir *rd)
-{
-	printf("%i: ", rd->type);
-	print_arg(&rd->arg);
-}
-
-void	debug_print(t_and_or_node *node)
-{
-	for (size_t idx_pp = 0; idx_pp < node->pipeline.size; idx_pp++)
-	{
-		t_command *srun = ft_vec_at(&node->pipeline, idx_pp);
-		ft_vec_foreach(&srun->args, (void(*)(void*))print_arg);
-		ft_vec_foreach(&srun->redirs, (void(*)(void*))print_redir);
-	}
-}
-
-void	freep(char **p)
-{
-	free(*p);
-}
 
 void	init_env(t_minishell *ms, char *env[])
 {
@@ -70,7 +37,6 @@ void	init_env(t_minishell *ms, char *env[])
 	}
 	str = NULL;
 	ft_vec_push_back(&ms->env, &str);
-	g_env = &ms->env;
 }
 
 void	minishell_init(t_minishell *ms, char *env[])
@@ -106,11 +72,10 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(line);
 		if (parse(&ms, line) != ftE_ok)
 			continue ;
-//		debug_print(&ms.node);
 		ms.status = run_pipeline(ms.node.pipeline, ms.env);
 	}
 	if (isatty(STDIN_FILENO))
 		printf("exit\n");
-	ft_vec_destructor(&ms.env, (t_destrfunc)freep);
+	ft_vec_destructor(&ms.env, (t_destrfunc)ft_freederef);
 	and_or_node_destr(&ms.node);
 }

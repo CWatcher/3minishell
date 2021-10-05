@@ -1,6 +1,13 @@
 #include "tokenize.h"
 #include <ft_string.h>
 
+typedef struct s_open_arg {
+	t_vector		arg_build;
+	t_vector		str_build;
+	t_stringview	sv;
+	size_t			pos;
+}			t_open_arg;
+
 char *env_value(const t_vector *env, t_stringview key)
 {
 	char	*str;
@@ -19,71 +26,99 @@ char *env_value(const t_vector *env, t_stringview key)
 	return "";
 }
 
-t_ftE	get_name(t_stringview sv, t_stringview *name, size_t *pos)
+t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 {
 	t_ftE	err;
 
 	err = ftE_ok;
-	if (sv.str[*pos] == '{')
+	if (oa->sv.str[oa->pos] == '{')
 	{
-		name->str = &sv.str[++(*pos)];
+		name->str = &oa->sv.str[++(oa->pos)];
 		name->size = 0;
-		while (*pos < sv.size && sv.str[*pos] != '}')
+		while (oa->pos < oa->sv.size && oa->sv.str[oa->pos] != '}')
 		{
 			if ((ft_isalnum(name->str[name->size]) || name->str[name->size] == '_') == t_false)
 				err = ftE_parse_error;
 			name->size++;
-			(*pos)++;
+			(oa->pos)++;
 		}
-		(*pos)++;
+		(oa->pos)++;
 	}
 	else
 	{
-		name->str = &sv.str[*pos];
+		name->str = &oa->sv.str[oa->pos];
 		name->size = 0;
 		while (ft_isalnum(name->str[name->size]) || name->str[name->size] == '_')
 		{
 			name->size++;
-			(*pos)++;
+			(oa->pos)++;
 		}
 	}
 	return (err);
 }
 
-t_ftE	open_arg_env(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
+t_ftE	push_env_to_args(t_open_arg *oa, char *env_v)
+{
+	size_t	pos;
+	char	*str;
+
+	pos = 0;
+	while (env_v[pos])
+	{
+		if (ft_isspace(env_v[pos]))
+		{
+			if (ft_vec_push_back(&oa->str_build, "\0") != ftE_ok)
+				return (ftE_bad_alloc);
+			str = ft_vec_fetch_array(&oa->str_build, NULL);
+			if (ft_vec_push_back(&oa->arg_build, &str) != ftE_ok)
+				return (ftE_bad_alloc);
+			while (ft_isspace(env_v[pos]))
+				pos++;
+		}
+		else
+		{
+			if (ft_vec_push_back(&oa->str_build, &env_v[pos]) != ftE_ok)
+				return (ftE_bad_alloc);
+			pos++;
+		}
+	}
+	return (ftE_ok);
+}
+
+t_ftE	open_arg_env(t_open_arg *oa, const t_vector *env)
 {
 	t_stringview	name;
 	char			*env_v;
 
-	(*pos)++;
-	if (get_name(sv, &name, pos))
+	(oa->pos)++;
+	if (choose_name(oa, &name) != ftE_ok)
 		return (ftE_parse_error);
 	if (name.size == 0)
 	{
-		if (ft_vec_push_back(str_build, "$") != ftE_ok)
+		if (ft_vec_push_back(&oa->str_build, "$") != ftE_ok)
 			return (ftE_bad_alloc);
 	}
 	else
 	{
 		env_v = env_value(env, name);
-		if (ft_vec_push_back_n(str_build, env_v, ft_strlen(env_v)) != ftE_ok)
+		if (push_env_to_args(oa, env_v) != ftE_ok)
 			return (ftE_bad_alloc);
 	}
 	return (ftE_ok);
 }
 
-t_ftE	open_argNquotes(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
+t_ftE	open_argnoquotes(t_open_arg *oa, const t_vector *env)
 {
 	t_ftE	err;
 
 	err = ftE_ok;
-	while (*pos < sv.size && '\"' != sv.str[*pos] && '\'' != sv.str[*pos])
+	while (oa->pos < oa->sv.size && '\"' != oa->sv.str[oa->pos] && '\'' != oa->sv.str[oa->pos])
 	{
-		if (sv.str[*pos] == '\\')
-			(*pos)++;
-		else if (sv.str[*pos] == '$')
-			err = open_arg_env(sv, str_build, env, pos);
-		else if (ft_vec_push_back(str_build, &sv.str[(*pos)++]) != ftE_ok)
+		if (oa->sv.str[oa->pos] == '\\')
+			oa->pos++;
+		else if (oa->sv.str[oa->pos] == '$')
+			err = open_arg_env(oa, env);
+		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) != ftE_ok)
 			return (ftE_bad_alloc);
 		if (err)
 			return (err);
@@ -91,64 +126,89 @@ t_ftE	open_argNquotes(t_stringview sv, t_vector *str_build, const t_vector *env,
 	return (ftE_ok);
 }
 
-t_ftE	open_arg1quotes(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
+t_ftE	open_arg1quotes(t_open_arg *oa, const t_vector *env)
 {
 	(void)env;
-	(*pos)++;
-	while (sv.str[*pos] != '\'')
+	(oa->pos)++;
+	while (oa->sv.str[oa->pos] != '\'')
 	{
-		if (ft_vec_push_back(str_build, &sv.str[*pos]) != ftE_ok)
+		if (ft_vec_push_back(&oa->str_build, &oa->sv.str[oa->pos]) != ftE_ok)
 			return (ftE_bad_alloc);
-		(*pos)++;
+		(oa->pos)++;
 	}
-	(*pos)++;
+	(oa->pos)++;
 	return (ftE_ok);
 }
 
-t_ftE	open_arg2quotes(t_stringview sv, t_vector *str_build, const t_vector *env, size_t *pos)
+t_ftE	open_arg2quotes(t_open_arg *oa, const t_vector *env)
 {
 	t_ftE	err;
 
 	(void)env;
 	err = ftE_ok;
-	(*pos)++;
-	while (sv.str[*pos] != '\"')
+	oa->pos++;
+	while (oa->sv.str[oa->pos] != '\"')
 	{
-		if (sv.str[*pos] == '$')
-			err = open_arg_env(sv, str_build, env, pos);
-		else if (ft_vec_push_back(str_build, &sv.str[(*pos)++]) != ftE_ok)
+		if (oa->sv.str[oa->pos] == '$')
+			err = open_arg_env(oa, env);
+		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) != ftE_ok)
 			return (ftE_bad_alloc);
 		if (err)
 			return (err);
 	}
-	(*pos)++;
+	(oa->pos)++;
 	return (ftE_ok);
 }
 
-char *open_arg(t_stringview sv, const t_vector *env)
+t_ftE	real_open_arg(t_open_arg *oa, const t_vector *env)
 {
-	t_vector	str_build;
 	t_ftE		err;
-	size_t		pos;
-	char const	zero = '\0';
 
-	ft_vec_construct(&str_build, sizeof(char));
-	ft_vec_reserv(&str_build, sv.size * 1.3);
-	pos = 0;
-	while (pos < sv.size)
+	while (oa->pos < oa->sv.size)
 	{
-		if (sv.str[pos] == '\"')
-			err = open_arg2quotes(sv, &str_build, env, &pos);
-		else if (sv.str[pos] == '\'')
-			err = open_arg1quotes(sv, &str_build, env, &pos);
+		if (oa->sv.str[oa->pos] == '\"')
+			err = open_arg2quotes(oa, env);
+		else if (oa->sv.str[oa->pos] == '\'')
+			err = open_arg1quotes(oa, env);
 		else
-			err = open_argNquotes(sv, &str_build, env, &pos);
+			err = open_argnoquotes(oa, env);
 		if (err != ftE_ok)
 		{
-			ft_vec_destructor(&str_build, NULL);
-			return (NULL);
+			ft_vec_destructor(&oa->str_build, NULL);
+			return (err);
 		}
 	}
-	ft_vec_push_back(&str_build, (void*)&zero);
-	return (ft_vec_fetch_array(&str_build, NULL));
+	ft_vec_push_back(&oa->str_build, "\0");
+	return (ftE_ok);
+}
+
+static void	*clean_open_arg(t_open_arg *oa)
+{
+	ft_vec_destructor(&oa->str_build, NULL);
+	ft_vec_destructor(&oa->arg_build, (t_destrfunc)ft_freederef);
+	return (NULL);
+}
+
+char	**open_arg(t_stringview sv, const t_vector *env)
+{
+	t_open_arg		oa;
+	t_ftE			err;
+	char			*str;
+
+	oa.pos = 0;
+	oa.sv = sv;
+	ft_vec_construct(&oa.str_build, sizeof(char));
+	ft_vec_reserv(&oa.str_build, sv.size);
+	ft_vec_construct(&oa.arg_build, sizeof(char*));
+	if (real_open_arg(&oa, env) != ftE_ok)
+		return (clean_open_arg(&oa));
+	str = ft_vec_fetch_array(&oa.str_build, NULL);
+	err = ft_vec_push_back(&oa.arg_build, &str);
+	if (err != ftE_ok)
+		free(str);
+	str = NULL;
+	err |= ft_vec_push_back(&oa.arg_build, &str);
+	if (err != ftE_ok)
+		return (clean_open_arg(&oa));
+	return (ft_vec_fetch_array(&oa.arg_build, NULL));
 }
