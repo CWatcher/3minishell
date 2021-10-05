@@ -5,3 +5,7 @@ echo 'ls' | ./minishell
 echo 'ls | wc' | ./minishell
 ulimit -n 7
 echo 'ls | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc ' | ./minishell
+echo 'ls
+ls
+ls
+ls' | ./minishell

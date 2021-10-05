@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 20:02:18 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/05 09:42:11 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,14 @@ void	init_env(t_minishell *ms, char *env[])
 
 void	minishell_init(t_minishell *ms, char *env[])
 {
-	*ms = (t_minishell){{0},{0},0,0,0};
+	*ms = (t_minishell){.prompt = PROMPT};
+	if (!isatty(STDIN_FILENO))
+		rl_outstream = stdin;
 	using_history();
 	set_signal_handler();
 	ft_vec_construct(&ms->env, sizeof(char *));
 	and_or_node_constr(&ms->node);
 	init_env(ms, env);
-	if (isatty(STDIN_FILENO))
-		ms->prompt = PROMPT;
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -99,17 +99,10 @@ int	main(int argc, char *argv[], char *envp[])
 		free(line);
 		if (null_minishell_cmd(&ms) != ftE_ok)
 			break;
-		if (isatty(STDIN_FILENO))
-			line = readline(ms.prompt);
-		else
-		{
-			int r = ft_get_next_line(STDIN_FILENO, &line);
-			if (r < 1)
-				return (r);
-		}
+		line = readline(ms.prompt);
 		if (!line)
 			break;
-		if (*line)
+		if (isatty(STDIN_FILENO) && *line && ft_strlen(line) > 0)
 			add_history(line);
 		if (parse(&ms, line) != ftE_ok)
 			continue ;
