@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/04 22:32:30 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/05 20:41:53 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,19 @@ static void	exec_cmd(t_vector args, t_vector env)
 {
 	char	*pathname;
 	char	**argv;
+	t_builtin_func builtin_func;
 
 	argv = open_args(args, env);
 	if (ft_strchr(argv[0], '/'))
 		pathname = ft_strdup(argv[0]);
 	else
-		pathname = get_exec_pathname(argv[0], find_value(env.array, "PATH="));
+	{
+		builtin_func = find_builtin(argv[0]);
+		if (builtin_func != NULL)
+			exit(builtin_func(argv));
+		else
+			pathname = get_exec_pathname(argv[0], find_value(env.array, "PATH="));
+	}
 	execve(pathname, argv, env.array);
 	//TODO check exit codes when argv[0] is a dir
 	argv = ft_freemultistr(argv);

@@ -1,11 +1,17 @@
 make > /dev/null || exit 1
 echo 'make: ok!'
 
-echo 'ls' | ./minishell
-echo 'ls | wc' | ./minishell
+./tt.sh 'ls'
+./tt.sh 'ls | wc'
 ulimit -n 7
-echo 'ls | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc ' | ./minishell
-echo 'ls
+./tt.sh 'ls | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc '
+./tt.sh 'ls
 ls
 ls
-ls' | ./minishell
+ls'
+./tt.sh 'echo'
+./tt.sh 'echo a'
+./tt.sh 'echo "" ab'
+./tt.sh 'echo ab ""'
+./tt.sh 'echo -n'
+./tt.sh 'echo -n a'
