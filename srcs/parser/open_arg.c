@@ -28,9 +28,6 @@ char *env_value(const t_vector *env, t_stringview key)
 
 t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 {
-	t_ftE	err;
-
-	err = ftE_ok;
 	if (oa->sv.str[oa->pos] == '{')
 	{
 		name->str = &oa->sv.str[++(oa->pos)];
@@ -38,7 +35,7 @@ t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 		while (oa->pos < oa->sv.size && oa->sv.str[oa->pos] != '}')
 		{
 			if ((ft_isalnum(name->str[name->size]) || name->str[name->size] == '_') == t_false)
-				err = ftE_parse_error;
+				return (ftE_parse_error);
 			name->size++;
 			(oa->pos)++;
 		}
@@ -54,7 +51,7 @@ t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 			(oa->pos)++;
 		}
 	}
-	return (err);
+	return (ftE_ok);
 }
 
 t_ftE	push_env_to_args(t_open_arg *oa, char *env_v)
