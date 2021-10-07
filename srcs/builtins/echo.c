@@ -2,15 +2,16 @@
 #include "ft_io.h"
 
 //int	echo(const args, t_vector env)
-int	echo(char* argv[])
+int	echo(char *argv[])
 {
-	t_bool		no_newline;
-	const char 	*ending[2] = {"\n", ""};
+	t_bool		newline_on;
 
-	if (!argv || !argv[0] || !argv[1])
+	if (!argv || !argv[0])
 		return (0);
-	no_newline = ft_strcmp(argv[1], "-n") == 0;
-	if (ft_putmultistr_delim(argv + no_newline + 1, " ", ending[no_newline]) < 0)
+	newline_on = ft_strcmp(argv[1], "-n") != 0;
+	if (ft_putmultistr_delim(argv + !newline_on + 1, " ") < 0)
 		return (1);
+	if (newline_on)
+		ft_putstr("\n");
 	return (0);
 }
