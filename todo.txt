@@ -9,12 +9,12 @@ fork_cmd() -= access()
 #include <libft.h> -> "libft.h"
 make re = make clean && make
     ("make re" errors on commit "- #include <bits/sigaction.h>" after next)
-[norm] libft/error.h: e_ftE -= uppercase += explicit
+[norm] libft/error.h: e_ft_err -= uppercase += explicit
 Makefile -= *
 Makefile -= printf
 Makefile += color on Ubuntu
 fork_cmd.c -= #include <sys/types.h>
-[rename] t_true -> true
+[rename] ft_true -> true
 
 -.vscode
 git -= submodules

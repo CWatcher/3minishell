@@ -53,7 +53,7 @@ void	minishell_init(t_minishell *ms, char *env[])
 
 void	minishell_destr(t_minishell *ms)
 {
-	ft_vec_destructor(&ms->env, (t_destrfunc)ft_freederef);
+	ft_vec_destructor(&ms->env, (t_destr_func)ft_freederef);
 	and_or_node_destr(&ms->node);
 }
 
@@ -66,17 +66,17 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argv;
 	minishell_init(&ms, envp);
 	line = NULL;
-	while (t_true)
+	while (ft_true)
 	{
 		free(line);
-		if (null_minishell_cmd(&ms) != ftE_ok)
+		if (null_minishell_cmd(&ms) != ft_err_ok)
 			break;
 		line = readline(ms.prompt);
 		if (!line)
 			break;
 		if (isatty(STDIN_FILENO) && *line && ft_strlen(line) > 0)
 			add_history(line);
-		if (parse(&ms, line) != ftE_ok)
+		if (parse(&ms, line) != ft_err_ok)
 			continue ;
 		ms.status = run_pipeline(ms.node.pipeline, ms.env);
 	}

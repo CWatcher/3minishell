@@ -1,14 +1,14 @@
 #include "tokenize.h"
 
-t_ftE	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
+t_ft_err	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 {
-	if (ft_vec_push_back(&parse->tokens, &token) != ftE_ok)
-		return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
+	if (ft_vec_push_back(&parse->tokens, &token) != ft_err_ok)
+		return (ft_err_perror("mish: bad alloc", ft_err_bad_alloc));
 	parse->dfafunc = func;
-	return (ftE_ok);
+	return (ft_err_ok);
 }
 
-t_ftE	dfa_skip_spaces(char const *str, t_dfaparse *parse)
+t_ft_err	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 {
 	t_stringview const	sv = {(char *)str, 1};
 
@@ -24,7 +24,7 @@ t_ftE	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_argprotsym));
 	else
 		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg));
-	return (ftE_ok);
+	return (ft_err_ok);
 }
 
 t_dfafunc	match_operator(char ch)
