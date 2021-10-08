@@ -26,8 +26,8 @@ static t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 			perror("ft_open_file(): close()");
 	*p_fd = open(path, oflag, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (*p_fd == -1)
-		return (t_false);
-	return (t_true);
+		return (ft_false);
+	return (ft_true);
 }
 
 static t_bool	open_redirs(t_vector v_redirs, t_vector env,
@@ -40,7 +40,7 @@ static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 	t_bool			r;
 
 	i = 0;
-	r = t_true;
+	r = ft_true;
 	while (r && i < v_redirs.size)
 	{
 		//! \todo error if open args return more then 1 arg

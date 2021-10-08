@@ -11,12 +11,13 @@ BUILD_DIR       = .release/
 NAME_EXE        = minishell
 PATH_EXE        = minishell
 TARGET_TYPE     = exe
-INC_DIR         = ${LIBFT_INC} srcs/
-FLAGS          += -Wpedantic -O2
+INC_DIR         = ${LIBFT_INC} srcs/ ${HOME}/.brew/Cellar/readline/8.1.1/include
+FLAGS          += -Wpedantic -O3
 LIBS           += -lreadline ${LIBFT_LIB}
-LIBS_DIRS      += ${LIBFT_LIB_DIR}
+LIBS_DIRS      += ${LIBFT_DB_LIB_DIR} ${HOME}/.brew/Cellar/readline/8.1.1/lib
 IS_FTST         = 0
 DEPEND_FILES   += ./Makefile ./release.mk
+
 
 
 SETUP    =      ${addprefix BUILD_FLAGS+=, ${FLAGS}} \

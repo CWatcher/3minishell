@@ -30,7 +30,7 @@ enum e_token_type
 
 enum e_dfa_error
 {
-	dfaE_none = ftE_user_define_error_namespace,
+	dfaE_none = ft_err_user_define_error_namespace,
 	dfaE_parse_unexpected_token,
 	dfaE_parse_unclosed_quote
 };
@@ -41,7 +41,7 @@ typedef struct s_token
 	t_stringview		substr;
 }				t_token;
 
-typedef t_ftE(*t_dfafunc)(char const*, void *);
+typedef t_ft_err(*t_dfafunc)(char const*, void *);
 
 typedef struct s_parse
 {
@@ -49,26 +49,26 @@ typedef struct s_parse
 	t_dfafunc	dfafunc;
 }				t_dfaparse;
 
-t_ftE	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func);
+t_ft_err	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func);
 t_dfafunc	match_operator(char ch);
 
-t_ftE	dfa_skip_spaces(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_skip_spaces(char const *str, t_dfaparse *parse);
 
-t_ftE	dfa_repeat(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_repeat(char const *str, t_dfaparse *parse);
 
-t_ftE	dfa_arg(char const *str, t_dfaparse *parse);
-t_ftE	dfa_arg1quotes(char const *str, t_dfaparse *parse);
-t_ftE	dfa_arg2quotes(char const *str, t_dfaparse *parse);
-t_ftE	dfa_argprotsym(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_arg(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_arg1quotes(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_arg2quotes(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_argprotsym(char const *str, t_dfaparse *parse);
 
-t_ftE	dfa_op_brack_left(char const *str, t_dfaparse *parse);
-t_ftE	dfa_op_brack_right(char const *str, t_dfaparse *parse);
-t_ftE	dfa_op_end(char const *str, t_dfaparse *parse);
-t_ftE	dfa_op_or(char const *str, t_dfaparse *parse);
-t_ftE	dfa_op_and(char const *str, t_dfaparse *parse);
-t_ftE	dfa_op_redir_left(char const *str, t_dfaparse *parse);
-t_ftE	dfa_op_redir_right(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_op_brack_left(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_op_brack_right(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_op_end(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_op_or(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_op_and(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_op_redir_left(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_op_redir_right(char const *str, t_dfaparse *parse);
 
-t_ftE	dfa_tokenize(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_tokenize(char const *str, t_dfaparse *parse);
 
 #endif

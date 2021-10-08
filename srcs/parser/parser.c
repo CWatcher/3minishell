@@ -2,13 +2,13 @@
 #include "parser.h"
 #include <minishell.h>
 
-t_ftE	dlrt_dfaparse(t_dfaparse *dfa, t_ftE err)
+t_ft_err	dlrt_dfaparse(t_dfaparse *dfa, t_ft_err err)
 {
-	ft_vec_destructor(&dfa->tokens, (t_destrfunc)NULL);
+	ft_vec_destructor(&dfa->tokens, (t_destr_func)NULL);
 	return (err);
 }
 
-t_ftE	check_parse(t_minishell *ms)
+t_ft_err	check_parse(t_minishell *ms)
 {
 	size_t		i;
 	t_command	*scmd;
@@ -18,24 +18,24 @@ t_ftE	check_parse(t_minishell *ms)
 	{
 		scmd = ft_vec_at(&ms->node.pipeline, i);
 		if (scmd->args.size == 0)
-			return (ftE_parse_error);
+			return (ft_err_perror("mish: unexpected token", ft_err_parse_error));
 		i++;
 	}
-	return (ftE_ok);
+	return (ft_err_ok);
 }
 
-t_ftE	parse(t_minishell *ms, char const *str)
+t_ft_err	parse(t_minishell *ms, char const *str)
 {
 	t_dfaparse	tokens;
-	t_ftE		err;
+	t_ft_err		err;
 
 	err = dfa_tokenize(str, &tokens);
-	if (err != ftE_ok)
+	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));
 	if (tokens.tokens.size == 0)
-		return (dlrt_dfaparse(&tokens, ftE_parse_error));
+		return (dlrt_dfaparse(&tokens, ft_err_parse_error));
 	err = parse_commands(ms, &tokens);
-	if (err != ftE_ok)
+	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));
 	err = check_parse(ms);
 	return (dlrt_dfaparse(&tokens, err));

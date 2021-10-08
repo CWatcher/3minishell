@@ -42,8 +42,8 @@ typedef struct s_and_or_node
 void	and_or_node_constr(t_and_or_node *node);
 void	and_or_node_destr(t_and_or_node *node);
 
-typedef t_ftE(	*t_itokenfunc)(void *, void *);
-typedef int(	*t_builtin_func)(char* argv[]);
+typedef t_ft_err(	*t_itokenfunc)(void *, void *);
+typedef int(		*t_builtin_func)(char* argv[]);
 
 typedef struct s_builtin_entry
 {
@@ -62,9 +62,10 @@ typedef struct s_minishell
 }				t_minishell;
 
 char	**open_arg(t_stringview sv, const t_vector *env);
-char**	open_args(t_vector v_stringviews, t_vector env);
-t_ftE	parse(t_minishell *ms, char const *str);
-t_ftE	null_minishell_cmd(t_minishell *ms);
+char	**open_allargs(t_vector v_stringviews, t_vector env);
+t_ft_err	parse(t_minishell *ms, char const *str);
+t_ft_err	null_minishell_cmd(t_minishell *ms);
+void	minishell_destr(t_minishell *ms);
 void	set_signal_handler(void);
 t_builtin_func	find_builtin(const char *s);
 int		ms_echo(char* argv[]);

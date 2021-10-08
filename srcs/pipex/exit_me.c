@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_me.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 17:05:01 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/09/30 22:27:29 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/08 19:41:41 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	exit_me(char *dynamic_error)
 	}
 	else
 	{
-		ft_putendl_fd(dynamic_error, STDERR_FILENO);
+		ft_putendl_fd_s(dynamic_error, STDERR_FILENO);
 		status = EXIT_FAILURE;
 	}
 	free(dynamic_error);

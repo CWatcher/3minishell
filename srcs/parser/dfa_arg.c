@@ -1,6 +1,6 @@
 #include "tokenize.h"
 
-t_ftE	dfa_arg(char const *str, t_dfaparse *parse)
+t_ft_err	dfa_arg(char const *str, t_dfaparse *parse)
 {
 	t_token				*t;
 	t_stringview const	sv = {(char *)str, 1};
@@ -17,10 +17,10 @@ t_ftE	dfa_arg(char const *str, t_dfaparse *parse)
 		parse->dfafunc = (t_dfafunc)dfa_arg1quotes;
 	else if (*str == '\\')
 		parse->dfafunc = (t_dfafunc)dfa_argprotsym;
-	return (ftE_ok);
+	return (ft_err_ok);
 }
 
-t_ftE	dfa_arg1quotes(char const *str, t_dfaparse *parse)
+t_ft_err	dfa_arg1quotes(char const *str, t_dfaparse *parse)
 {
 	t_token *t;
 
@@ -28,10 +28,10 @@ t_ftE	dfa_arg1quotes(char const *str, t_dfaparse *parse)
 	t->substr.size++;
 	if (*str == '\'')
 		parse->dfafunc = (t_dfafunc)dfa_arg;
-	return (ftE_ok);
+	return (ft_err_ok);
 }
 
-t_ftE	dfa_arg2quotes(char const *str, t_dfaparse *parse)
+t_ft_err	dfa_arg2quotes(char const *str, t_dfaparse *parse)
 {
 	t_token *t;
 
@@ -39,10 +39,10 @@ t_ftE	dfa_arg2quotes(char const *str, t_dfaparse *parse)
 	t->substr.size++;
 	if (*str == '"')
 		parse->dfafunc = (t_dfafunc)dfa_arg;
-	return (ftE_ok);
+	return (ft_err_ok);
 }
 
-t_ftE	dfa_argprotsym(char const *str, t_dfaparse *parse)
+t_ft_err	dfa_argprotsym(char const *str, t_dfaparse *parse)
 {
 	t_token *t;
 
@@ -50,5 +50,5 @@ t_ftE	dfa_argprotsym(char const *str, t_dfaparse *parse)
 	t = ((t_token *)ft_vec_back(&parse->tokens));
 	t->substr.size++;
 	parse->dfafunc = (t_dfafunc)dfa_arg;
-	return (ftE_ok);
+	return (ft_err_ok);
 }

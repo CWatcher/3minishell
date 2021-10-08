@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/05 20:47:42 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/08 23:40:25 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "minishell.h"
 #include "pipex/pipex.h"
 #include "ft_io.h" // ft_get_next_line()
+#include <ft_exit.h>
 
 void	init_env(t_minishell *ms, char *env[])
 {
@@ -51,6 +52,12 @@ void	minishell_init(t_minishell *ms, char *env[])
 	init_env(ms, env);
 }
 
+void	minishell_destr(t_minishell *ms)
+{
+	ft_vec_destructor(&ms->env, (t_destr_func)ft_freederef);
+	and_or_node_destr(&ms->node);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_minishell	ms;
@@ -59,23 +66,23 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	minishell_init(&ms, envp);
+	ft_at_exit(&ms, (t_destr_func)minishell_destr);
 	line = NULL;
-	while (t_true)
+	while (ft_true)
 	{
 		free(line);
-		if (null_minishell_cmd(&ms) != ftE_ok)
+		if (null_minishell_cmd(&ms) != ft_err_ok)
 			break;
 		line = readline(ms.prompt);
 		if (!line)
 			break;
 		if (isatty(STDIN_FILENO) && *line && ft_strlen(line) > 0)
 			add_history(line);
-		if (parse(&ms, line) != ftE_ok)
+		if (parse(&ms, line) != ft_err_ok)
 			continue ;
 		ms.status = run_pipeline(ms.node.pipeline, ms.env);
 	}
 	if (isatty(STDIN_FILENO))
 		printf("exit\n");
-	ft_vec_destructor(&ms.env, (t_destrfunc)ft_freederef);
-	and_or_node_destr(&ms.node);
+	ft_exit(0);
 }
