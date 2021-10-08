@@ -1,8 +1,7 @@
 #include "../minishell.h"
 #include "ft_io.h"
 
-//int	echo(const args, t_vector env)
-int	echo(char *argv[])
+int	ms_echo(char *argv[])
 {
 	t_bool		newline_on;
 

@@ -3,8 +3,12 @@
 
 t_builtin_func	find_builtin(const char *s)
 {
-	if (ft_strcmp(s, "echo") == 0)
-		return ((t_builtin_func)echo);
-	else
-		return (NULL);
+	const t_builtin_entry	builtin_dic[] = {
+		{"echo", ms_echo}, {"exit", ms_exit}, {NULL, NULL}};
+	int						i;
+
+	i = 0;
+	while (builtin_dic[i].name && ft_strcmp(s, builtin_dic[i].name) != 0)
+		i++;
+	return (builtin_dic[i].func);
 }

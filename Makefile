@@ -21,7 +21,8 @@ SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				srcs/pipex/fork_heredoc.c	\
 				srcs/pipex/run_pipeline.c	\
 				srcs/builtins/find_builtin.c\
-				srcs/builtins/echo.c		\
+				srcs/builtins/ms_echo.c		\
+				srcs/builtins/ms_exit.c		\
 				./srcs/signal_handle.c		\
 				./srcs/main.c
 
