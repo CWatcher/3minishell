@@ -18,7 +18,7 @@ t_ft_err	check_parse(t_minishell *ms)
 	{
 		scmd = ft_vec_at(&ms->node.pipeline, i);
 		if (scmd->args.size == 0)
-			return (ft_err_perror("mish: unexpected token", ft_err_parse_error));
+			return (ft_err_perror("mish: ", ft_err_bad_syntax));
 		i++;
 	}
 	return (ft_err_ok);
@@ -33,7 +33,7 @@ t_ft_err	parse(t_minishell *ms, char const *str)
 	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));
 	if (tokens.tokens.size == 0)
-		return (dlrt_dfaparse(&tokens, ft_err_parse_error));
+		return (dlrt_dfaparse(&tokens, ft_err_perror("mish: ", ft_err_bad_syntax)));
 	err = parse_commands(ms, &tokens);
 	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));

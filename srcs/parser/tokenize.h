@@ -28,13 +28,6 @@ enum e_token_type
 	e_token_logic_redir_i_stream = e_redir_i_stream,
 };
 
-enum e_dfa_error
-{
-	dfaE_none = ft_err_user_define_error_namespace,
-	dfaE_parse_unexpected_token,
-	dfaE_parse_unclosed_quote
-};
-
 typedef struct s_token
 {
 	enum e_token_type	type;

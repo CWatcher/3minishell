@@ -29,7 +29,8 @@ t_ft_err	null_minishell_cmd(t_minishell *ms)
 	and_or_node_destr(&ms->node);
 	srun_constr(&srun);
 	and_or_node_constr(&ms->node);
-	ft_vec_push_back(&ms->node.pipeline, &srun);
+	if (ft_vec_push_back(&ms->node.pipeline, &srun) != ft_err_ok)
+		return (ft_err_perror("mish: ", ft_err_bad_alloc));
 	ms->parse_token = (t_itokenfunc)parse_all;
 	return (ft_err_ok);
 }

@@ -3,7 +3,7 @@
 t_ft_err	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
 {
 	if (ft_vec_push_back(&parse->tokens, &token) != ft_err_ok)
-		return (ft_err_perror("mish: bad alloc", ft_err_bad_alloc));
+		return (ft_err_perror("mish: ", ft_err_bad_alloc));
 	parse->dfafunc = func;
 	return (ft_err_ok);
 }

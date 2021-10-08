@@ -9,7 +9,7 @@ t_ft_err	parse_all(t_minishell *ms, t_token *token)
 		return (parse_arg(ms, token));
 	if (token->type == e_token_logic_pipe)
 		return (parse_pipe(ms, token));
-	return (ft_err_perror("mish: unexpected token", ft_err_parse_error));
+	return (ft_err_perror("mish: ", ft_err_bad_syntax));
 }
 
 t_ft_err	parse_arg(t_minishell *ms, t_token *token)
@@ -18,9 +18,9 @@ t_ft_err	parse_arg(t_minishell *ms, t_token *token)
 
 	s_run = ft_vec_back(&ms->node.pipeline);
 	if (token->type != e_token_arg)
-		return (ft_err_perror("mish: unexpected token", ft_err_parse_error));
+		return (ft_err_perror("mish: ", ft_err_bad_syntax));
 	if (ft_vec_push_back(&s_run->args, &token->substr) != ft_err_ok)
-		return (ft_err_perror("mish: bad alloc", ft_err_bad_alloc));
+		return (ft_err_perror("mish: ", ft_err_bad_alloc));
 	ms->parse_token = (t_itokenfunc)parse_all;
 	return (ft_err_ok);
 }
@@ -32,7 +32,7 @@ t_ft_err	parse_pipe(t_minishell *ms, t_token *token)
 	(void)token;
 	srun_constr(&srun);
 	if (ft_vec_push_back(&ms->node.pipeline, &srun) != ft_err_ok)
-		return (ft_err_perror("mish: bad alloc", ft_err_bad_alloc));
+		return (ft_err_perror("mish: ", ft_err_bad_alloc));
 	ms->parse_token = (t_itokenfunc)parse_all;
 	return (ft_err_ok);
 }
@@ -45,7 +45,7 @@ t_ft_err	parse_arg_redir(t_minishell *ms, t_token *token)
 	s_run = ft_vec_back(&ms->node.pipeline);
 	redir = ft_vec_back(&s_run->redirs);
 	if (token->type != e_token_arg)
-		return (ft_err_perror("mish: unexpected token", ft_err_parse_error));
+		return (ft_err_perror("mish: ", ft_err_bad_syntax));
 	redir->arg = token->substr;
 	ms->parse_token = (t_itokenfunc)parse_all;
 	return (ft_err_ok);
@@ -61,7 +61,7 @@ t_ft_err	parse_redir(t_minishell *ms, t_token *token)
 	redir.arg = (t_stringview){NULL, 0};
 	redir.type = (t_redir_type)token->type;
 	if (ft_vec_push_back(&srun->redirs, &redir) != ft_err_ok)
-		return (ft_err_perror("mish: bad alloc", ft_err_bad_alloc));
+		return (ft_err_perror("mish: ", ft_err_bad_alloc));
 	ms->parse_token = (t_itokenfunc)parse_arg_redir;
 	return (ft_err_ok);
 }
