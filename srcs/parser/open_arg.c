@@ -37,8 +37,14 @@ t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 		name->size = 0;
 		while (oa->pos < oa->sv.size && oa->sv.str[oa->pos] != '}')
 		{
+<<<<<<< Updated upstream
 			if ((ft_isalnum(name->str[name->size]) || name->str[name->size] == '_') == t_false)
 				err = ftE_parse_error;
+=======
+			if ((ft_isalnum(name->str[name->size]) \
+					|| name->str[name->size] == '_') == t_false)
+				return (ftE_perror("mish: bad substitution", ftE_parse_error));
+>>>>>>> Stashed changes
 			name->size++;
 			(oa->pos)++;
 		}
@@ -48,7 +54,8 @@ t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 	{
 		name->str = &oa->sv.str[oa->pos];
 		name->size = 0;
-		while (ft_isalnum(name->str[name->size]) || name->str[name->size] == '_')
+		while (ft_isalnum(name->str[name->size]) \
+				|| name->str[name->size] == '_')
 		{
 			name->size++;
 			(oa->pos)++;
@@ -67,11 +74,14 @@ t_ftE	push_env_to_args(t_open_arg *oa, char *env_v)
 	{
 		if (ft_isspace(env_v[pos]))
 		{
-			if (ft_vec_push_back(&oa->str_build, "\0") != ftE_ok)
-				return (ftE_bad_alloc);
-			str = ft_vec_fetch_array(&oa->str_build, NULL);
-			if (ft_vec_push_back(&oa->arg_build, &str) != ftE_ok)
-				return (ftE_bad_alloc);
+			if (oa->str_build.size != 0)
+			{
+				if (ft_vec_push_back(&oa->str_build, "\0") != ftE_ok)
+					return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
+				str = ft_vec_fetch_array(&oa->str_build, NULL);
+				if (ft_vec_push_back(&oa->arg_build, &str) != ftE_ok)
+					return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
+			}
 			while (ft_isspace(env_v[pos]))
 				pos++;
 		}
@@ -96,13 +106,36 @@ t_ftE	open_arg_env(t_open_arg *oa, const t_vector *env)
 	if (name.size == 0)
 	{
 		if (ft_vec_push_back(&oa->str_build, "$") != ftE_ok)
-			return (ftE_bad_alloc);
+			return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
 	}
 	else
 	{
 		env_v = env_value(env, name);
 		if (push_env_to_args(oa, env_v) != ftE_ok)
-			return (ftE_bad_alloc);
+			return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
+	}
+	return (ftE_ok);
+}
+
+t_ftE	open_arg_env_quotes(t_open_arg *oa, const t_vector *env)
+{
+	t_stringview	name;
+	char			*env_v;
+
+	(oa->pos)++;
+	if (choose_name(oa, &name) != ftE_ok)
+		return (ftE_parse_error);
+	if (name.size == 0)
+	{
+		if (ft_vec_push_back(&oa->str_build, "$") != ftE_ok)
+			return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
+	}
+	else
+	{
+		env_v = env_value(env, name);
+		if (ft_vec_push_back_n(&oa->str_build, env_v, ft_strlen(env_v))
+				!= ftE_ok)
+			return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
 	}
 	return (ftE_ok);
 }
@@ -112,14 +145,22 @@ t_ftE	open_argnoquotes(t_open_arg *oa, const t_vector *env)
 	t_ftE	err;
 
 	err = ftE_ok;
-	while (oa->pos < oa->sv.size && '\"' != oa->sv.str[oa->pos] && '\'' != oa->sv.str[oa->pos])
+	while (oa->pos < oa->sv.size \
+			&& '\"' != oa->sv.str[oa->pos] \
+			&& '\'' != oa->sv.str[oa->pos])
 	{
 		if (oa->sv.str[oa->pos] == '\\')
+		{
 			oa->pos++;
+			if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
+					!= ftE_ok)
+				return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
+		}
 		else if (oa->sv.str[oa->pos] == '$')
 			err = open_arg_env(oa, env);
-		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) != ftE_ok)
-			return (ftE_bad_alloc);
+		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
+					!= ftE_ok)
+			return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
 		if (err)
 			return (err);
 	}
@@ -133,7 +174,7 @@ t_ftE	open_arg1quotes(t_open_arg *oa, const t_vector *env)
 	while (oa->sv.str[oa->pos] != '\'')
 	{
 		if (ft_vec_push_back(&oa->str_build, &oa->sv.str[oa->pos]) != ftE_ok)
-			return (ftE_bad_alloc);
+			return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
 		(oa->pos)++;
 	}
 	(oa->pos)++;
@@ -150,9 +191,10 @@ t_ftE	open_arg2quotes(t_open_arg *oa, const t_vector *env)
 	while (oa->sv.str[oa->pos] != '\"')
 	{
 		if (oa->sv.str[oa->pos] == '$')
-			err = open_arg_env(oa, env);
-		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) != ftE_ok)
-			return (ftE_bad_alloc);
+			err = open_arg_env_quotes(oa, env);
+		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++])
+						!= ftE_ok)
+			return (ftE_perror("mish: bad alloc", ftE_bad_alloc));
 		if (err)
 			return (err);
 	}
@@ -178,12 +220,12 @@ t_ftE	real_open_arg(t_open_arg *oa, const t_vector *env)
 			return (err);
 		}
 	}
-	ft_vec_push_back(&oa->str_build, "\0");
 	return (ftE_ok);
 }
 
-static void	*clean_open_arg(t_open_arg *oa)
+static void	*clean_open_arg(t_open_arg *oa, t_ftE err)
 {
+	(void)err;
 	ft_vec_destructor(&oa->str_build, NULL);
 	ft_vec_destructor(&oa->arg_build, (t_destrfunc)ft_freederef);
 	return (NULL);
@@ -201,14 +243,20 @@ char	**open_arg(t_stringview sv, const t_vector *env)
 	ft_vec_reserv(&oa.str_build, sv.size);
 	ft_vec_construct(&oa.arg_build, sizeof(char*));
 	if (real_open_arg(&oa, env) != ftE_ok)
-		return (clean_open_arg(&oa));
-	str = ft_vec_fetch_array(&oa.str_build, NULL);
-	err = ft_vec_push_back(&oa.arg_build, &str);
-	if (err != ftE_ok)
-		free(str);
+		return (clean_open_arg(&oa, ftE_fail));
+	err = ftE_ok;
+	if (oa.str_build.size != 0)
+	{
+		ft_vec_push_back(&oa.str_build, "\0");
+		str = ft_vec_fetch_array(&oa.str_build, NULL);
+		err = ft_vec_push_back(&oa.arg_build, &str);
+		if (err != ftE_ok)
+			free(str);
+	}
 	str = NULL;
 	err |= ft_vec_push_back(&oa.arg_build, &str);
 	if (err != ftE_ok)
-		return (clean_open_arg(&oa));
+		return (clean_open_arg(&oa,
+				ftE_perror("mish: bad alloc", ftE_bad_alloc)));
 	return (ft_vec_fetch_array(&oa.arg_build, NULL));
 }

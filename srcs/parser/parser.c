@@ -18,7 +18,7 @@ t_ftE	check_parse(t_minishell *ms)
 	{
 		scmd = ft_vec_at(&ms->node.pipeline, i);
 		if (scmd->args.size == 0)
-			return (ftE_parse_error);
+			return (ftE_perror("mish: unexpected token", ftE_parse_error));
 		i++;
 	}
 	return (ftE_ok);

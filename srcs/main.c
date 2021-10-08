@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/05 20:47:42 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/08 19:29:50 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ void	minishell_init(t_minishell *ms, char *env[])
 	init_env(ms, env);
 }
 
+void	minishell_destr(t_minishell *ms)
+{
+	ft_vec_destructor(&ms->env, (t_destrfunc)ft_freederef);
+	and_or_node_destr(&ms->node);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_minishell	ms;
@@ -74,8 +80,7 @@ int	main(int argc, char *argv[], char *envp[])
 			continue ;
 		ms.status = run_pipeline(ms.node.pipeline, ms.env);
 	}
+	minishell_destr(&ms);
 	if (isatty(STDIN_FILENO))
 		printf("exit\n");
-	ft_vec_destructor(&ms.env, (t_destrfunc)ft_freederef);
-	and_or_node_destr(&ms.node);
 }

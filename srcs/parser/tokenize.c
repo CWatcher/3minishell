@@ -15,6 +15,7 @@ t_ftE	dfa_tokenize(char const *str, t_dfaparse *parse)
 	}
 	if (parse->dfafunc == (t_dfafunc)&dfa_arg1quotes \
 		|| parse->dfafunc == (t_dfafunc)&dfa_arg2quotes)
-		return ((t_ftE)dfaE_parse_unclosed_quote);
+		return (ftE_perror("mish: unclosed quote", \
+				(t_ftE)dfaE_parse_unclosed_quote));
 	return (ftE_ok);
 }
