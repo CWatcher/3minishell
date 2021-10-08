@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/08 19:29:50 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/08 23:40:25 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "minishell.h"
 #include "pipex/pipex.h"
 #include "ft_io.h" // ft_get_next_line()
+#include <ft_exit.h>
 
 void	init_env(t_minishell *ms, char *env[])
 {
@@ -65,6 +66,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	minishell_init(&ms, envp);
+	ft_at_exit(&ms, (t_destr_func)minishell_destr);
 	line = NULL;
 	while (ft_true)
 	{
@@ -80,7 +82,7 @@ int	main(int argc, char *argv[], char *envp[])
 			continue ;
 		ms.status = run_pipeline(ms.node.pipeline, ms.env);
 	}
-	minishell_destr(&ms);
 	if (isatty(STDIN_FILENO))
 		printf("exit\n");
+	ft_exit(0);
 }
