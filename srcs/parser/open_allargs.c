@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   open_args.c                                        :+:      :+:    :+:   */
+/*   open_allargs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/05 21:02:11 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/07 21:45:58 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char**	open_args(t_vector v_stringviews, t_vector env)
+char**	open_allargs(t_vector v_stringviews, t_vector env)
 {
 	const t_stringview	*stringviews = v_stringviews.array;
 	size_t				i;

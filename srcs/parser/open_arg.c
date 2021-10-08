@@ -28,23 +28,15 @@ char *env_value(const t_vector *env, t_stringview key)
 
 t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 {
-	t_ftE	err;
-
-	err = ftE_ok;
 	if (oa->sv.str[oa->pos] == '{')
 	{
 		name->str = &oa->sv.str[++(oa->pos)];
 		name->size = 0;
 		while (oa->pos < oa->sv.size && oa->sv.str[oa->pos] != '}')
 		{
-<<<<<<< Updated upstream
-			if ((ft_isalnum(name->str[name->size]) || name->str[name->size] == '_') == t_false)
-				err = ftE_parse_error;
-=======
 			if ((ft_isalnum(name->str[name->size]) \
 					|| name->str[name->size] == '_') == t_false)
 				return (ftE_perror("mish: bad substitution", ftE_parse_error));
->>>>>>> Stashed changes
 			name->size++;
 			(oa->pos)++;
 		}
@@ -61,7 +53,7 @@ t_ftE	choose_name(t_open_arg *oa, t_stringview *name)
 			(oa->pos)++;
 		}
 	}
-	return (err);
+	return (ftE_ok);
 }
 
 t_ftE	push_env_to_args(t_open_arg *oa, char *env_v)
