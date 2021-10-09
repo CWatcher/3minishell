@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/07 23:18:16 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/09 20:01:08 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,26 +57,25 @@ static char	*get_exec_pathname(const char *filename, const char *path_var)
 	return (found_pathname);
 }
 
-static void	exec_cmd(t_vector args, t_vector env)
+static void	exec_cmd(t_vector args, t_vector env) //TODO *env
 {
-	char	*pathname;
-	char	**argv;
-	t_builtin_func builtin_func;
+	char			*pathname;
+	char			*const *argv = open_allargs(args, env);
+	t_builtin_func	builtin_func;
 
-	argv = open_allargs(args, env);
 	if (ft_strchr(argv[0], '/'))
 		pathname = ft_strdup(argv[0]);
 	else
 	{
 		builtin_func = find_builtin(argv[0]);
 		if (builtin_func != NULL)
-			exit(builtin_func(argv));
+			exit(builtin_func(args, &env));
 		else
 			pathname = get_exec_pathname(argv[0], find_value(env.array, "PATH="));
 	}
 	execve(pathname, argv, env.array);
 	//TODO check exit codes when argv[0] is a dir
-	argv = ft_freemultistr(argv);
+	//TODO free(ms)
 	exit_me(pathname);
 }
 

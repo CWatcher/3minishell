@@ -1,8 +1,10 @@
-#include "../minishell.h"
+#include "minishell.h"
+#include "ft_vector.h"
 #include "ft_io.h"
 
-int	ms_echo(char *argv[])
+int	ms_echo(t_vector args, t_vector *env)
 {
+	char		*const *argv = open_allargs(args, *env);
 	t_bool		newline_on;
 
 	if (!argv || !argv[0])

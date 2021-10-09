@@ -4,7 +4,8 @@
 t_builtin_func	find_builtin(const char *s)
 {
 	const t_builtin_entry	builtin_dic[] = {
-		{"echo", ms_echo}, {"exit", ms_exit}, {NULL, NULL}};
+		// {"echo", ms_echo}, {"exit", ms_exit}, {NULL, NULL}};
+		{"echo", ms_echo}, {NULL, NULL}};
 	int						i;
 
 	i = 0;

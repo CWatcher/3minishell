@@ -3,7 +3,7 @@ echo 'make: ok!'
 
 ./tt.sh 'ls'
 ./tt.sh 'ls | wc'
-ulimit -n 7
+ulimit -n 20
 ./tt.sh 'ls | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc '
 ./tt.sh 'ls
 ls
