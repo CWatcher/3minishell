@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/07 21:45:58 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/09 07:32:12 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ char**	open_allargs(t_vector v_stringviews, t_vector env)
 	while (i < v_stringviews.size)
 	{
 		n_args = open_arg(stringviews[i], &env);
+		if (n_args == NULL)
+		{
+			ft_vec_destructor(&argv, (t_destr_func)ft_freederef);
+			return (NULL);
+		}
 		ft_vec_push_back_n(&argv, n_args, ft_strarr_size(n_args));
 		free(n_args);
 		i++;

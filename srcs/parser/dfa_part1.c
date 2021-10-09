@@ -22,6 +22,8 @@ t_ft_err	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg2quotes));
 	else if (*str == '\\')
 		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_argprotsym));
+	else if (*str == '$' && *(str + 1) == '{')
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_argskipcurlbraces));
 	else
 		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg));
 	return (ft_err_ok);

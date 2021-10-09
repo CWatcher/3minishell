@@ -53,6 +53,7 @@ t_ft_err	dfa_arg(char const *str, t_dfaparse *parse);
 t_ft_err	dfa_arg1quotes(char const *str, t_dfaparse *parse);
 t_ft_err	dfa_arg2quotes(char const *str, t_dfaparse *parse);
 t_ft_err	dfa_argprotsym(char const *str, t_dfaparse *parse);
+t_ft_err	dfa_argskipcurlbraces(char const *str, t_dfaparse *parse);
 
 t_ft_err	dfa_op_brack_left(char const *str, t_dfaparse *parse);
 t_ft_err	dfa_op_brack_right(char const *str, t_dfaparse *parse);

@@ -25,7 +25,7 @@ char *env_value(const t_vector *env, t_stringview key)
 	}
 	return "";
 }
-
+#include <stdio.h>
 t_ft_err	choose_name_brack(t_open_arg *oa, t_stringview *name)
 {
 	name->str = &oa->sv.str[++(oa->pos)];
@@ -157,13 +157,19 @@ t_ft_err	open_argnoquotes(t_open_arg *oa, const t_vector *env)
 			oa->pos++;
 			if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
 					!= ft_err_ok)
-				return (ft_err_bad_alloc);
+				err = ft_err_bad_alloc;
 		}
 		else if (oa->sv.str[oa->pos] == '$')
+		{
+			printf("%c\n", oa->sv.str[oa->pos]);
 			err = open_arg_env(oa, env);
-		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
+		}
+		else
+		{
+			if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
 					!= ft_err_ok)
-			return (ft_err_bad_alloc);
+				err = ft_err_bad_alloc;
+		}
 		if (err != ft_err_ok)
 			return (err);
 	}
@@ -225,7 +231,7 @@ t_ft_err	real_open_arg(t_open_arg *oa, const t_vector *env)
 
 static void	*clean_open_arg(t_open_arg *oa, t_ft_err err)
 {
-	(void)err;
+	ft_err_perror("mish: ", err);
 	ft_vec_destructor(&oa->str_build, NULL);
 	ft_vec_destructor(&oa->arg_build, (t_destr_func)ft_freederef);
 	return (NULL);
@@ -234,7 +240,7 @@ static void	*clean_open_arg(t_open_arg *oa, t_ft_err err)
 char	**open_arg(t_stringview sv, const t_vector *env)
 {
 	t_open_arg		oa;
-	t_ft_err			err;
+	t_ft_err		err;
 	char			*str;
 
 	oa.pos = 0;
@@ -242,8 +248,9 @@ char	**open_arg(t_stringview sv, const t_vector *env)
 	ft_vec_construct(&oa.str_build, sizeof(char));
 	ft_vec_reserv(&oa.str_build, sv.size);
 	ft_vec_construct(&oa.arg_build, sizeof(char*));
-	if (real_open_arg(&oa, env) != ft_err_ok)
-		return (clean_open_arg(&oa, ft_err_fail));
+	err = real_open_arg(&oa, env);
+	if (err != ft_err_ok)
+		return (clean_open_arg(&oa, err));
 	err = ft_err_ok;
 	if (oa.str_build.size != 0)
 	{
