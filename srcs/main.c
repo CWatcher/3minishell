@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/08 23:40:25 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/09 09:02:11 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ int	main(int argc, char *argv[], char *envp[])
 		line = readline(ms.prompt);
 		if (!line)
 			break;
-		if (isatty(STDIN_FILENO) && *line && ft_strlen(line) > 0)
+		if (*line == '\0')
+			continue ;
+		if (isatty(STDIN_FILENO))
 			add_history(line);
 		if (parse(&ms, line) != ft_err_ok)
 			continue ;

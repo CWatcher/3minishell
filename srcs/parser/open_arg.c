@@ -160,16 +160,10 @@ t_ft_err	open_argnoquotes(t_open_arg *oa, const t_vector *env)
 				err = ft_err_bad_alloc;
 		}
 		else if (oa->sv.str[oa->pos] == '$')
-		{
-			printf("%c\n", oa->sv.str[oa->pos]);
 			err = open_arg_env(oa, env);
-		}
-		else
-		{
-			if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
+		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
 					!= ft_err_ok)
-				err = ft_err_bad_alloc;
-		}
+			err = ft_err_bad_alloc;
 		if (err != ft_err_ok)
 			return (err);
 	}
@@ -252,7 +246,7 @@ char	**open_arg(t_stringview sv, const t_vector *env)
 	if (err != ft_err_ok)
 		return (clean_open_arg(&oa, err));
 	err = ft_err_ok;
-	if (oa.str_build.size != 0)
+	if (oa.str_build.size != 0 || oa.arg_build.size == 0)
 	{
 		ft_vec_push_back(&oa.str_build, "\0");
 		str = ft_vec_fetch_array(&oa.str_build, NULL);
