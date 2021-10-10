@@ -25,7 +25,7 @@ char *env_value(const t_vector *env, t_stringview key)
 	}
 	return "";
 }
-#include <stdio.h>
+
 t_ft_err	choose_name_brack(t_open_arg *oa, t_stringview *name)
 {
 	name->str = &oa->sv.str[++(oa->pos)];

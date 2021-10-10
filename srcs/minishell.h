@@ -43,7 +43,7 @@ void	and_or_node_constr(t_and_or_node *node);
 void	and_or_node_destr(t_and_or_node *node);
 
 typedef t_ft_err(	*t_itokenfunc)(void *, void *);
-typedef int(		*t_builtin_func)(char* argv[]);
+typedef int(		*t_builtin_func)(char *argv[], t_vector *env);
 
 typedef struct s_builtin_entry
 {
@@ -61,15 +61,21 @@ typedef struct s_minishell
 	t_builtin_entry	builtins[C_BUILTINS];
 }				t_minishell;
 
-char	**open_arg(t_stringview sv, const t_vector *env);
-char	**open_allargs(t_vector v_stringviews, t_vector env);
-t_ft_err	parse(t_minishell *ms, char const *str);
-t_ft_err	null_minishell_cmd(t_minishell *ms);
-void	minishell_destr(t_minishell *ms);
-void	set_sig_handler(void);
-void	set_childsig_handler(void);
+char			**open_arg(t_stringview sv, const t_vector *env);
+char			*open_heredocarg(t_stringview sv);
+char			**open_allargs(t_vector v_stringviews, t_vector env);
+t_bool			open_redirs(t_vector v_redirs, const t_vector *env,
+					int *p_fd_in, int *p_fd_out);
+t_ft_err		parse(t_minishell *ms, char const *str);
+t_ft_err		null_minishell_cmd(t_minishell *ms);
+void			minishell_destr(t_minishell *ms);
+void			set_signal_handler(void);
+void			clean_signal_handlers(void);
 t_builtin_func	find_builtin(const char *s);
-int		ms_echo(char* argv[]);
-int		ms_exit(char* argv[]);
+int				ms_echo(char* argv[], t_vector *env);
+int				ms_exit(char* argv[], t_vector *env);
+int				ms_export(char *argv[], t_vector *env);
+int				ms_unset(char *argv[], t_vector *env);
+int				ms_env(char *argv[], t_vector *env);
 
 #endif

@@ -5,14 +5,11 @@
 	Ctrl-\ не убивает
 +exit_minishell()
 
-fork_cmd() -= access()
 #include <libft.h> -> "libft.h"
 make re = make clean && make
     ("make re" errors on commit "- #include <bits/sigaction.h>" after next)
 Makefile -= *
-Makefile -= printf
 Makefile += color on Ubuntu
-fork_cmd.c -= #include <sys/types.h>
 
 -.vscode
 git -= submodules

@@ -20,9 +20,14 @@ SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				srcs/pipex/fork_cmd.c		\
 				srcs/pipex/fork_heredoc.c	\
 				srcs/pipex/run_pipeline.c	\
+				srcs/pipex/run_builtin.c	\
+				srcs/pipex/open_redirs.c	\
 				srcs/builtins/find_builtin.c\
 				srcs/builtins/ms_echo.c		\
 				srcs/builtins/ms_exit.c		\
+				srcs/builtins/ms_export.c	\
+				srcs/builtins/ms_unset.c	\
+				srcs/builtins/ms_env.c		\
 				./srcs/signal_handle.c		\
 				./srcs/main.c
 

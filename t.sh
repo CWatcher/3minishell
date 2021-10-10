@@ -3,8 +3,8 @@ echo 'make: ok!'
 
 ./tt.sh 'ls'
 ./tt.sh 'ls | wc'
-ulimit -n 7
-./tt.sh 'ls | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc | wc '
+ulimit -n 18
+./tt.sh 'ls|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc'
 ./tt.sh 'ls
 ls
 ls
@@ -22,6 +22,7 @@ export TT='| ls'
 export TT='> out.txt'
 ./tt.sh 'echo $TT'
 ./tt.sh 'exit'
+./tt.sh 'echo abc > out.txt'
 # ./tt.sh 'exit 0'
 # ./tt.sh 'exit 1'
 ./tt.sh 'exit 2 1'
