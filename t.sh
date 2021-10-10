@@ -2,13 +2,17 @@ make > /dev/null || exit 1
 echo 'make: ok!'
 
 ./tt.sh 'ls'
+./tt.sh 'ls
+ls
+ls'
+./tt.sh 'ls | wc > out.txt'
+./tt.sh '<Makefile cat | wc >out.txt'
+./tt.sh '< Makefile cat | wc > out.txt'
+./tt.sh 'cat < Makefile | > out.txt wc '
+./tt.sh 'cat < Makefile | cat < Makefile | > out.txt wc '
 ./tt.sh 'ls | wc'
 ulimit -n 18
 ./tt.sh 'ls|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc'
-./tt.sh 'ls
-ls
-ls
-ls'
 
 ./tt.sh 'echo'
 ./tt.sh 'echo a'

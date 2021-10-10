@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <signal.h>
-
+#include <sys/wait.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <ft_io.h>
