@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/09 09:02:11 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/10 20:47:37 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		free(line);
 		if (null_minishell_cmd(&ms) != ft_err_ok)
-			break;
+			break ;
 		line = readline(ms.prompt);
 		if (!line)
-			break;
+			break ;
 		if (*line == '\0')
 			continue ;
 		if (isatty(STDIN_FILENO))
@@ -86,5 +86,5 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (isatty(STDIN_FILENO))
 		printf("exit\n");
-	ft_exit(0);
+	ft_exit(ms.status);
 }

@@ -25,7 +25,7 @@ static int	fd_redirect(int fd, int target_fd)
 	return (fd_backup);
 }
 
-static int fd_restore(int fd, int source_fd)
+static int	fd_restore(int fd, int source_fd)
 {
 	if (fd != source_fd)
 	{
@@ -56,6 +56,9 @@ int	run_builtin(t_builtin_func builtin_func, t_vector args, t_vector redirs,
 	if (std_in_backup || std_out_backup < 0)
 		return (-1);
 	argv = open_allargs(args, *env);
+	//TODO check argv everywhere
+	if (argv == NULL)
+		return (1);
 	r = builtin_func(argv, env);
 	argv = ft_freemultistr(argv);
 	fd_restore(STDIN_FILENO, std_in_backup);

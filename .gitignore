@@ -13,8 +13,10 @@
 cmake-build-debug
 */.gitignore
 out*.txt
+*.log
 .release/
 .debug/
 bonus
 .vscode
 minishell
+mish

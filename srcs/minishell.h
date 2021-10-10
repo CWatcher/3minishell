@@ -31,16 +31,16 @@ typedef struct s_command
 	t_vector	redirs;
 }				t_command;
 
-void	srun_constr(t_command *srun);
-void	srun_destr(t_command *srun);
+void			srun_constr(t_command *srun);
+void			srun_destr(t_command *srun);
 
 typedef struct s_and_or_node
 {
 	t_vector	pipeline;
 }				t_and_or_node;
 
-void	and_or_node_constr(t_and_or_node *node);
-void	and_or_node_destr(t_and_or_node *node);
+void			and_or_node_constr(t_and_or_node *node);
+void			and_or_node_destr(t_and_or_node *node);
 
 typedef t_ft_err(	*t_itokenfunc)(void *, void *);
 typedef int(		*t_builtin_func)(char *argv[], t_vector *env);
@@ -57,8 +57,7 @@ typedef struct s_minishell
 	t_and_or_node	node;
 	t_itokenfunc	parse_token;
 	int				status;
-	char*			prompt;
-	t_builtin_entry	builtins[C_BUILTINS];
+	char			*prompt;
 }				t_minishell;
 
 char			**open_arg(t_stringview sv, const t_vector *env);
@@ -72,8 +71,8 @@ void			minishell_destr(t_minishell *ms);
 void			set_signal_handler(void);
 void			clean_signal_handlers(void);
 t_builtin_func	find_builtin(const char *s);
-int				ms_echo(char* argv[], t_vector *env);
-int				ms_exit(char* argv[], t_vector *env);
+int				ms_echo(char *argv[], t_vector *env);
+int				ms_exit(char *argv[], t_vector *env);
 int				ms_export(char *argv[], t_vector *env);
 int				ms_unset(char *argv[], t_vector *env);
 int				ms_env(char *argv[], t_vector *env);
