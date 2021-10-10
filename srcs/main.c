@@ -46,7 +46,7 @@ void	minishell_init(t_minishell *ms, char *env[])
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
 	using_history();
-	set_signal_handler();
+	set_sig_handler();
 	ft_vec_construct(&ms->env, sizeof(char *));
 	and_or_node_constr(&ms->node);
 	init_env(ms, env);

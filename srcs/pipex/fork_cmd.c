@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/10 13:58:06 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/10 20:50:39 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	exec_cmd(t_vector args, t_vector *env)
 		else
 			pathname = get_exec_pathname(argv[0], find_value(env->array, "PATH="));
 	}
-	clean_signal_handlers();
+	set_childsig_handler();
 	execve(pathname, argv, env->array);
 	//TODO check exit codes when argv[0] is a dir
 	//TODO free(ms)

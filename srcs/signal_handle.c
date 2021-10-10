@@ -7,37 +7,36 @@
 #include <ft_io.h>
 #include <ft_string.h>
 
-static void	new_line(int i)
+static void	sig_handle(int sig)
 {
-	(void)i;
-	ft_putendl("");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	int		status;
+
+	waitpid(-1, &status, 0);
+	if (WTERMSIG(status) == SIGINT && WIFSIGNALED(status))
+		rl_on_new_line();
+	else if (sig == SIGINT)
+	{
+		ft_putstr("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (WTERMSIG(status) == SIGQUIT && WIFSIGNALED(status))
+	{
+		ft_putstr_fd("Quit: ", STDERR_FILENO);
+		ft_putnbr_fd(sig, STDERR_FILENO);
+		ft_putendl_fd("", STDERR_FILENO);
+	}
+	return ;
 }
 
-static void	clean_quit(int code)
+void	set_sig_handler(void)
 {
-	ft_putstr_fd("Quit: ", STDERR_FILENO);
-	ft_putnbr_fd(code, STDERR_FILENO);
-	ft_putendl_fd("", STDERR_FILENO);
+	signal(SIGINT, sig_handle);
+	signal(SIGQUIT, sig_handle);
 }
 
-void	set_signal_handler(void)
+void	set_childsig_handler(void)
 {
-	signal(SIGINT, new_line);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-static void	clean_int(int i)
-{
-	(void)i;
-}
-
-void	clean_signal_handlers(void)
-{
-	clean_int(0);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGQUIT, clean_quit);
+	signal(SIGQUIT, sig_handle);
 }
