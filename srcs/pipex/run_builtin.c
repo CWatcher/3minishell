@@ -16,20 +16,22 @@ static int	fd_redirect(int fd, int target_fd)
 	{
 		fd_backup = dup(fd);
 		if (fd_backup < 0)
-			return (ft_perror("mish: dup(fd_backup):", -1));
-		if (fd >= 0 && dup2(target_fd, fd) != fd)
-			return (ft_perror("mish: dup2(target_fd, fd):", -1));
+			return (ft_perror("mish: fd_redirect(): dup()", -1));
+		if (dup2(target_fd, fd) != fd)
+			return (ft_perror("mish: fd_redirect(): dup2()", -1));
+		if (close(target_fd) != 0)
+			return (ft_perror("mish: fd_redirect(): close()", -1));
 	}
 	return (fd_backup);
 }
 
-static int fd_restore(int fd, int target_fd)
+static int fd_restore(int fd, int source_fd)
 {
-	if (fd != target_fd)
+	if (fd != source_fd)
 	{
-		if (fd >= 0 && dup2(target_fd, fd) != fd)
-			return (ft_perror("mish: fd_restore():", -1));
-		if (close(fd) != 0)
+		if (dup2(source_fd, fd) != fd)
+			return (ft_perror("mish: fd_restore(): dup2()", -1));
+		if (close(source_fd) != 0)
 			return (ft_perror("mish: fd_restore(): close()", -1));
 	}
 	return (fd);
@@ -51,12 +53,12 @@ int	run_builtin(t_builtin_func builtin_func, t_vector args, t_vector redirs,
 		return (-1);
 	std_in_backup = fd_redirect(STDIN_FILENO, fd_in);
 	std_out_backup = fd_redirect(STDOUT_FILENO, fd_out);
-	if (std_out_backup < 0)
+	if (std_in_backup || std_out_backup < 0)
 		return (-1);
 	argv = open_allargs(args, *env);
 	r = builtin_func(argv, env);
-	
-	fd_restore(std_in_backup, STDIN_FILENO);
-	fd_restore(std_out_backup, STDOUT_FILENO);
+	argv = ft_freemultistr(argv);
+	fd_restore(STDIN_FILENO, std_in_backup);
+	fd_restore(STDOUT_FILENO, std_out_backup);
 	return (r);
 }

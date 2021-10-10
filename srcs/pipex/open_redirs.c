@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/10 14:00:36 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/10 17:23:40 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ static t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 			perror("ft_open_file(): close()");
 	*p_fd = open(path, oflag, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (*p_fd == -1)
+	{
+		perror("mish: ft_open_file(): open()");
 		return (ft_false);
+	}
 	return (ft_true);
 }
 
