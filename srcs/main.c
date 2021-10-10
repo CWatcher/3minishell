@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/09 09:02:11 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/10 19:00:05 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	minishell_init(t_minishell *ms, char *env[])
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
 	using_history();
-	set_signal_handler();
+	set_sig_handler();
 	ft_vec_construct(&ms->env, sizeof(char *));
 	and_or_node_constr(&ms->node);
 	init_env(ms, env);

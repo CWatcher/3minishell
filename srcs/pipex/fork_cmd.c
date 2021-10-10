@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/09 09:07:24 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/10 19:24:28 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	exec_cmd(t_vector args, t_vector env)
 		else
 			pathname = get_exec_pathname(argv[0], find_value(env.array, "PATH="));
 	}
-	clean_signal_handlers();
+	set_childsig_handler();
 	execve(pathname, argv, env.array);
 	//TODO check exit codes when argv[0] is a dir
 	argv = ft_freemultistr(argv);
