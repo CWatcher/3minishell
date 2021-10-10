@@ -30,7 +30,7 @@ static t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 	return (ft_true);
 }
 
-static t_bool	open_redirs(t_vector v_redirs, t_vector env,
+static t_bool	open_redirs(t_vector v_redirs, t_vector *env,
 					int *p_fd_in, int *p_fd_out)
 {
 	size_t			i;
@@ -44,7 +44,7 @@ static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 	while (r && i < v_redirs.size)
 	{
 		//! \todo error if open args return more then 1 arg
-		t = open_arg(redirs[i].arg, &env);
+		t = open_arg(redirs[i].arg, env);
 		path = *t;
 		*t = NULL;
 		ft_strarr_clear(t);
@@ -66,7 +66,7 @@ static t_bool	open_redirs(t_vector v_redirs, t_vector env,
 	return (r);
 }
 
-static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
+static pid_t	fork_pipeline(t_vector pipeline, t_vector *env)
 {
 	const t_command		*cmds = pipeline.array;
 	size_t				j;
@@ -95,7 +95,7 @@ static pid_t	fork_pipeline(t_vector pipeline, t_vector env)
 	return (pid);
 }
 
-int	run_pipeline(t_vector pipeline, t_vector env)
+int	run_pipeline(t_vector pipeline, t_vector *env)
 {
 	pid_t				pid;
 	int					status;

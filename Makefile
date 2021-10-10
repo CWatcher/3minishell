@@ -23,6 +23,9 @@ SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				srcs/builtins/find_builtin.c\
 				srcs/builtins/ms_echo.c		\
 				srcs/builtins/ms_exit.c		\
+				srcs/builtins/ms_export.c	\
+				srcs/builtins/ms_unset.c	\
+				srcs/builtins/ms_env.c		\
 				./srcs/signal_handle.c		\
 				./srcs/main.c
 

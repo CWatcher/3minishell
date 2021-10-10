@@ -82,7 +82,7 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(line);
 		if (parse(&ms, line) != ft_err_ok)
 			continue ;
-		ms.status = run_pipeline(ms.node.pipeline, ms.env);
+		ms.status = run_pipeline(ms.node.pipeline, &ms.env);
 	}
 	if (isatty(STDIN_FILENO))
 		printf("exit\n");

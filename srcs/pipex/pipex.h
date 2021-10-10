@@ -16,7 +16,7 @@
 # include "../minishell.h"
 
 int		ft_perror(const char *s, int ret);
-pid_t	fork_cmd(t_vector args, t_vector env, int fd_in, int fd_out);
-int		run_pipeline(t_vector pipeline, t_vector env);
+pid_t	fork_cmd(t_vector args, t_vector *env, int fd_in, int fd_out);
+int		run_pipeline(t_vector pipeline, t_vector *env);
 
 #endif

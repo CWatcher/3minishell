@@ -57,31 +57,31 @@ static char	*get_exec_pathname(const char *filename, const char *path_var)
 	return (found_pathname);
 }
 
-static void	exec_cmd(t_vector args, t_vector env)
+static void	exec_cmd(t_vector args, t_vector *env)
 {
-	char	*pathname;
-	char	**argv;
-	t_builtin_func builtin_func;
+	char			*pathname;
+	char			**argv;
+	t_builtin_func	builtin_func;
 
-	argv = open_allargs(args, env);
+	argv = open_allargs(args, *env);
 	if (ft_strchr(argv[0], '/'))
 		pathname = ft_strdup(argv[0]);
 	else
 	{
 		builtin_func = find_builtin(argv[0]);
 		if (builtin_func != NULL)
-			exit(builtin_func(argv));
+			exit(builtin_func(argv, env));
 		else
-			pathname = get_exec_pathname(argv[0], find_value(env.array, "PATH="));
+			pathname = get_exec_pathname(argv[0], find_value(env->array, "PATH="));
 	}
 	clean_signal_handlers();
-	execve(pathname, argv, env.array);
+	execve(pathname, argv, env->array);
 	//TODO check exit codes when argv[0] is a dir
 	argv = ft_freemultistr(argv);
 	exit_me(pathname);
 }
 
-pid_t	fork_cmd(t_vector args, t_vector env, int fd_in, int fd_out)
+pid_t	fork_cmd(t_vector args, t_vector *env, int fd_in, int fd_out)
 {
 	pid_t	pid;
 

@@ -2,10 +2,12 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ft_vector.h>
 #include "ft_io.h"
 
-int	ms_exit(char *argv[])
+int	ms_exit(char *argv[], t_vector *env)
 {
+	(void)env;
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (!argv || !argv[0])
 		return (1);

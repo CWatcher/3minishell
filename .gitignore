@@ -16,4 +16,5 @@ out*.txt
 .release/
 .debug/
 bonus
+.vscode
 minishell
