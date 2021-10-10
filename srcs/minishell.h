@@ -69,8 +69,8 @@ t_bool			open_redirs(t_vector v_redirs, const t_vector *env,
 t_ft_err		parse(t_minishell *ms, char const *str);
 t_ft_err		null_minishell_cmd(t_minishell *ms);
 void			minishell_destr(t_minishell *ms);
-void			set_signal_handler(void);
-void			clean_signal_handlers(void);
+void			set_sig_handler(void);
+void			set_childsig_handler(void);
 t_builtin_func	find_builtin(const char *s);
 int				ms_echo(char* argv[], t_vector *env);
 int				ms_exit(char* argv[], t_vector *env);
