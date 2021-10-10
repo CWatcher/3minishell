@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/09 09:07:24 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/10 13:58:06 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void	exec_cmd(t_vector args, t_vector *env)
 	clean_signal_handlers();
 	execve(pathname, argv, env->array);
 	//TODO check exit codes when argv[0] is a dir
+	//TODO free(ms)
 	argv = ft_freemultistr(argv);
 	exit_me(pathname);
 }

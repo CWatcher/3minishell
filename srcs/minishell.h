@@ -43,7 +43,7 @@ void	and_or_node_constr(t_and_or_node *node);
 void	and_or_node_destr(t_and_or_node *node);
 
 typedef t_ft_err(	*t_itokenfunc)(void *, void *);
-typedef int(		*t_builtin_func)(char *argv[], t_vector *);
+typedef int(		*t_builtin_func)(char *argv[], t_vector *env);
 
 typedef struct s_builtin_entry
 {
@@ -64,6 +64,8 @@ typedef struct s_minishell
 char			**open_arg(t_stringview sv, const t_vector *env);
 char			*open_heredocarg(t_stringview sv);
 char			**open_allargs(t_vector v_stringviews, t_vector env);
+t_bool			open_redirs(t_vector v_redirs, const t_vector *env,
+					int *p_fd_in, int *p_fd_out);
 t_ft_err		parse(t_minishell *ms, char const *str);
 t_ft_err		null_minishell_cmd(t_minishell *ms);
 void			minishell_destr(t_minishell *ms);

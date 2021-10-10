@@ -1,5 +1,5 @@
-#include "../minishell.h"
-#include <ft_vector.h>
+#include "minishell.h"
+#include "ft_vector.h"
 #include "ft_io.h"
 
 int	ms_echo(char *argv[], t_vector *env)
