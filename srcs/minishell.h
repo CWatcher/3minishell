@@ -71,6 +71,6 @@ void	minishell_destr(t_minishell *ms);
 void	set_signal_handler(void);
 t_builtin_func	find_builtin(const char *s);
 int		ms_echo(t_vector args, t_vector *env);
-//int		ms_exit(char *const argv[], t_vector *env);
+int		ms_exit(t_vector args, t_vector *env);
 
 #endif
