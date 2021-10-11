@@ -69,13 +69,13 @@ t_ft_err		parse(t_minishell *ms, char const *str);
 t_ft_err		null_minishell_cmd(t_minishell *ms);
 void			minishell_destr(t_minishell *ms);
 void			set_sig_handler(void);
-void			set_childsig_handler(void);
+void			set_exesig_handler(void);
 t_builtin_func	find_builtin(const char *s);
 int				ms_echo(char *argv[], t_vector *env);
 int				ms_exit(char *argv[], t_vector *env);
 int				ms_export(char *argv[], t_vector *env);
 int				ms_unset(char *argv[], t_vector *env);
 int				ms_env(char *argv[], t_vector *env);
-int	ms_perror(const char *cmd,const char *arg,const char *msg, int ret);
+int				ms_perror(const char *cmd,const char *arg,const char *msg, int ret);
 
 #endif

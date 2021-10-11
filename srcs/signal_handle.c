@@ -33,10 +33,10 @@ static void	sig_handle(int sig)
 void	set_sig_handler(void)
 {
 	signal(SIGINT, sig_handle);
-	signal(SIGQUIT, sig_handle);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void	set_childsig_handler(void)
+void	set_exesig_handler(void)
 {
 	signal(SIGQUIT, sig_handle);
 }

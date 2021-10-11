@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 16:46:22 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 18:36:06 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ static void	exec_cmd(t_vector args, t_vector redirs, t_vector *env)
 		else
 			pathname = get_exec_pathname(argv[0], find_value(env->array, "PATH="));
 	}
-	set_childsig_handler();
 	execve(pathname, argv, env->array);
 	argv = ft_freemultistr(argv);
 	ft_at_exit(pathname, (t_destr_func)free);

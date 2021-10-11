@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 03:50:43 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 18:34:25 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	minishell_init(t_minishell *ms, char *env[])
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
 	using_history();
-	set_sig_handler();
 	ft_vec_construct(&ms->env, sizeof(char *));
 	and_or_node_constr(&ms->node);
 	init_env(ms, env);
@@ -70,6 +69,7 @@ int	main(int argc, char *argv[], char *envp[])
 	line = NULL;
 	while (ft_true)
 	{
+		set_sig_handler();
 		free(line);
 		if (null_minishell_cmd(&ms) != ft_err_ok)
 			break ;
@@ -82,6 +82,7 @@ int	main(int argc, char *argv[], char *envp[])
 			add_history(line);
 		if (parse(&ms, line) != ft_err_ok)
 			continue ;
+		set_exesig_handler();
 		ms.status = run_pipeline(ms.node.pipeline, &ms.env);
 	}
 	if (isatty(STDIN_FILENO))
