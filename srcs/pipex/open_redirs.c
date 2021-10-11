@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 20:45:13 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 23:23:32 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	fd_restore(int fd, int source_fd)
 	return (fd);
 }
 
-t_bool	open_redirs(t_vector v_redirs, const t_vector *env,
+t_bool	open_redirs(t_vector v_redirs, const t_ms_vars *vars,
 					int *p_fd_in, int *p_fd_out)
 {
 	size_t			i;
@@ -81,8 +81,9 @@ t_bool	open_redirs(t_vector v_redirs, const t_vector *env,
 			// bash: syntax error near unexpected token `newline'
 			r = open_heredoc(limiter, p_fd_in);
 		}
-		else {
-			t = open_arg(redirs[i].arg, env);
+		else
+		{
+			t = open_arg(redirs[i].arg, vars);
 			path = *t;
 			*t = NULL;
 			if (!t || t[1])

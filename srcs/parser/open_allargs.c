@@ -6,14 +6,14 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 19:39:22 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 00:50:54 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 //! \todo allocation handle
-char**	open_allargs(t_vector v_stringviews, t_vector env)
+char**	open_allargs(t_vector v_stringviews, t_ms_vars const *vars)
 {
 	const t_stringview	*stringviews = v_stringviews.array;
 	size_t				i;
@@ -24,7 +24,7 @@ char**	open_allargs(t_vector v_stringviews, t_vector env)
 	i = 0;
 	while (i < v_stringviews.size)
 	{
-		n_args = open_arg(stringviews[i], &env);
+		n_args = open_arg(stringviews[i], vars);
 		if (n_args == NULL)
 		{
 			ft_vec_destructor(&argv, (t_destr_func)ft_freederef);

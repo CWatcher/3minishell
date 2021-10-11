@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:51:35 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 19:51:36 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/11 23:08:08 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,24 @@ typedef struct s_builtin_entry
 	t_builtin_func	func;
 }	t_builtin_entry;
 
+typedef struct s_ms_vars
+{
+	int				status;
+	t_vector		env;
+}				t_ms_vars;
+
 typedef struct s_minishell
 {
-	t_vector		env;
+	t_ms_vars		vars;
 	t_and_or_node	node;
 	t_itokenfunc	parse_token;
-	int				status;
 	char			*prompt;
 }				t_minishell;
 
-char			**open_arg(t_stringview sv, const t_vector *env);
+char			**open_arg(t_stringview sv, const t_ms_vars *vars);
 char			*open_heredocarg(t_stringview sv);
-char			**open_allargs(t_vector v_stringviews, t_vector env);
-t_bool			open_redirs(t_vector v_redirs, const t_vector *env,
+char			**open_allargs(t_vector v_stringviews, const t_ms_vars *vars);
+t_bool			open_redirs(t_vector v_redirs, const t_ms_vars *vars,
 					int *p_fd_in, int *p_fd_out);
 t_ft_err		parse(t_minishell *ms, char const *str);
 t_ft_err		null_minishell_cmd(t_minishell *ms);

@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:40:17 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 19:40:18 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 01:23:00 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,25 @@ typedef struct s_open_arg {
 	size_t			pos;
 }			t_open_arg;
 
-char *env_value(const t_vector *env, t_stringview key)
+char	*get_intvalue(int value)
+{
+	static char	arr[32];
+
+	ft_utob(arr, value);
+	return arr;
+}
+
+char *env_value(t_stringview key, const t_ms_vars *vars)
 {
 	char	*str;
 	size_t	i;
 
+	if (key.size == 1 && ft_strncmp("?", key.str, 1) == 0)
+		return (get_intvalue(vars->status));
 	i = 0;
-	while (i < env->size - 1)
+	while (i < vars->env.size - 1)
 	{
-		str = *(char **)ft_vec_at(env, i);
+		str = *(char **)ft_vec_at(&vars->env, i);
 		if (ft_strncmp(str, key.str, key.size) == 0 && str[key.size] == '=')
 		{
 			return (str + key.size + 1);
@@ -42,6 +52,12 @@ t_ft_err	choose_name_brack(t_open_arg *oa, t_stringview *name)
 {
 	name->str = &oa->sv.str[++(oa->pos)];
 	name->size = 0;
+	if (oa->sv.str[oa->pos] == '?' && oa->sv.str[oa->pos + 1] == '}')
+	{
+		name->size = 1;
+		oa->pos += 2;
+		return (ft_err_ok);
+	}
 	while (oa->pos < oa->sv.size && oa->sv.str[oa->pos] != '}')
 	{
 		if ((ft_isalnum(name->str[name->size]) \
@@ -58,6 +74,12 @@ t_ft_err	choose_name_nobrack(t_open_arg *oa, t_stringview *name)
 {
 	name->str = &oa->sv.str[oa->pos];
 	name->size = 0;
+	if (oa->sv.str[oa->pos] == '?')
+	{
+		name->size = 1;
+		oa->pos++;
+		return (ft_err_ok);
+	}
 	while (ft_isalnum(name->str[name->size]) \
 			|| name->str[name->size] == '_')
 	{
@@ -106,7 +128,7 @@ t_ft_err	push_env_to_args(t_open_arg *oa, char *env_v)
 	return (ft_err_ok);
 }
 
-t_ft_err	open_arg_env(t_open_arg *oa, const t_vector *env)
+t_ft_err	open_arg_env(t_open_arg *oa, const t_ms_vars *vars)
 {
 	t_stringview	name;
 	t_ft_err		err;
@@ -123,14 +145,14 @@ t_ft_err	open_arg_env(t_open_arg *oa, const t_vector *env)
 	}
 	else
 	{
-		env_v = env_value(env, name);
+		env_v = env_value(name, vars);
 		if (push_env_to_args(oa, env_v) != ft_err_ok)
 			return (ft_err_bad_alloc);
 	}
 	return (ft_err_ok);
 }
 
-t_ft_err	open_arg_env_quotes(t_open_arg *oa, const t_vector *env)
+t_ft_err	open_arg_env_quotes(t_open_arg *oa, const t_ms_vars *vars)
 {
 	t_stringview	name;
 	t_ft_err		err;
@@ -147,7 +169,7 @@ t_ft_err	open_arg_env_quotes(t_open_arg *oa, const t_vector *env)
 	}
 	else
 	{
-		env_v = env_value(env, name);
+		env_v = env_value(name, vars);
 		if (ft_vec_push_back_n(&oa->str_build, env_v, ft_strlen(env_v))
 				!= ft_err_ok)
 			return (ft_err_bad_alloc);
@@ -155,7 +177,7 @@ t_ft_err	open_arg_env_quotes(t_open_arg *oa, const t_vector *env)
 	return (ft_err_ok);
 }
 
-t_ft_err	open_argnoquotes(t_open_arg *oa, const t_vector *env)
+t_ft_err	open_argnoquotes(t_open_arg *oa, const t_ms_vars *vars)
 {
 	t_ft_err	err;
 
@@ -172,7 +194,7 @@ t_ft_err	open_argnoquotes(t_open_arg *oa, const t_vector *env)
 				err = ft_err_bad_alloc;
 		}
 		else if (oa->sv.str[oa->pos] == '$')
-			err = open_arg_env(oa, env);
+			err = open_arg_env(oa, vars);
 		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
 					!= ft_err_ok)
 			err = ft_err_bad_alloc;
@@ -182,9 +204,8 @@ t_ft_err	open_argnoquotes(t_open_arg *oa, const t_vector *env)
 	return (ft_err_ok);
 }
 
-t_ft_err	open_arg1quotes(t_open_arg *oa, const t_vector *env)
+t_ft_err	open_arg1quotes(t_open_arg *oa)
 {
-	(void)env;
 	(oa->pos)++;
 	while (oa->sv.str[oa->pos] != '\'')
 	{
@@ -196,17 +217,16 @@ t_ft_err	open_arg1quotes(t_open_arg *oa, const t_vector *env)
 	return (ft_err_ok);
 }
 
-t_ft_err	open_arg2quotes(t_open_arg *oa, const t_vector *env)
+t_ft_err	open_arg2quotes(t_open_arg *oa, const t_ms_vars *vars)
 {
 	t_ft_err	err;
 
-	(void)env;
 	err = ft_err_ok;
 	oa->pos++;
 	while (oa->sv.str[oa->pos] != '\"')
 	{
 		if (oa->sv.str[oa->pos] == '$')
-			err = open_arg_env_quotes(oa, env);
+			err = open_arg_env_quotes(oa, vars);
 		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++])
 						!= ft_err_ok)
 			return (ft_err_bad_alloc);
@@ -217,18 +237,18 @@ t_ft_err	open_arg2quotes(t_open_arg *oa, const t_vector *env)
 	return (ft_err_ok);
 }
 
-t_ft_err	real_open_arg(t_open_arg *oa, const t_vector *env)
+t_ft_err	real_open_arg(t_open_arg *oa, const t_ms_vars *vars)
 {
 	t_ft_err		err;
 
 	while (oa->pos < oa->sv.size)
 	{
 		if (oa->sv.str[oa->pos] == '\"')
-			err = open_arg2quotes(oa, env);
+			err = open_arg2quotes(oa, vars);
 		else if (oa->sv.str[oa->pos] == '\'')
-			err = open_arg1quotes(oa, env);
+			err = open_arg1quotes(oa);
 		else
-			err = open_argnoquotes(oa, env);
+			err = open_argnoquotes(oa, vars);
 		if (err != ft_err_ok)
 			return (err);
 	}
@@ -243,7 +263,7 @@ static void	*clean_open_arg(t_open_arg *oa, t_ft_err err)
 	return (NULL);
 }
 
-char	**open_arg(t_stringview sv, const t_vector *env)
+char	**open_arg(t_stringview sv, const t_ms_vars *vars)
 {
 	t_open_arg		oa;
 	t_ft_err		err;
@@ -254,7 +274,7 @@ char	**open_arg(t_stringview sv, const t_vector *env)
 	ft_vec_construct(&oa.str_build, sizeof(char));
 	ft_vec_reserv(&oa.str_build, sv.size);
 	ft_vec_construct(&oa.arg_build, sizeof(char*));
-	err = real_open_arg(&oa, env);
+	err = real_open_arg(&oa, vars);
 	if (err != ft_err_ok)
 		return (clean_open_arg(&oa, err));
 	err = ft_err_ok;

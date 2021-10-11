@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 19:52:33 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/11 23:11:35 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ void	init_env(t_minishell *ms, char *env[])
 	size_t	i;
 
 	size = ft_strarr_size(env);
-	ft_vec_reserv(&ms->env, size * 1.3);
+	ft_vec_reserv(&ms->vars.env, size * 1.3);
 	i = 0;
 	while (i < size)
 	{
 		str = ft_strdup(env[i]);
-		ft_vec_push_back(&ms->env, &str);
+		ft_vec_push_back(&ms->vars.env, &str);
 		i++;
 	}
 	str = NULL;
-	ft_vec_push_back(&ms->env, &str);
+	ft_vec_push_back(&ms->vars.env, &str);
 }
 
 void	minishell_init(t_minishell *ms, char *env[])
@@ -46,14 +46,14 @@ void	minishell_init(t_minishell *ms, char *env[])
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
 	using_history();
-	ft_vec_construct(&ms->env, sizeof(char *));
+	ft_vec_construct(&ms->vars.env, sizeof(char *));
 	and_or_node_constr(&ms->node);
 	init_env(ms, env);
 }
 
 void	minishell_destr(t_minishell *ms)
 {
-	ft_vec_destructor(&ms->env, (t_destr_func)ft_freederef);
+	ft_vec_destructor(&ms->vars.env, (t_destr_func)ft_freederef);
 	and_or_node_destr(&ms->node);
 }
 
@@ -78,7 +78,7 @@ void	minishell_loop(t_minishell *ms)
 		if (parse(ms, line) != ft_err_ok)
 			continue ;
 		set_exesig_handler();
-		ms->status = run_pipeline(ms->node.pipeline, &ms->env);
+		ms->vars.status = run_pipeline(ms->node.pipeline, &ms->vars);
 	}
 }
 
@@ -93,5 +93,5 @@ int	main(int argc, char *argv[], char *envp[])
 	minishell_loop(&ms);
 	if (isatty(STDIN_FILENO))
 		ft_putendl_s("exit");
-	ft_exit(ms.status);
+	ft_exit(ms.vars.status);
 }

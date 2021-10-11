@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   fork_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 17:04:17 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 20:47:16 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/12 00:57:45 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "ft_string.h"
 #include "ft_io.h"
-#include "exit_me.h"
+#include <ft_exit.h>
 #include "pipex.h"
 #include "minishell.h"
 
@@ -29,17 +29,17 @@ static void	get_put_heredoc(char *limiter, int fd_out)
 		r = ft_putendl_fd(s, fd_out);
 		s = ft_free(s);
 		if (r < 0)
-			exit_me(ft_strdup("heredoc: failed to ft_putendl_fd()"));
+			ft_exit(ms_perror("heredoc: failed to ft_putendl_fd()", NULL, NULL, 1));
 		if (ft_putstr(">1 ") < 0)
-			exit_me(ft_strdup("heredoc: failed to ft_putstr()"));
+			ft_exit(ms_perror("heredoc: failed to ft_putstr()", NULL, NULL, 1));
 		r = ft_get_next_line(STDIN_FILENO, &s);
 	}
 	s = ft_free(s);
 	free(limiter);
 	if (close(fd_out) != 0)
-		exit_me(ft_strdup("Failed to close() in get_put_heredoc()"));
+		ft_exit(ms_perror("Failed to close() in get_put_heredoc()", NULL, NULL, 1));
 	if (r < 0)
-		exit_me(ft_strdup("heredoc: failed to ft_get_next_line()"));
+		ft_exit(ms_perror("heredoc: failed to ft_get_next_line()", NULL, NULL, 1));
 }
 
 t_bool	fork_heredoc(char *limiter, t_io_fds fds)
@@ -52,7 +52,7 @@ t_bool	fork_heredoc(char *limiter, t_io_fds fds)
 		if (close(fds.in) != 0)
 			ms_perror("child fork_heredoc()", "close(fds.in)", NULL, 1);
 		get_put_heredoc(limiter, fds.out);
-		exit_me(NULL);
+		ft_exit(0);
 	}
 	else
 	{
