@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:51:35 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 19:51:36 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 00:00:47 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <ftdef.h>
 # include <ft_string.h>
 
-# define PROMPT "mish-0.4$ "
+# define PROMPT "mish-0.5$ "
 # define C_BUILTINS 1
 
 typedef enum e_redir_type
