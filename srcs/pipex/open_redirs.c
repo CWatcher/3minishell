@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 19:40:52 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 20:45:13 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,17 @@
 #include "ft_string.h" // free_mutlistr()
 #include "ftdef.h"
 
+static t_bool	open_heredoc(char *limiter, int *p_fd_in)
+{
+	int			pipe_fds[2];
+	t_io_fds	fds;
+
+	if (pipe(pipe_fds) < 0)
+		return (ms_perror("heredoc", "pipe", NULL, ft_false));
+	*p_fd_in = pipe_fds[0];
+	fds = (t_io_fds){pipe_fds[0], pipe_fds[1]};
+	return (fork_heredoc(limiter, fds));
+}
 
 static t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 {
@@ -52,6 +63,7 @@ t_bool	open_redirs(t_vector v_redirs, const t_vector *env,
 	size_t			i;
 	const t_redir	*redirs = v_redirs.array;
 	char			*path;
+	char			*limiter;
 	char			**t;
 	t_bool			r;
 
@@ -59,27 +71,34 @@ t_bool	open_redirs(t_vector v_redirs, const t_vector *env,
 	r = ft_true;
 	while (r && i < v_redirs.size)
 	{
-		t = open_arg(redirs[i].arg, env);
-		path = *t;
-		*t = NULL;
-		if (!t || t[1])
-		{
-			t = ft_freemultistr(t);
-			return (ms_perror(NULL, redirs[i].arg.str, "ambiguous redirect", ft_false));
-		}
-		t = ft_freemultistr(t);
 		if (redirs[i].type == e_redir_i_stream)
 		{
 			// fork_heredoc()
 			//*p_fd_in = heredoc_pipe[0];
+			limiter = open_heredocarg(redirs[i].arg);
+			//TODO
+			// bash-3.2$ cat <<
+			// bash: syntax error near unexpected token `newline'
+			r = open_heredoc(limiter, p_fd_in);
 		}
-		else if (redirs[i].type == e_redir_i_file)
-			r = ft_open_file(path, O_RDONLY, p_fd_in);
-		else if (redirs[i].type == e_redir_o_trunc)
-			r = ft_open_file(path, O_CREAT | O_WRONLY | O_TRUNC, p_fd_out);
-		else if (redirs[i].type == e_redir_o_append)
-			r = ft_open_file(path, O_CREAT | O_WRONLY | O_APPEND, p_fd_out);
-		free(path);
+		else {
+			t = open_arg(redirs[i].arg, env);
+			path = *t;
+			*t = NULL;
+			if (!t || t[1])
+			{
+				t = ft_freemultistr(t);
+				return (ms_perror(NULL, redirs[i].arg.str, "ambiguous redirect", ft_false));
+			}
+			t = ft_freemultistr(t);
+			if (redirs[i].type == e_redir_i_file)
+				r = ft_open_file(path, O_RDONLY, p_fd_in);
+			else if (redirs[i].type == e_redir_o_trunc)
+				r = ft_open_file(path, O_CREAT | O_WRONLY | O_TRUNC, p_fd_out);
+			else if (redirs[i].type == e_redir_o_append)
+				r = ft_open_file(path, O_CREAT | O_WRONLY | O_APPEND, p_fd_out);
+			free(path);
+		}
 		i++;
 	}
 	return (r);

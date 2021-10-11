@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 16:28:47 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 22:15:05 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ static pid_t	fork_pipeline(t_vector pipeline, t_vector *env)
 		fd_in = pipe_fds[0];
 		j++;
 	}
-	if (!open_redirs(cmds[j].redirs, env, &fd_in, &fd_out))
-		return (-1);
 	pid = fork_cmd(cmds[j].args, cmds[j].redirs, env, fd_in, fd_out);
 	return (pid);
 }
