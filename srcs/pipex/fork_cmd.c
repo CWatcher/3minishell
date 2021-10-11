@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/10 20:50:39 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/11 01:58:58 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ static void	exec_cmd(t_vector args, t_vector *env)
 pid_t	fork_cmd(t_vector args, t_vector *env, int fd_in, int fd_out)
 {
 	pid_t	pid;
+	char 	*const *argv = args.array;
 
 	pid = fork();
 	if (pid == 0)
@@ -97,9 +98,9 @@ pid_t	fork_cmd(t_vector args, t_vector *env, int fd_in, int fd_out)
 	}
 	errno = 0;
 	if (fd_in != STDIN_FILENO && close(fd_in) != 0)
-		perror("mish: fork_cmd(): close(fd_in)");
+		ms_perror("fork_cmd(): close(fd_in)", argv[0], NULL, 1);
 	if (fd_out != STDOUT_FILENO && close(fd_out) != 0)
-		perror("mish: fork_cmd(): close(fd_out)");
+		ms_perror("fork_cmd(): close(fd_out)", argv[0], NULL, 1);
 	if (errno != 0 && pid == 0)
 		exit_me(ft_strdup("mish: child"));
 	if (pid < 0)
