@@ -6,6 +6,8 @@
 ./tt.sh 'ls
 ls
 ls'
+export TT='tt.sh    echo.sh'
+./tt.sh 'cat <$TT'
 ./tt.sh 'ls | wc > out.txt'
 ./tt.sh '<1test_all.sh cat | wc >out.txt'
 ./tt.sh '< 1test_all.sh cat | wc > out.txt'

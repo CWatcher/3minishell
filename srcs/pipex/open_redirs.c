@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 16:35:45 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 19:40:52 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,15 @@ t_bool	open_redirs(t_vector v_redirs, const t_vector *env,
 	r = ft_true;
 	while (r && i < v_redirs.size)
 	{
-		//! \todo error if open args return more then 1 arg
 		t = open_arg(redirs[i].arg, env);
 		path = *t;
 		*t = NULL;
-		ft_strarr_clear(t);
-
+		if (!t || t[1])
+		{
+			t = ft_freemultistr(t);
+			return (ms_perror(NULL, redirs[i].arg.str, "ambiguous redirect", ft_false));
+		}
+		t = ft_freemultistr(t);
 		if (redirs[i].type == e_redir_i_stream)
 		{
 			// fork_heredoc()
