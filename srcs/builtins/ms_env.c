@@ -1,10 +1,18 @@
-#include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_env.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/11 18:45:43 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/11 18:46:08 by fdiego           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ft_vector.h>
 #include <ft_io.h>
-#include <ft_string.h>
+#include <ft_error.h>
 
 static void	print_env(t_vector *envv)
 {

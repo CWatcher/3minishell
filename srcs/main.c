@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 18:34:25 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/11 19:52:33 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,34 +57,40 @@ void	minishell_destr(t_minishell *ms)
 	and_or_node_destr(&ms->node);
 }
 
-int	main(int argc, char *argv[], char *envp[])
+void	minishell_loop(t_minishell *ms)
 {
-	t_minishell	ms;
 	char		*line;
 
-	(void)argc;
-	(void)argv;
-	minishell_init(&ms, envp);
-	ft_at_exit(&ms, (t_destr_func)minishell_destr);
 	line = NULL;
 	while (ft_true)
 	{
 		set_sig_handler();
 		free(line);
-		if (null_minishell_cmd(&ms) != ft_err_ok)
+		if (null_minishell_cmd(ms) != ft_err_ok)
 			break ;
-		line = readline(ms.prompt);
+		line = readline(ms->prompt);
 		if (!line)
 			break ;
 		if (*line == '\0')
 			continue ;
 		if (isatty(STDIN_FILENO))
 			add_history(line);
-		if (parse(&ms, line) != ft_err_ok)
+		if (parse(ms, line) != ft_err_ok)
 			continue ;
 		set_exesig_handler();
-		ms.status = run_pipeline(ms.node.pipeline, &ms.env);
+		ms->status = run_pipeline(ms->node.pipeline, &ms->env);
 	}
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	t_minishell	ms;
+
+	(void)argc;
+	(void)argv;
+	minishell_init(&ms, envp);
+	ft_at_exit(&ms, (t_destr_func)minishell_destr);
+	minishell_loop(&ms);
 	if (isatty(STDIN_FILENO))
 		ft_putendl_s("exit");
 	ft_exit(ms.status);

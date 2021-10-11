@@ -6,12 +6,13 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/09 07:32:12 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/11 19:39:22 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+//! \todo allocation handle
 char**	open_allargs(t_vector v_stringviews, t_vector env)
 {
 	const t_stringview	*stringviews = v_stringviews.array;

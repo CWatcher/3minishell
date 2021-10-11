@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 23:21:37 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 14:42:16 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 18:46:23 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int	ms_exit(char *argv[], t_vector *env)
 	arg = NULL;
 	if (isatty(STDIN_FILENO))
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	if (!argv || !argv[0])
-		return (1);
 	if (!argv[1])
 		ft_exit(0);
 	if (argv[2])

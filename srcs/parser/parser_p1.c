@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_p1.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/11 19:40:36 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/11 19:40:58 by fdiego           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <parser/tokenize.h>
 #include <parser/parser.h>
 
@@ -68,8 +80,8 @@ t_ft_err	parse_redir(t_minishell *ms, t_token *token)
 
 t_ft_err	parse_commands(t_minishell *ms, t_dfaparse *tokens)
 {
-	size_t	i;
-	t_token	*t;
+	size_t		i;
+	t_token		*t;
 	t_ft_err	err;
 
 	i = 0;

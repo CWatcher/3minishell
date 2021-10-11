@@ -1,19 +1,27 @@
-#include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ms_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/11 19:07:33 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/11 19:07:39 by fdiego           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ft_vector.h>
 #include <ft_io.h>
 #include <ft_string.h>
 
-static int	str_find(char const *env_s, char const* ref)
+static int	str_find(char const **env_s, char const* ref)
 {
 	size_t	ref_len;
 
-	if (env_s == NULL)
+	if (*env_s == NULL)
 		return (1);
 	ref_len = ft_strlen(ref);
-	return (!(ft_strncmp(env_s, ref, ref_len) == 0 && env_s[ref_len] == '='));
+	return (!(ft_strncmp(*env_s, ref, ref_len) == 0 && (*env_s)[ref_len] == '='));
 }
 
 static t_bool	is_name(char const *name)

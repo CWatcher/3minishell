@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dfa_part1.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/11 19:36:24 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/11 19:36:25 by fdiego           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tokenize.h"
 
 t_ft_err	dfa_create_token(t_dfaparse *parse, t_token token, t_dfafunc func)
@@ -15,17 +27,23 @@ t_ft_err	dfa_skip_spaces(char const *str, t_dfaparse *parse)
 	if (ft_isspace(*str))
 		parse->dfafunc = (t_dfafunc)dfa_skip_spaces;
 	else if (ft_strchr("<>|&();", *str))
-		return (dfa_create_token(parse, (t_token){e_token_logic, sv}, match_operator(*str)));
+		return (dfa_create_token(parse, (t_token){e_token_logic, sv}, \
+			match_operator(*str)));
 	else if (*str == '\'')
-		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg1quotes));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, \
+			(t_dfafunc)dfa_arg1quotes));
 	else if (*str == '\"')
-		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg2quotes));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, \
+			(t_dfafunc)dfa_arg2quotes));
 	else if (*str == '\\')
-		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_argprotsym));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, \
+			(t_dfafunc)dfa_argprotsym));
 	else if (*str == '$' && *(str + 1) == '{')
-		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_argskipcurlbraces));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, \
+			(t_dfafunc)dfa_argskipcurlbraces));
 	else
-		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, (t_dfafunc)dfa_arg));
+		return (dfa_create_token(parse, (t_token){e_token_arg, sv}, \
+			(t_dfafunc)dfa_arg));
 	return (ft_err_ok);
 }
 

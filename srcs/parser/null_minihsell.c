@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   null_minihsell.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/11 19:37:06 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/11 19:37:09 by fdiego           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 #include "parser.h"
 
@@ -5,6 +17,7 @@ void	and_or_node_constr(t_and_or_node *node)
 {
 	ft_vec_construct(&node->pipeline, sizeof(t_command));
 }
+
 void	and_or_node_destr(t_and_or_node *node)
 {
 	ft_vec_destructor(&node->pipeline, (t_destr_func)srun_destr);
