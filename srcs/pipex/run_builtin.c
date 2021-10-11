@@ -25,8 +25,8 @@ static int	fd_redirect(int fd, int target_fd)
 	return (fd_backup);
 }
 
-int	run_builtin(t_builtin_func builtin_func, t_vector args, t_vector redirs,
-				t_vector *env)
+int	run_builtin(t_builtin_func builtin_func, t_command *cmd,
+				t_ms_vars *vars)
 {
 	int	fd_in;
 	int	fd_out;
@@ -37,17 +37,17 @@ int	run_builtin(t_builtin_func builtin_func, t_vector args, t_vector redirs,
 
 	fd_in = STDIN_FILENO;
 	fd_out = STDOUT_FILENO;
-	if (!open_redirs(redirs, env, &fd_in, &fd_out))
+	if (!open_redirs(cmd->redirs, vars, &fd_in, &fd_out))
 		return (-1);
 	std_in_backup = fd_redirect(STDIN_FILENO, fd_in);
 	std_out_backup = fd_redirect(STDOUT_FILENO, fd_out);
 	if (std_in_backup || std_out_backup < 0)
 		return (-1);
-	argv = open_allargs(args, *env);
+	argv = open_allargs(cmd->args, vars);
 	//TODO check argv everywhere
 	if (argv == NULL)
 		return (1);
-	r = builtin_func(argv, env);
+	r = builtin_func(argv, &vars->env);
 	argv = ft_freemultistr(argv);
 	fd_restore(STDIN_FILENO, std_in_backup);
 	fd_restore(STDOUT_FILENO, std_out_backup);

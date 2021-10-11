@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   fork_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/21 17:04:17 by CWatcher          #+#    #+#             */
 /*   Updated: 2021/10/11 23:59:46 by CWatcher         ###   ########.fr       */
@@ -13,7 +13,6 @@
 #include <unistd.h>
 #include "ft_string.h"
 #include "ft_io.h"
-#include "exit_me.h"
 #include "pipex.h"
 #include "minishell.h"
 #include "ft_vector.h"
@@ -78,7 +77,7 @@ t_bool	fork_heredoc(char *limiter, t_io_fds fds)
 		if (close(fds.in) != 0)
 			ms_perror("child fork_heredoc()", "close(fds.in)", NULL, 1);
 		get_put_heredoc(limiter, fds.out);
-		exit_me(NULL);
+		ft_exit(0);
 	}
 	else
 	{

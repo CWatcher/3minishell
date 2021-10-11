@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 18:36:06 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 00:55:31 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "../minishell.h"
 #include "pipex.h"
 #include "ft_string.h"
-#include "exit_me.h"
 #include "ft_exit.h"
 #include <sys/types.h>
 
@@ -59,7 +58,7 @@ static char	*get_exec_pathname(const char *filename, const char *path_var)
 	return (found_pathname);
 }
 
-static void	exec_cmd(t_vector args, t_vector redirs, t_vector *env)
+static void	exec_cmd(t_command *cmd, t_ms_vars *vars)
 {
 	char			*pathname;
 	char			**argv;
@@ -68,10 +67,10 @@ static void	exec_cmd(t_vector args, t_vector redirs, t_vector *env)
 
 	fds = (t_io_fds) {STDIN_FILENO, STDOUT_FILENO};
 	pathname = NULL;
-	argv = open_allargs(args, *env);
+	argv = open_allargs(cmd->args, vars);
 	if (!argv)
-		ft_exit(ms_perror("open_allargs()", ((char**)args.array)[0], NULL, 1));
-	if (!open_redirs(redirs, env, &fds.in, &fds.out))
+		ft_exit(ms_perror("open_allargs()", ((char**)cmd->args.array)[0], NULL, 1));
+	if (!open_redirs(cmd->redirs, vars, &fds.in, &fds.out))
 		ft_exit(1);
 	 if (fd_restore(STDIN_FILENO, fds.in) < 0
 	 	|| fd_restore(STDOUT_FILENO, fds.out) < 0)
@@ -82,30 +81,30 @@ static void	exec_cmd(t_vector args, t_vector redirs, t_vector *env)
 	{
 		builtin_func = find_builtin(argv[0]);
 		if (builtin_func != NULL)
-			(ft_exit(builtin_func(argv, env)));
+			(ft_exit(builtin_func(argv, &vars->env)));
 		else
-			pathname = get_exec_pathname(argv[0], find_value(env->array, "PATH="));
+			pathname = get_exec_pathname(argv[0], find_value(vars->env.array, "PATH="));
 	}
-	execve(pathname, argv, env->array);
+	execve(pathname, argv, vars->env.array);
 	argv = ft_freemultistr(argv);
 	ft_at_exit(pathname, (t_destr_func)free);
 	ft_exit(ms_perror(pathname, NULL, strerror(errno), 127));
 }
 	//TODO check exit codes when argv[0] is a dir, ...
 
-pid_t	fork_cmd(t_vector args, t_vector redirs, t_vector *env, int fd_in, int fd_out)
+pid_t	fork_cmd(t_command *cmd, t_ms_vars *vars, int fd_in, int fd_out)
 {
 	pid_t	pid;
-	char 	*const *argv = args.array;
+	char 	*const *argv = cmd->args.array;
 
 	pid = fork();
 	if (pid == 0)
 	{
 		if (fd_in >= 0 && dup2(fd_in, STDIN_FILENO) != STDIN_FILENO)
-			exit_me(ft_strdup("mish: dup2()"));
+			ft_exit(ms_perror("mish: dup2()", NULL, NULL, 1));
 		if (fd_out >= 0 && dup2(fd_out, STDOUT_FILENO) != STDOUT_FILENO)
-			exit_me(ft_strdup("mish: dup2()"));
-		exec_cmd(args, redirs, env);
+			ft_exit(ms_perror("mish: dup2()", NULL, NULL, 1));
+		exec_cmd(cmd, vars);
 	}
 	errno = 0;
 	if (fd_in != STDIN_FILENO && close(fd_in) != 0)
@@ -113,7 +112,7 @@ pid_t	fork_cmd(t_vector args, t_vector redirs, t_vector *env, int fd_in, int fd_
 	if (fd_out != STDOUT_FILENO && close(fd_out) != 0)
 		ms_perror("fork_cmd(): close(fd_out)", argv[0], NULL, 1);
 	if (errno != 0 && pid == 0)
-		exit_me(ft_strdup("mish: child"));
+		ft_exit(ms_perror("mish: child", NULL, NULL, 1));
 	if (pid < 0)
 		perror("mish: fork()");
 	return (pid);
