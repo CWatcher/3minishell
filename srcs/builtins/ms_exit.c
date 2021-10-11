@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 23:21:37 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/10 23:21:38 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 03:56:00 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@
 #include "ft_vector.h"
 #include "ft_io.h"
 #include "ft_string.h"
-
-//TODO print wrong argument
+#include "minishell.h" //ms_perror()
 
 int	ms_exit(char *argv[], t_vector *env)
 {
 	long long	n;
 	t_ft_err	err;
+	char		*arg;
 
 	(void)env;
+	arg = NULL;
 	if (isatty(STDIN_FILENO))
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (!argv || !argv[0])
@@ -32,16 +33,15 @@ int	ms_exit(char *argv[], t_vector *env)
 	if (!argv[1])
 		ft_exit(0);
 	if (argv[2])
+		return (ms_perror(argv[0], argv[1], "too many arguments", 1));
+	arg = ft_strtrim(argv[1], " \t\n\v\f\r");
+	err = ft_strtol_m(argv[1], 9223372036854775808ull, &n);
+	if (err || ft_strcmp_s(arg, "9223372036854775808") == 0)
 	{
-		ft_putstr_fd("mish: exit: too many arguments\n", STDERR_FILENO);
-		return (1);
+		free(arg);
+		ft_exit(ms_perror(argv[0], argv[1], "numeric argument required", 255));
 	}
-	err = ft_strtol_m(argv[1], 9223372036854775807ull, &n);
-	if (err)
-	{
-		ft_putstr_fd("mish: exit: numeric argument required\n", STDERR_FILENO);
-		ft_exit(255);
-	}
+	free(arg);
 	ft_exit(n);
 	return (1);
 }

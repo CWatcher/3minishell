@@ -29,6 +29,7 @@ SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				srcs/builtins/ms_unset.c	\
 				srcs/builtins/ms_env.c		\
 				./srcs/signal_handle.c		\
+				./srcs/ms_perror.c			\
 				./srcs/main.c
 
 RELEASE_MAKE = ./release.mk
