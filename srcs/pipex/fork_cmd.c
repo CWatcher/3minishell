@@ -6,17 +6,19 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 01:58:58 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 16:46:22 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include "../minishell.h"
 #include "pipex.h"
 #include "ft_string.h"
 #include "exit_me.h"
+#include "ft_exit.h"
 #include <sys/types.h>
 
 static char	*find_value(char *vars[], char *var_name_with_delimiter)
@@ -57,32 +59,42 @@ static char	*get_exec_pathname(const char *filename, const char *path_var)
 	return (found_pathname);
 }
 
-static void	exec_cmd(t_vector args, t_vector *env)
+static void	exec_cmd(t_vector args, t_vector redirs, t_vector *env)
 {
 	char			*pathname;
 	char			**argv;
 	t_builtin_func	builtin_func;
+	t_io_fds		fds;
 
+	fds = (t_io_fds) {STDIN_FILENO, STDOUT_FILENO};
+	pathname = NULL;
 	argv = open_allargs(args, *env);
+	if (!argv)
+		ft_exit(ms_perror("open_allargs()", ((char**)args.array)[0], NULL, 1));
+	if (!open_redirs(redirs, env, &fds.in, &fds.out))
+		ft_exit(1);
+	 if (fd_restore(STDIN_FILENO, fds.in) < 0
+	 	|| fd_restore(STDOUT_FILENO, fds.out) < 0)
+		 ft_exit(1);
 	if (ft_strchr(argv[0], '/'))
 		pathname = ft_strdup(argv[0]);
 	else
 	{
 		builtin_func = find_builtin(argv[0]);
 		if (builtin_func != NULL)
-			exit(builtin_func(argv, env));
+			(ft_exit(builtin_func(argv, env)));
 		else
 			pathname = get_exec_pathname(argv[0], find_value(env->array, "PATH="));
 	}
 	set_childsig_handler();
 	execve(pathname, argv, env->array);
-	//TODO check exit codes when argv[0] is a dir
-	//TODO free(ms)
 	argv = ft_freemultistr(argv);
-	exit_me(pathname);
+	ft_at_exit(pathname, (t_destr_func)free);
+	ft_exit(ms_perror(pathname, NULL, strerror(errno), 127));
 }
+	//TODO check exit codes when argv[0] is a dir, ...
 
-pid_t	fork_cmd(t_vector args, t_vector *env, int fd_in, int fd_out)
+pid_t	fork_cmd(t_vector args, t_vector redirs, t_vector *env, int fd_in, int fd_out)
 {
 	pid_t	pid;
 	char 	*const *argv = args.array;
@@ -94,7 +106,7 @@ pid_t	fork_cmd(t_vector args, t_vector *env, int fd_in, int fd_out)
 			exit_me(ft_strdup("mish: dup2()"));
 		if (fd_out >= 0 && dup2(fd_out, STDOUT_FILENO) != STDOUT_FILENO)
 			exit_me(ft_strdup("mish: dup2()"));
-		exec_cmd(args, env);
+		exec_cmd(args, redirs, env);
 	}
 	errno = 0;
 	if (fd_in != STDIN_FILENO && close(fd_in) != 0)

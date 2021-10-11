@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/10 23:21:37 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 03:56:00 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 14:42:16 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,3 +45,5 @@ int	ms_exit(char *argv[], t_vector *env)
 	ft_exit(n);
 	return (1);
 }
+
+//RF ft_strtrim(); ft_strcmp_s() -> strstr()

@@ -25,18 +25,6 @@ static int	fd_redirect(int fd, int target_fd)
 	return (fd_backup);
 }
 
-static int	fd_restore(int fd, int source_fd)
-{
-	if (fd != source_fd)
-	{
-		if (dup2(source_fd, fd) != fd)
-			return (ft_perror("mish: fd_restore(): dup2()", -1));
-		if (close(source_fd) != 0)
-			return (ft_perror("mish: fd_restore(): close()", -1));
-	}
-	return (fd);
-}
-
 int	run_builtin(t_builtin_func builtin_func, t_vector args, t_vector redirs,
 				t_vector *env)
 {

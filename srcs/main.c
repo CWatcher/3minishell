@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/10 20:47:37 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 03:50:43 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ int	main(int argc, char *argv[], char *envp[])
 		ms.status = run_pipeline(ms.node.pipeline, &ms.env);
 	}
 	if (isatty(STDIN_FILENO))
-		printf("exit\n");
+		ft_putendl_s("exit");
 	ft_exit(ms.status);
 }

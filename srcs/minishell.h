@@ -76,6 +76,6 @@ int				ms_exit(char *argv[], t_vector *env);
 int				ms_export(char *argv[], t_vector *env);
 int				ms_unset(char *argv[], t_vector *env);
 int				ms_env(char *argv[], t_vector *env);
-int				ms_perror(char *cmd, char *arg, char *msg, int ret);
+int	ms_perror(const char *cmd,const char *arg,const char *msg, int ret);
 
 #endif

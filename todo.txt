@@ -3,8 +3,8 @@
 	Это вроде из-за того что нужно как то по особому обрабатывать сигналы в уже запущенных прогах
 
 	Ctrl-\ не убивает
-+exit_minishell()
 
+[replace] exit_me() -> ft_exit()
 #include <libft.h> -> "libft.h"
 make re = make clean && make
     ("make re" errors on commit "- #include <bits/sigaction.h>" after next)

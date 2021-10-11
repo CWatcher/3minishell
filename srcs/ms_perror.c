@@ -3,7 +3,7 @@
 #include <errno.h>
 #include "ft_io.h"
 
-int	ms_perror(char *cmd, char *arg, char *msg, int ret)
+int	ms_perror(const char *cmd,const char *arg,const char *msg, int ret)
 {
 	ft_putstr_fd_s("mish: ", STDERR_FILENO);
 	if (cmd)

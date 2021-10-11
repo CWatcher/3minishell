@@ -7,15 +7,20 @@
 ls
 ls'
 ./tt.sh 'ls | wc > out.txt'
+./tt.sh '<1test_all.sh cat | wc >out.txt'
+./tt.sh '< 1test_all.sh cat | wc > out.txt'
+./tt.sh 'cat < 1test_all.sh | > out.txt wc '
+./tt.sh 'ls < 1test_all.sh | cat < tt.sh | > out.txt wc '
+./tt.sh ' ls > out.txt | wc'
+./tt.sh 'ls | wc'
+ulimit -n 12
+./tt.sh 'ls|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc'
+
 ./tt.sh '<Makefile cat | wc >out.txt'
 ./tt.sh '< Makefile cat | wc > out.txt'
 ./tt.sh 'cat < Makefile | > out.txt wc '
 ./tt.sh 'ls < Makefile | cat < Makefile | > out.txt wc '
-./tt.sh ' ls > out.txt | wc'
 ./tt.sh 'cat < Makefile | cat < Makefile > out.txt | > out.txt wc '
-./tt.sh 'ls | wc'
-ulimit -n 18
-./tt.sh 'ls|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc'
 
 ./echo.sh
 ./exit.sh

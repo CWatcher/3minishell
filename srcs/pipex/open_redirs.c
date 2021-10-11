@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/10 17:23:40 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/11 16:35:45 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,22 @@ static t_bool	ft_open_file(const char *path, int oflag, int *p_fd)
 	*p_fd = open(path, oflag, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (*p_fd == -1)
 	{
-		perror("mish: ft_open_file(): open()");
+		ms_perror(NULL, path, NULL, 1);
 		return (ft_false);
 	}
 	return (ft_true);
+}
+
+int	fd_restore(int fd, int source_fd)
+{
+	if (fd != source_fd)
+	{
+		if (dup2(source_fd, fd) != fd)
+			return (ft_perror("mish: fd_restore(): dup2()", -1));
+		if (close(source_fd) != 0)
+			return (ft_perror("mish: fd_restore(): close()", -1));
+	}
+	return (fd);
 }
 
 t_bool	open_redirs(t_vector v_redirs, const t_vector *env,
