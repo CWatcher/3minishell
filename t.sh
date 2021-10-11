@@ -1,64 +1,7 @@
+#!/bin/bash
+
 make > /dev/null || exit 1
 echo 'make: ok!'
 
-./tt.sh 'ls'
-./tt.sh 'ls
-ls
-ls'
-./tt.sh 'ls | wc > out.txt'
-./tt.sh '<Makefile cat | wc >out.txt'
-./tt.sh '< Makefile cat | wc > out.txt'
-./tt.sh 'cat < Makefile | > out.txt wc '
-./tt.sh 'cat < Makefile | cat < Makefile | > out.txt wc '
-./tt.sh 'ls | wc'
-ulimit -n 18
-./tt.sh 'ls|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc|wc'
-
-./tt.sh 'echo'
-./tt.sh 'echo a'
-./tt.sh 'echo "" ab'
-./tt.sh 'echo ab ""'
-./tt.sh 'echo -n'
-./tt.sh 'echo -n a'
-
-export TT='| ls'
-./tt.sh 'echo $TT'
-export TT='> out.txt'
-./tt.sh 'echo $TT'
-./tt.sh 'echo abc > out.txt'
-
-./tt.sh 'exit'
-./tt.sh 'exit 0'
-./tt.sh 'exit 1'
-./tt.sh 'exit 2 1'
-./tt.sh 'exit a'
-./tt.sh 'exit 127'
-./tt.sh 'exit 128'
-./tt.sh 'exit 255'
-./tt.sh 'exit 256'
-./tt.sh 'exit 257'
-./tt.sh 'exit 2147483647'
-./tt.sh 'exit 2147483648'
-./tt.sh 'exit 9223372036854775807'
-./tt.sh 'exit 92233720368547758070'
-./tt.sh 'exit 92233720368547758079'
-./tt.sh 'exit 9223372036854775808'
-./tt.sh 'exit 92233720368547758080'
-./tt.sh 'exit 11111111111111111111111111111111'
-./tt.sh 'exit -2'
-./tt.sh 'exit -222'
-./tt.sh 'exit -127'
-./tt.sh 'exit -128'
-./tt.sh 'exit -2147483648'
-./tt.sh 'exit -9223372036854775807'
-./tt.sh 'exit -9223372036854775808'
-./tt.sh 'exit -92233720368547758070'
-./tt.sh 'exit -92233720368547758079'
-./tt.sh 'exit -92233720368547758080'
-./tt.sh 'exit -92233720368547758089'
-./tt.sh 'exit -1111111111111111111111111'
-
-# export TT='t    t'
-# ./tt.sh 'echo "$TT"'
-# export TT='t	t'
-# ./tt.sh 'echo "$TT"'
+cd tests
+./1test_all.sh
