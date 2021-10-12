@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   update_shlvl.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/12 08:26:56 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/12 08:26:56 by fdiego           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static char	*get_intvalue(int value)
@@ -47,7 +59,8 @@ t_ft_err	update_shlvl(t_vector *env)
 	int		value;
 	char	*str;
 
-	value = ft_atoi(get_env_value((t_stringview){.str = "SHLVL", .size = 5}, env));
+	value = ft_atoi(get_env_value(\
+			(t_stringview){.str = "SHLVL", .size = 5}, env));
 	value++;
 	ft_vec_remove_all(env, "SHLVL", \
 		(t_destr_func)ft_freederef, (t_cmp_func)str_find);

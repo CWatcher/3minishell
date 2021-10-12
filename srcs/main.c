@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/12 07:43:14 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 08:19:26 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	minishell_destr(t_minishell *ms)
 void	minishell_loop(t_minishell *ms)
 {
 	char		*line;
+	t_ft_err	err;
 
 	line = NULL;
 	while (ft_true)
@@ -74,15 +75,15 @@ void	minishell_loop(t_minishell *ms)
 			break ;
 		if (*line == '\0')
 			continue ;
-		if (isatty(STDIN_FILENO))
-			add_history(line);
-		if (parse(ms, line) != ft_err_ok)
+		add_history(line);
+		err = parse(ms, line);
+		if (err == ft_err_bad_syntax || err == ft_err_unclosedquotes)
+			ms->vars.status = 258;
+		if (err == ft_err_ok)
 		{
-			ms->vars.status = 2;
-			continue ;
+			set_exesig_handler();
+			ms->vars.status = run_pipeline(ms->node.pipeline, &ms->vars);
 		}
-		set_exesig_handler();
-		ms->vars.status = run_pipeline(ms->node.pipeline, &ms->vars);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:41:11 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 07:15:42 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 08:07:47 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ t_ft_err	parse(t_minishell *ms, char const *str)
 	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));
 	if (tokens.tokens.size == 0)
-		return (dlrt_dfaparse(&tokens, \
-			ft_err_perror("mish: ", ft_err_bad_syntax)));
+		return (dlrt_dfaparse(&tokens, ft_err_fail));
 	err = parse_commands(ms, &tokens);
 	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));
