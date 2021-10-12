@@ -25,5 +25,6 @@ ulimit -n 12
 ./tt.sh 'cat < Makefile | cat < Makefile > out.txt | > out.txt wc '
 
 ./heredoc.sh
+./cd.sh
 ./echo.sh
 ./exit.sh

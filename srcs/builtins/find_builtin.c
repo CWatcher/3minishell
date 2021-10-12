@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 18:43:50 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 18:43:51 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 03:10:53 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 t_builtin_func	find_builtin(const char *s)
 {
-	const t_builtin_entry	builtin_dic[] = { \
+	const t_builtin_entry	builtin_dic[] = {\
 		{"echo", ms_echo}, \
 		{"exit", ms_exit}, \
 		{"export", ms_export}, \
 		{"unset", ms_unset}, \
 		{"env", ms_env}, \
+		{"cd", ms_cd}, \
 		{NULL, NULL}};
 	int						i;
 

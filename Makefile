@@ -22,6 +22,7 @@ SRCS		=	${shell find ./srcs/parser/ -name '*.c'} \
 				srcs/pipex/run_builtin.c	\
 				srcs/pipex/open_redirs.c	\
 				srcs/builtins/find_builtin.c\
+				srcs/builtins/ms_cd.c		\
 				srcs/builtins/ms_echo.c		\
 				srcs/builtins/ms_exit.c		\
 				srcs/builtins/ms_export.c	\
