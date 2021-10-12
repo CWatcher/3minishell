@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/12 08:55:21 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/12 09:19:05 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static pid_t	fork_pipeline(t_vector pipeline, t_ms_vars *vars)
 	while (j < pipeline.size - 1)
 	{
 		if (pipe(pipe_fds) != 0)
-			return (ft_perror("mish: pipe error", -3));
+			return (ms_perror("pipe error", NULL, NULL, 1));
 		fork_cmd((t_command *)&cmds[j], vars, fds.in, pipe_fds[1]);
 		fds.in = pipe_fds[0];
 		j++;
