@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_builtin.c                                     :+:      :+:    :+:   */
+/*   parser_p2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 18:43:50 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 07:04:50 by fdiego           ###   ########.fr       */
+/*   Created: 2021/10/12 07:16:22 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/12 07:16:23 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include "ft_string.h"
+#include "parser.h"
 
-t_builtin_func	find_builtin(const char *s)
+t_ft_err	parse_all(t_minishell *ms, t_token *token)
 {
-	const t_builtin_entry	builtin_dic[] = {\
-		{"echo", ms_echo}, \
-		{"exit", ms_exit}, \
-		{"export", ms_export}, \
-		{"unset", ms_unset}, \
-		{"env", ms_env}, \
-		{NULL, NULL}};
-	int						i;
-
-	i = 0;
-	while (builtin_dic[i].name && ft_strcmp(s, builtin_dic[i].name) != 0)
-		i++;
-	return (builtin_dic[i].func);
+	if (token->type & e_redir_bit)
+		return (parse_redir(ms, token));
+	if (token->type == e_token_arg)
+		return (parse_arg(ms, token));
+	if (token->type == e_token_logic_pipe)
+		return (parse_pipe(ms, token));
+	return (ft_err_perror("mish: ", ft_err_bad_syntax));
 }

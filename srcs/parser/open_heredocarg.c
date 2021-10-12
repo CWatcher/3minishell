@@ -6,20 +6,15 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:40:11 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 19:40:12 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:10:16 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenize.h"
 #include <ft_string.h>
+#include "open_arg.h"
 
-typedef struct s_open_arg {
-	t_vector		str_build;
-	t_stringview	sv;
-	size_t			pos;
-}			t_open_arg;
-
-t_ft_err	open_heredocargnoquotes(t_open_arg *oa)
+t_ft_err	open_heredocargnoquotes(t_open_hdarg *oa)
 {
 	t_ft_err	err;
 
@@ -44,7 +39,7 @@ t_ft_err	open_heredocargnoquotes(t_open_arg *oa)
 	return (ft_err_ok);
 }
 
-t_ft_err	open_heredocarg1quotes(t_open_arg *oa)
+t_ft_err	open_heredocarg1quotes(t_open_hdarg *oa)
 {
 	(oa->pos)++;
 	while (oa->sv.str[oa->pos] != '\'')
@@ -57,12 +52,12 @@ t_ft_err	open_heredocarg1quotes(t_open_arg *oa)
 	return (ft_err_ok);
 }
 
-t_ft_err	open_heredocarg2quotes(t_open_arg *oa)
+t_ft_err	open_heredocarg2quotes(t_open_hdarg *oa)
 {
 	oa->pos++;
 	while (oa->sv.str[oa->pos] != '\"')
 	{
-		if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++])
+		if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
 						!= ft_err_ok)
 			return (ft_err_bad_alloc);
 	}
@@ -70,7 +65,7 @@ t_ft_err	open_heredocarg2quotes(t_open_arg *oa)
 	return (ft_err_ok);
 }
 
-t_ft_err	real_open_heredocarg(t_open_arg *oa)
+t_ft_err	real_open_heredocarg(t_open_hdarg *oa)
 {
 	t_ft_err		err;
 
@@ -88,16 +83,9 @@ t_ft_err	real_open_heredocarg(t_open_arg *oa)
 	return (ft_err_ok);
 }
 
-static void	*clean_open_heredocarg(t_open_arg *oa, t_ft_err err)
-{
-	ft_err_perror("mish: ", err);
-	ft_vec_destructor(&oa->str_build, NULL);
-	return (NULL);
-}
-
 char	*open_heredocarg(t_stringview sv)
 {
-	t_open_arg		oa;
+	t_open_hdarg	oa;
 	t_ft_err		err;
 
 	oa.pos = 0;
@@ -106,8 +94,16 @@ char	*open_heredocarg(t_stringview sv)
 	ft_vec_reserv(&oa.str_build, sv.size);
 	err = real_open_heredocarg(&oa);
 	if (err != ft_err_ok)
-		return (clean_open_heredocarg(&oa, err));
+	{
+		ft_err_perror("mish: ", ft_err_bad_alloc);
+		ft_vec_destructor(&oa.str_build, NULL);
+		return (NULL);
+	}
 	if (ft_vec_push_back(&oa.str_build, "\0") != ft_err_ok)
-		return (clean_open_heredocarg(&oa, ft_err_bad_alloc));
+	{
+		ft_err_perror("mish: ", ft_err_bad_alloc);
+		ft_vec_destructor(&oa.str_build, NULL);
+		return (NULL);
+	}
 	return (ft_vec_fetch_array(&oa.str_build, NULL));
 }

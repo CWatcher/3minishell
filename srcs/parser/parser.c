@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:41:11 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 19:41:12 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:15:42 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 t_ft_err	dlrt_dfaparse(t_dfaparse *dfa, t_ft_err err)
 {
-	ft_vec_destructor(&dfa->tokens, (t_destr_func)NULL);
+	ft_vec_destructor(&dfa->tokens, (t_destr_func) NULL);
 	return (err);
 }
 
@@ -39,13 +39,14 @@ t_ft_err	check_parse(t_minishell *ms)
 t_ft_err	parse(t_minishell *ms, char const *str)
 {
 	t_dfaparse	tokens;
-	t_ft_err		err;
+	t_ft_err	err;
 
 	err = dfa_tokenize(str, &tokens);
 	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));
 	if (tokens.tokens.size == 0)
-		return (dlrt_dfaparse(&tokens, ft_err_perror("mish: ", ft_err_bad_syntax)));
+		return (dlrt_dfaparse(&tokens, \
+			ft_err_perror("mish: ", ft_err_bad_syntax)));
 	err = parse_commands(ms, &tokens);
 	if (err != ft_err_ok)
 		return (dlrt_dfaparse(&tokens, err));

@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:07:33 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 19:07:39 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:00:08 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 #include <ft_io.h>
 #include <ft_string.h>
 
-static int	str_find(char const **env_s, char const* ref)
+static int	str_find(char const **env_s, char const *ref)
 {
 	size_t	ref_len;
 
 	if (*env_s == NULL)
 		return (1);
 	ref_len = ft_strlen(ref);
-	return (!(ft_strncmp(*env_s, ref, ref_len) == 0 && (*env_s)[ref_len] == '='));
+	return (!(ft_strncmp(*env_s, ref, ref_len) == 0 \
+				&& (*env_s)[ref_len] == '='));
 }
 
 static t_bool	is_name(char const *name)
@@ -62,7 +63,8 @@ int	ms_unset(char *argv[], t_vector *env)
 			ret = 1;
 			continue ;
 		}
-		ft_vec_remove_all(env, argv[i], (t_destr_func)ft_freederef, (t_cmp_func)str_find);
+		ft_vec_remove_all(env, argv[i], \
+			(t_destr_func)ft_freederef, (t_cmp_func)str_find);
 	}
 	return (ret);
 }
