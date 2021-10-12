@@ -21,25 +21,20 @@
 
 static void	sig_handle(int sig)
 {
-	int		status;
-
-	waitpid(-1, &status, 0);
-	if (WTERMSIG(status) == SIGINT && WIFSIGNALED(status))
-		rl_on_new_line();
-	else if (sig == SIGINT)
+	if (sig == SIGINT)
 	{
+		(void)sig;
 		ft_putstr("\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	else if (WTERMSIG(status) == SIGQUIT && WIFSIGNALED(status))
-	{
-		ft_putstr_fd("Quit: ", STDERR_FILENO);
-		ft_putnbr_fd(sig, STDERR_FILENO);
-		ft_putendl_fd("", STDERR_FILENO);
-	}
 	return ;
+}
+
+static void	ignore(int sig)
+{
+	(void)sig;
 }
 
 void	set_sig_handler(void)
@@ -50,5 +45,6 @@ void	set_sig_handler(void)
 
 void	set_exesig_handler(void)
 {
-	signal(SIGQUIT, sig_handle);
+	signal(SIGINT, ignore);
+	signal(SIGQUIT, ignore);
 }
