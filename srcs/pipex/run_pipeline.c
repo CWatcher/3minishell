@@ -17,7 +17,9 @@
 #include "../minishell.h"
 #include "pipex.h"
 #include "ft_string.h" // free_mutlistr()
-#include "ftdef.h"
+#include <ft_io.h>
+#include <ftdef.h>
+#include <readline/readline.h>
 
 static pid_t	fork_pipeline(t_vector pipeline, t_ms_vars *vars)
 {
@@ -43,13 +45,34 @@ static pid_t	fork_pipeline(t_vector pipeline, t_ms_vars *vars)
 	return (pid);
 }
 
+int	ft_waitpid(pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		ft_putstr("\n");
+		rl_on_new_line();
+		return (130);
+	}
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+	{
+		ft_putstr_fd("Quit: ", STDERR_FILENO);
+		ft_putnbr_fd(SIGQUIT, STDERR_FILENO);
+		ft_putendl_fd("", STDERR_FILENO);
+		return (131);
+	}
+	
+	return (WEXITSTATUS(status));
+}
+
 int	run_pipeline(t_vector pipeline, t_ms_vars *vars)
 {
 	const t_command		*cmds = pipeline.array;
 	char				**argv;
 	t_builtin_func		builtin_func;
 	pid_t				pid;
-	int					status;
 
 	if (pipeline.size == 1)
 	{
@@ -65,6 +88,5 @@ int	run_pipeline(t_vector pipeline, t_ms_vars *vars)
 	pid = fork_pipeline(pipeline, vars);
 	if (pid < 0)
 		return (1);
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	return (ft_waitpid(pid));
 }
