@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 18:43:54 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 04:54:51 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/12 08:55:13 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,26 @@
 
 int	ms_pwd(char *argv[], t_vector *env)
 {
-	char	path[PATH_MAX];
+	t_vector	path;
 
 	(void)argv;
 	(void)env;
-	if (!getcwd(path, PATH_MAX))
-		return (ms_perror("pwd", argv[0], NULL, 1));
-	ft_putendl_s(path);
+	ft_vec_construct(&path, sizeof(char));
+	ft_vec_reserv(&path, 256);
+	while (!getcwd(path.array, path.capacity))
+	{
+		if (path.capacity * 2 > 524288)
+		{
+			ft_vec_destructor(&path, NULL);
+			return (ms_perror("pwd", argv[0], "path too long", 1));
+		}
+		if (ft_vec_reserv(&path, path.capacity * 2) != ft_err_ok)
+		{
+			ft_vec_destructor(&path, NULL);
+			return (ms_perror("pwd", argv[0], "allocation error", 1));
+		}
+	}
+	ft_putendl_s(path.array);
+	ft_vec_destructor(&path, NULL);
 	return (0);
 }
