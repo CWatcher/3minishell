@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_pipeline.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/12 01:11:26 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 08:55:21 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,22 @@ static pid_t	fork_pipeline(t_vector pipeline, t_ms_vars *vars)
 {
 	const t_command		*cmds = pipeline.array;
 	size_t				j;
-	int					fd_in;
-	int					fd_out;
+	t_io_fds			fds;
 	int					pipe_fds[2];
 	pid_t				pid;
 
-	fd_in = STDIN_FILENO;
-	fd_out = STDOUT_FILENO;
+	fds.in = STDIN_FILENO;
+	fds.out = STDOUT_FILENO;
 	j = 0;
 	while (j < pipeline.size - 1)
 	{
 		if (pipe(pipe_fds) != 0)
 			return (ft_perror("mish: pipe error", -3));
-		fork_cmd((t_command *)&cmds[j], vars, fd_in, pipe_fds[1]);
-		fd_in = pipe_fds[0];
+		fork_cmd((t_command *)&cmds[j], vars, fds.in, pipe_fds[1]);
+		fds.in = pipe_fds[0];
 		j++;
 	}
-	pid = fork_cmd((t_command *)&cmds[j], vars, fd_in, fd_out);
+	pid = fork_cmd((t_command *)&cmds[j], vars, fds.in, fds.out);
 	return (pid);
 }
 

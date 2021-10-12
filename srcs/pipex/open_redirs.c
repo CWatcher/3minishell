@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 15:54:21 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 23:23:32 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 08:50:19 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,43 @@ int	fd_restore(int fd, int source_fd)
 	return (fd);
 }
 
+			//TODO
+			// bash-3.2$ cat <<
+			// bash: syntax error near unexpected token `newline'
+static	t_bool	open_file_redir(t_redir redir, const t_ms_vars *vars,
+					int *p_fd_in, int *p_fd_out)
+{
+	char			*path;
+	char			**t;
+	t_bool			r;
+
+	t = open_arg(redir.arg, vars);
+	path = *t;
+	*t = NULL;
+	if (!t || t[1])
+	{
+		t = ft_freemultistr(t);
+		return (ms_perror(
+				NULL, redir.arg.str, "ambiguous redirect", ft_false));
+	}
+	t = ft_freemultistr(t);
+	r = ft_false;
+	if (redir.type == e_redir_i_file)
+		r = ft_open_file(path, O_RDONLY, p_fd_in);
+	else if (redir.type == e_redir_o_trunc)
+		r = ft_open_file(path, O_CREAT | O_WRONLY | O_TRUNC, p_fd_out);
+	else if (redir.type == e_redir_o_append)
+		r = ft_open_file(path, O_CREAT | O_WRONLY | O_APPEND, p_fd_out);
+	free(path);
+	return (r);
+}
+
 t_bool	open_redirs(t_vector v_redirs, const t_ms_vars *vars,
 					int *p_fd_in, int *p_fd_out)
 {
 	size_t			i;
 	const t_redir	*redirs = v_redirs.array;
-	char			*path;
 	char			*limiter;
-	char			**t;
 	t_bool			r;
 
 	i = 0;
@@ -73,33 +102,11 @@ t_bool	open_redirs(t_vector v_redirs, const t_ms_vars *vars,
 	{
 		if (redirs[i].type == e_redir_i_stream)
 		{
-			// fork_heredoc()
-			//*p_fd_in = heredoc_pipe[0];
 			limiter = open_heredocarg(redirs[i].arg);
-			//TODO
-			// bash-3.2$ cat <<
-			// bash: syntax error near unexpected token `newline'
 			r = open_heredoc(limiter, p_fd_in);
 		}
 		else
-		{
-			t = open_arg(redirs[i].arg, vars);
-			path = *t;
-			*t = NULL;
-			if (!t || t[1])
-			{
-				t = ft_freemultistr(t);
-				return (ms_perror(NULL, redirs[i].arg.str, "ambiguous redirect", ft_false));
-			}
-			t = ft_freemultistr(t);
-			if (redirs[i].type == e_redir_i_file)
-				r = ft_open_file(path, O_RDONLY, p_fd_in);
-			else if (redirs[i].type == e_redir_o_trunc)
-				r = ft_open_file(path, O_CREAT | O_WRONLY | O_TRUNC, p_fd_out);
-			else if (redirs[i].type == e_redir_o_append)
-				r = ft_open_file(path, O_CREAT | O_WRONLY | O_APPEND, p_fd_out);
-			free(path);
-		}
+			r = open_file_redir(redirs[i], vars, p_fd_in, p_fd_out);
 		i++;
 	}
 	return (r);

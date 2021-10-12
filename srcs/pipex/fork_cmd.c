@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 15:24:29 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/12 07:42:53 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 09:01:37 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,21 @@ static char	*get_exec_pathname(const char *filename, const char *path_var)
 	return (found_pathname);
 }
 
+static void	init_params(t_command *cmd, t_io_fds *p_fds, char ***p_argv,
+	t_ms_vars *vars)
+{
+	*p_argv = open_allargs(cmd->args, vars);
+	if (!*p_argv)
+		ft_exit(
+			ms_perror("open_allargs()", ((char**)cmd->args.array)[0], NULL, 1));
+	*p_fds = (t_io_fds){STDIN_FILENO, STDOUT_FILENO};
+	if (!open_redirs(cmd->redirs, vars, &p_fds->in, &p_fds->out))
+		ft_exit(1);
+	if (fd_restore(STDIN_FILENO, p_fds->in) < 0
+		|| fd_restore(STDOUT_FILENO, p_fds->out) < 0)
+		ft_exit(1);
+}
+
 static void	exec_cmd(t_command *cmd, t_ms_vars *vars)
 {
 	char			*pathname;
@@ -65,16 +80,8 @@ static void	exec_cmd(t_command *cmd, t_ms_vars *vars)
 	t_builtin_func	builtin_func;
 	t_io_fds		fds;
 
-	fds = (t_io_fds) {STDIN_FILENO, STDOUT_FILENO};
 	pathname = NULL;
-	argv = open_allargs(cmd->args, vars);
-	if (!argv)
-		ft_exit(ms_perror("open_allargs()", ((char**)cmd->args.array)[0], NULL, 1));
-	if (!open_redirs(cmd->redirs, vars, &fds.in, &fds.out))
-		ft_exit(1);
-	 if (fd_restore(STDIN_FILENO, fds.in) < 0
-	 	|| fd_restore(STDOUT_FILENO, fds.out) < 0)
-		 ft_exit(1);
+	init_params(cmd, &fds, &argv, vars);
 	if (ft_strchr(argv[0], '/'))
 		pathname = ft_strdup(argv[0]);
 	else
@@ -83,19 +90,20 @@ static void	exec_cmd(t_command *cmd, t_ms_vars *vars)
 		if (builtin_func != NULL)
 			(ft_exit(builtin_func(argv, &vars->env)));
 		else
-			pathname = get_exec_pathname(argv[0], find_value(vars->env.array, "PATH="));
+			pathname = get_exec_pathname(argv[0],
+					find_value(vars->env.array, "PATH="));
 	}
 	execve(pathname, argv, vars->env.array);
 	argv = ft_freemultistr(argv);
 	ft_at_exit(pathname, (t_destr_func)free);
 	ft_exit(ms_perror(pathname, NULL, strerror(errno), 127));
 }
-	//TODO check exit codes when argv[0] is a dir, ...
+//TODO check exit codes when argv[0] is a dir, ...
 
 pid_t	fork_cmd(t_command *cmd, t_ms_vars *vars, int fd_in, int fd_out)
 {
-	pid_t	pid;
-	char 	*const *argv = cmd->args.array;
+	pid_t		pid;
+	char *const	*argv = cmd->args.array;
 
 	pid = fork();
 	if (pid == 0)

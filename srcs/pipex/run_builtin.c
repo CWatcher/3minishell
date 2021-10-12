@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_builtin.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/12 08:51:44 by CWatcher          #+#    #+#             */
+/*   Updated: 2021/10/12 08:53:44 by CWatcher         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
@@ -28,23 +40,21 @@ static int	fd_redirect(int fd, int target_fd)
 int	run_builtin(t_builtin_func builtin_func, t_command *cmd,
 				t_ms_vars *vars)
 {
-	int	fd_in;
-	int	fd_out;
-	int	std_in_backup;
-	int	std_out_backup;
-	int	r;
-	char	**argv;
+	t_io_fds	fds;
+	int			std_in_backup;
+	int			std_out_backup;
+	int			r;
+	char		**argv;
 
-	fd_in = STDIN_FILENO;
-	fd_out = STDOUT_FILENO;
-	if (!open_redirs(cmd->redirs, vars, &fd_in, &fd_out))
+	fds.in = STDIN_FILENO;
+	fds.out = STDOUT_FILENO;
+	if (!open_redirs(cmd->redirs, vars, &fds.in, &fds.out))
 		return (-1);
-	std_in_backup = fd_redirect(STDIN_FILENO, fd_in);
-	std_out_backup = fd_redirect(STDOUT_FILENO, fd_out);
+	std_in_backup = fd_redirect(STDIN_FILENO, fds.in);
+	std_out_backup = fd_redirect(STDOUT_FILENO, fds.out);
 	if (std_in_backup || std_out_backup < 0)
 		return (-1);
 	argv = open_allargs(cmd->args, vars);
-	//TODO check argv everywhere
 	if (argv == NULL)
 		return (1);
 	r = builtin_func(argv, &vars->env);
@@ -53,3 +63,4 @@ int	run_builtin(t_builtin_func builtin_func, t_command *cmd,
 	fd_restore(STDOUT_FILENO, std_out_backup);
 	return (r);
 }
+	//TODO check argv everywhere
