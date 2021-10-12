@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 06:58:59 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 06:59:00 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:19:45 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,9 @@ int				ms_exit(char *argv[], t_vector *env);
 int				ms_export(char *argv[], t_vector *env);
 int				ms_unset(char *argv[], t_vector *env);
 int				ms_env(char *argv[], t_vector *env);
-<<<<<<< HEAD
 int				ms_pwd(char *argv[], t_vector *env);
 int				ms_cd(char *argv[], t_vector *env);
-int				ms_perror(const char *cmd, const char *arg,
-					const char *msg, int ret);
-=======
 int				ms_perror(const char *cmd, const char *arg, \
-							const char *msg, int ret);
->>>>>>> parser
+					const char *msg, int ret);
 
 #endif
