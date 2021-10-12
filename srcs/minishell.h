@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:51:35 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 03:17:21 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/12 06:18:54 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <ftdef.h>
 # include <ft_string.h>
 
-# define PROMPT "mish-0.5$ "
+# define PROMPT "mish-0.6$ "
 # define C_BUILTINS 1
 
 typedef enum e_redir_type
@@ -93,6 +93,7 @@ int				ms_exit(char *argv[], t_vector *env);
 int				ms_export(char *argv[], t_vector *env);
 int				ms_unset(char *argv[], t_vector *env);
 int				ms_env(char *argv[], t_vector *env);
+int				ms_pwd(char *argv[], t_vector *env);
 int				ms_cd(char *argv[], t_vector *env);
 int				ms_perror(const char *cmd, const char *arg,
 					const char *msg, int ret);

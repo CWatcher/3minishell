@@ -26,5 +26,6 @@ ulimit -n 12
 
 ./heredoc.sh
 ./cd.sh
+./pwd.sh
 ./echo.sh
 ./exit.sh

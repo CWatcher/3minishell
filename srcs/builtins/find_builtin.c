@@ -6,7 +6,7 @@
 /*   By: CWatcher <cwatcher@student.21-school.r>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 18:43:50 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 03:10:53 by CWatcher         ###   ########.fr       */
+/*   Updated: 2021/10/12 04:26:51 by CWatcher         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_builtin_func	find_builtin(const char *s)
 		{"export", ms_export}, \
 		{"unset", ms_unset}, \
 		{"env", ms_env}, \
+		{"pwd", ms_pwd}, \
 		{"cd", ms_cd}, \
 		{NULL, NULL}};
 	int						i;
