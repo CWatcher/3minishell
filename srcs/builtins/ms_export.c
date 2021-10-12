@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 18:48:16 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 07:04:10 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:20:49 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,22 @@ static void	print_env(t_vector *envv)
 	}
 }
 
-void	process_arg(char arg, t_vector *env, int *ret)
+void	process_arg(char *arg, t_vector *env, int *ret)
 {
 	char	*str;
 
 	if (is_name(arg) == ft_false)
 	{
-		if (ret == 0)
+		if (*ret == 0)
 			ft_err_perror("export: ", ft_err_bad_arg);
-		ret = 1;
+		*ret = 1;
 		return ;
 	}
 	str = ft_strdup(arg);
 	if (str == NULL)
 	{
 		ft_err_perror("export: ", ft_err_bad_alloc);
-		ret = 1;
+		*ret = 1;
 		return ;
 	}
 	ft_vec_remove_all(env, arg, \

@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 07:11:52 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 07:11:52 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:20:21 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_ft_err	push_env_to_args_spaces(t_open_arg *oa, char *env_v, size_t *pos)
 	}
 	while (ft_isspace(env_v[*pos]))
 		(*pos)++;
+	return (ft_err_ok);
 }
 
 t_ft_err	push_env_to_args(t_open_arg *oa, char *env_v)
