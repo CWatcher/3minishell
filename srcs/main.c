@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 16:38:32 by CWatcher          #+#    #+#             */
-/*   Updated: 2021/10/11 23:11:35 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:43:14 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	minishell_init(t_minishell *ms, char *env[])
 	ft_vec_construct(&ms->vars.env, sizeof(char *));
 	and_or_node_constr(&ms->node);
 	init_env(ms, env);
+	update_shlvl(&ms->vars.env);
 }
 
 void	minishell_destr(t_minishell *ms)

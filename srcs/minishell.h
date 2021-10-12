@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 06:58:59 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 07:19:45 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 07:40:30 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,6 @@ int				ms_pwd(char *argv[], t_vector *env);
 int				ms_cd(char *argv[], t_vector *env);
 int				ms_perror(const char *cmd, const char *arg, \
 					const char *msg, int ret);
+t_ft_err		update_shlvl(t_vector *env);
 
 #endif
