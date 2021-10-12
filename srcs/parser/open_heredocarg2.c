@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenize.c                                         :+:      :+:    :+:   */
+/*   open_heredocarg2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 19:41:22 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/12 07:08:45 by fdiego           ###   ########.fr       */
+/*   Created: 2021/10/12 06:52:31 by fdiego            #+#    #+#             */
+/*   Updated: 2021/10/12 06:52:32 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenize.h"
+#include "open_arg.h"
 
-t_ft_err	dfa_tokenize(char const *str, t_dfaparse *parse)
+t_ft_err	open_heredocargnoquotes(t_open_hdarg *oa)
 {
 	t_ft_err	err;
 
-	ft_vec_construct(&parse->tokens, sizeof(t_token));
-	parse->dfafunc = (t_dfafunc)dfa_skip_spaces;
-	while (*str)
+	err = ft_err_ok;
+	while (oa->pos < oa->sv.size \
+			&& '\"' != oa->sv.str[oa->pos] \
+			&& '\'' != oa->sv.str[oa->pos])
 	{
-		err = parse->dfafunc(str, parse);
+		if (oa->sv.str[oa->pos] == '\\')
+		{
+			oa->pos++;
+			if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
+					!= ft_err_ok)
+				err = ft_err_bad_alloc;
+		}
+		else if (ft_vec_push_back(&oa->str_build, &oa->sv.str[(oa->pos)++]) \
+					!= ft_err_ok)
+			err = ft_err_bad_alloc;
 		if (err != ft_err_ok)
 			return (err);
-		str++;
 	}
-	if (parse->dfafunc == (t_dfafunc) & dfa_arg1quotes \
-		|| parse->dfafunc == (t_dfafunc) & dfa_arg2quotes)
-		return (ft_err_perror("mish: ", ft_err_unclosedquotes));
 	return (ft_err_ok);
 }

@@ -76,7 +76,10 @@ void	minishell_loop(t_minishell *ms)
 		if (isatty(STDIN_FILENO))
 			add_history(line);
 		if (parse(ms, line) != ft_err_ok)
+		{
+			ms->vars.status = 2;
 			continue ;
+		}
 		set_exesig_handler();
 		ms->vars.status = run_pipeline(ms->node.pipeline, &ms->vars);
 	}

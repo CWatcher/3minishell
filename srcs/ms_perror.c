@@ -6,7 +6,7 @@
 /*   By: fdiego <fdiego@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 19:51:44 by fdiego            #+#    #+#             */
-/*   Updated: 2021/10/11 19:51:46 by fdiego           ###   ########.fr       */
+/*   Updated: 2021/10/12 06:59:27 by fdiego           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include <errno.h>
 #include "ft_io.h"
 
-int	ms_perror(const char *cmd,const char *arg,const char *msg, int ret)
+int	ms_perror(const char *cmd, const char *arg, \
+				const char *msg, int ret)
 {
 	ft_putstr_fd_s("mish: ", STDERR_FILENO);
 	if (cmd)

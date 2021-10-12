@@ -63,7 +63,6 @@ int	ft_waitpid(pid_t pid)
 		ft_putendl_fd("", STDERR_FILENO);
 		return (131);
 	}
-	
 	return (WEXITSTATUS(status));
 }
 
