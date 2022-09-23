@@ -11,10 +11,10 @@ BUILD_DIR       = .debug/
 NAME_EXE        = minishell
 PATH_EXE        = minishell
 TARGET_TYPE     = exe
-INC_DIR         = ${LIBFT_INC} srcs/ ${HOME}/.brew/Cellar/readline/8.1.1/include
-FLAGS          += -Wpedantic -O0 -g3 -fsanitize=address
+INC_DIR         = ${LIBFT_INC} srcs/ ${HOME}/.brew/Cellar/readline/8.1.2/include
+FLAGS          += -Wpedantic -O0 -g3 #-fsanitize=address
 LIBS           += -lreadline ${LIBFT_LIB}
-LIBS_DIRS      += ${LIBFT_DB_LIB_DIR} ${HOME}/.brew/Cellar/readline/8.1.1/lib
+LIBS_DIRS      += ${LIBFT_DB_LIB_DIR} ${HOME}/.brew/Cellar/readline/8.1.2/lib
 IS_FTST         = 0
 DEPEND_FILES   += ./Makefile ./debug.mk
 
